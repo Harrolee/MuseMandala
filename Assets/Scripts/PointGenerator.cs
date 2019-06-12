@@ -15,26 +15,90 @@ namespace EasyCurvedLine
 
     public class PointGenerator : MonoBehaviour
     {
+        
+        /* 
+        public GameObject sph;
+        float distCovered;
+        float fracJourney;
+        float startTime;
+        float journeyLength;
+        Vector3 endestPoint;
+*/
+/* 
+        public int Speed = 1;
         public int NewPoints = 10;
         public GameObject _CurvePoint;
         CurvedLineRenderer curvedLine;
         Vector3 childVec;
         Vector3 newVec;
+        List<Vector3> DeclaredPoints = new List<Vector3>();
+        List<Vector3> PointList = new List<Vector3>();
 
         private void Start()
         {
             curvedLine = GetComponent<CurvedLineRenderer>();
+            startTime = Time.time;
         }
 
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Space))
-                StartCoroutine(AddPoints(NewPoints));
+                LerpThroughList();
+            else if(Input.GetKeyDown(KeyCode.A)){
+              endestPoint=sph.transform.position + new Vector3(20,20);
+              journeyLength = Vector3.Distance(sph.transform.position, endestPoint);
+              TestLerp();
+            }
         }
+*/
 
-        public IEnumerator AddPoints(int numToAdd)
+/* 
+        void TestLerp()
         {
-            for (int i = 0; i < NewPoints; i++)
+        while(fracJourney<journeyLength)
+        {
+        distCovered = (Time.time - startTime) * Speed;
+        // Fraction of journey completed = current distance divided by total distance.
+        fracJourney = distCovered / journeyLength;
+        sph.transform.position = Vector3.Lerp(sph.transform.position, endestPoint, fracJourney);
+        }
+        }
+*/
+        //You have a list of points
+        //traverse list of points.
+            //for the first point, find the location of the current last child.
+            //create children between the currlast child and the first point.
+        //get the next list of points || be done
+/* 
+        Vector3 startPoint;
+        Vector3 endPoint;
+        Vector3 nextPoint;
+        void LerpThroughList()
+        {
+            DeclaredPoints = DeclarePoints(NewPoints);
+            for(int i=0; i<DeclaredPoints.Count; i++)
+            {
+                if (i==0)
+                {
+                    startPoint = transform.GetChild(transform.childCount-1).position;
+                    endPoint = DeclaredPoints[i];
+                }
+                else
+                {
+                    startPoint = DeclaredPoints[i-1];
+                    endPoint = DeclaredPoints[i];
+                }
+                //lerp make new points
+                nextPoint=Vector3.Lerp(startPoint, endPoint, Time.deltaTime * Speed * .2f);
+                Instantiate( _CurvePoint, nextPoint, Quaternion.identity, transform);
+            }
+        }
+*/
+        /* 
+        List<Vector3> DeclarePoints(int numToAdd)
+        {
+            print(transform.childCount);
+            for(int i = 0; i< numToAdd; i++)
             {
                 //get vec3 of latest child
                 childVec = transform.GetChild(transform.childCount-1).position;
@@ -43,30 +107,11 @@ namespace EasyCurvedLine
                     newVec = childVec + new Vector3(0, .2f);
                 else
                     newVec = childVec + new Vector3(.2f, 0);
-                //instantiate a new gameObject at newVec as a new child
-                Instantiate(_CurvePoint, newVec, Quaternion.identity, transform);
-                //use curvedLine to generate curves around the new point
 
-                if (curvedLine != null)
-                {
-                    curvedLine.Update();
-                }
-                yield return new WaitForSeconds(.1f);
+                PointList.Add(newVec);
             }
+            return PointList;
         } 
-        //get vector3 of child[length-1]
-        // increment vector3.x by 1
-        //next point = new vector3
-        //instantiate new prefab at next point and call LineSmoother.Update
-        
-
-
-
-        /* may or may not need the following:
-         
-        //lerped point list = vector3.lerp(vector3 of child[length-1], next point,  time.deltatime)
-        //make a child with curvedLinePoint with the values in this list
-        
-         */    
+        */
     }
 }
