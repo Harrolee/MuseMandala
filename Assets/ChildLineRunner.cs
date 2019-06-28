@@ -50,14 +50,6 @@ public class ChildLineRunner : MonoBehaviour//LineSource
 
         //render point array.
     }
-
-    //could move the LR to Vector3List convert to the function that sends this message
-    //Vector3[] GetPointArray()
-    //{
-    //    mySectionReflections = transform.parent.GetComponent<LineSource>().sectionReflections;
-
-    //    return mySectionReflections[myIndex];
-    //}
        
     int counter = 0;
     //here is--> a system that sends the current point and the next point into StartCoroutine(SlerpLine(______))

@@ -5,24 +5,6 @@ using UnityEngine.EventSystems;
 
 public class LineSource : MonoBehaviour
 {
-    /*
-     * After 6/26:
-     * 
-     * 
-    public ScriptableObject lineParams;
-    int reflections;
-    int sections;
-    *
-    *       make sections a list within lineParams. Get the number of sections from there
-    * 
-    *        calculate pointsPerSection by summing the # of points expected for each section.
-    List<int> pointsPerSection;
-
-            //questions for Lee:
-    //is var ReflectionCount actually LineCount?
-    */
-
-
 
     public static int sectionCount = 1;
     public float speed = 1;//move to SO
@@ -80,23 +62,13 @@ public class LineSource : MonoBehaviour
             CallRender();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (transform.GetSiblingIndex() == 2 && transform.childCount == 4)
-            {
-                WholeEnchilada();
-            }
+            GenerateSection();
+            //the following for if children inherit this script
+            //if (transform.GetSiblingIndex() == 2 && transform.childCount == 4)
+            //{
+            //    WholeEnchilada();
+            //}
         }
-    }
-
-    void WholeEnchilada()
-    {
-        GenerateSection();//generateMandala populates List<LineRenderer> allLines
-
-        //below: the part that starts the lerp.
-        //foreach (Vector3[] line in allLines)
-        //{
-        //    //ManageLR(line);
-
-        //}
     }
 
 
@@ -107,29 +79,31 @@ public class LineSource : MonoBehaviour
 
         sectionReflections = ReflectLine(MakePoints());
         Debug.Log(sectionReflections.Count + ": if 4, Ready to press :A key:");
-
-
     }
     
 
     void CallRender()
     {
-        //all four sets are identical here. why?
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            //each iteration: pull a v3[]  from sectionREflections and check it's 5.
-            Vector3[] newVE3 = sectionReflections[i];
-            print("section" + i);
-            foreach (var item in newVE3)
-            {
-                print(item);
-            }
-            print("end Section" + i);
 
-            print("my sib ind is " + transform.GetChild(i).transform.GetSiblingIndex());
+    //test
+            ////each iteration: pull a v3[]  from sectionREflections and check it's 5.
+            //Vector3[] newVE3 = sectionReflections[i];
+            //print("section" + i);
+            //foreach (var item in newVE3)
+            //{
+            //    print(item);
+            //}
+            //print("end Section" + i);
+
+            //print("my sib ind is " + transform.GetChild(i).transform.GetSiblingIndex());
             //print( newVE3[5]);
-            //transform.GetChild(i).GetComponent<ChildLineRunner>().StartLineRender(sectionReflections[i]);
+    //end test
+
+
+            transform.GetChild(i).GetComponent<ChildLineRunner>().StartLineRender(sectionReflections[i]);
         }
     }
 
@@ -159,61 +133,40 @@ public class LineSource : MonoBehaviour
     }
 
 
+    //returns a list of reflected lines
     //reflect ListOfPoints reflectionCount times
     List<Vector3[]> ReflectLine(Vector3[] line)
     {
         //transform line and store transformations in fullSection
         List<Vector3[]> fullSection = new List<Vector3[]>();
-        Vector3[] newRef = new Vector3[numPointsPerLine];
+
         int theta;
         Vector3 dummy3;
         theta = 360 / NumLinesPerSection;
         for (int ii = 1; ii < NumLinesPerSection + 1; ii++)
         {
-            print("line # " + ii);
+
+            //issue is here, that fullSection count is not populated by anything.
+            //This occurs because newRef does not exist outside of this loop.
+            //A solution could be:
+                //create an empty array of the size of each v3 array in the first loop and then copy point values into it.
+                    //this way, the array carrying the new point values is ephemeral and the array which they are passed into persists.
+
+            Vector3[] newRef = new Vector3[numPointsPerLine];
+            //print("line # " + ii);
             dummy3 = new Vector3(Mathf.Cos(theta * ii), Mathf.Sin(theta * ii), 0);
             //traverse line. For every vertex in line, create a reflection of that vertex.
             for (int jj = 0; jj < line.Length; jj++)
             {
-                print("traversal: " + jj);
+                //print("traversal: " + jj);
                 newRef[jj] = Vector3.Reflect(line[jj], dummy3);
                 //this is making the points and populating array newRef with them. After one traversal, newRef contains all new points for a new reflection.
-                print("newPoint is " + newRef[jj]);
             }
-            //it is as though the process of adding newRef Changes its values.
-                fullSection.Add(newRef);
-            if (newRef == fullSection[ii-1])
-            {
-                print("new ref == fullSection");
-            }
-            //    print("they're equal");
-            //new ref seems to be the same each time.
-
-
-
-            //for (int i = 0; i < transform.childCount; i++)
-            //{
-            //    //each iteration: pull a v3[]  from sectionREflections and check it's 5.
-            //    Vector3[] newVE3 = fullSection[i];
-            //    print("section" + i);
-            //    foreach (var item in newVE3)
-            //    {
-            //        print(item);
-            //    }
-            //    print("end Section" + i);
-
-            //    print("my sib ind is " + transform.GetChild(i).transform.GetSiblingIndex());
-            //    //print( newVE3[5]);
-            //    //transform.GetChild(i).GetComponent<ChildLineRunner>().StartLineRender(sectionReflections[i]);
-            //}
         }
-        //seems like newRef has been the same every time.
-
-
-
-        //returns a list of reflected lines
+        print("fullSection count is " + fullSection.Count);
         return fullSection;
     }
+
 
     void MakeChildLR(LineRenderer parentLR, int numOfChildren)
     {
@@ -224,68 +177,3 @@ public class LineSource : MonoBehaviour
 
     }
 }
-
-
-
-
-
-
-
-
-
-    /*
-    //the direction of the arc will depend on the direction of the slerp.
-    //implement arc after you implement slerping.
-    int counter=1;
-    void ManageLR(Vector3[] myLine)
-    {
-        Vector3 nextPoint;
-        float distCovered;
-        float journeyLength;
-        float fracJourney;
-        float startTime;
-
-        Vector3 currPoint = myLine[counter-1];
-        Vector3 declaredPoint = myLine[counter];
-        startTime = Time.time;
-        StartCoroutine(RenderLine(currPoint, declaredPoint));
-
-
-        IEnumerator RenderLine(Vector3 lastPoint, Vector3 DPoint)
-        {
-            distCovered = (Time.time - startTime) * speed;
-            journeyLength = Vector3.Distance(lastPoint, DPoint);
-            fracJourney = distCovered / journeyLength;
-            //the lerp---------
-            nextPoint = Vector3.Slerp(lastPoint, DPoint, fracJourney);
-            //-----------------
-
-            //when finished lerping, stop coroutine and begin the lerp toward the next point
-            if (fracJourney >= 1)
-            {
-                counter++;
-                if (counter != myLine.Length -1)
-                    ManageLR(myLine);
-                else//at this point, the entire line has been made.
-                    print("Done With Line");
-                yield break;
-            }
-            else
-                yield return new WaitForFixedUpdate();  //may change to waitforsecs
-        }
-    }
-
-    */
-
-
-
-
-
-
-
-
-//things not covered:
-/*
- *end of section need correspond with start of next section
- *      possible fix: generate a circle between each section.
- */
