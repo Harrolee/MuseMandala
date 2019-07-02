@@ -43,9 +43,9 @@ public class ChildLineRunner : MonoBehaviour//LineSource
 
     public void StartLineRender(Vector3[] myLine)
     {
-        //myLine = GetPointArray();
-        print(myLine[5]);
-        //SendPointsToLR();
+
+        this.myLine = myLine;
+        SendPointsToLR();
 
 
         //render point array.
