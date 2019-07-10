@@ -329,6 +329,8 @@ MonoBehaviour:
   _ChildLineRenderer: {fileID: 4833455814010669063, guid: 50febc32d1a4ae040890867020368343,
     type: 3}
   NumLinesPerSection: 4
+  NumBranchesPerTrunk: 2
+  PointsPerBranch: 3
 --- !u!120 &983819617
 LineRenderer:
   m_ObjectHideFlags: 0
