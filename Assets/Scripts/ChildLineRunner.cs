@@ -4,27 +4,26 @@ using UnityEngine;
 
 public class ChildLineRunner : MonoBehaviour//LineSource
 {
+
+    public GameObject _ChildLineRenderer;
+    [HideInInspector]
+    public List<Vector3[]> mySectionReflections;
+
+    LineRenderer myLR;
+    LineSource parentScript;
     GameObject _branchChild;
     MGMT mgmtScript;
 
-    int speed = 1;
+    //myIndex answers the question: Which Reflection am I?
+    int reflIndex;
     int lineCounter =0;
-    //branch cues consists of the points that each branch begins at.
-    Vector3[,] branchPoints;
-    int branchCounter = 0;
-    LineRenderer myLR;
-    public List<Vector3[]> mySectionReflections;
     int numPointsPerLine;
     Vector3[] myLine = new Vector3[15];
 
-    //myIndex answers the question: Which Reflection am I?
-    int reflIndex;
-
-    LineSource parentScript;
-    public GameObject _ChildLineRenderer;
     int branchPointBuffer;
-    Vector3[] myBranchStartPositions;
 
+    //Below is intro logic.
+    //-------------------------------
     void Awake()
     {       //center by force. For later, consider whether there is anything preventing this from working when not at origin.
         gameObject.transform.position = Vector3.zero;
@@ -47,18 +46,11 @@ public class ChildLineRunner : MonoBehaviour//LineSource
         myLR.numCapVertices = 3;
         myLR.numCornerVertices = 3;
     }
+    //---------------------------------
+    //Above is intro logic.
+    //Below is Main Controlling Method.
 
-    void GetVarsFromParent()
-    {
-        parentScript = transform.parent.GetComponent<LineSource>();
-        numPointsPerLine = parentScript.numPointsPerLine;
-        branchPointBuffer = parentScript.branchPointBuffer;
-        print("branchPointBuffer= " + branchPointBuffer);
-
-        if (_ChildLineRenderer == null)
-            _ChildLineRenderer = parentScript._ChildLineRenderer;
-    }
-
+    //Main Logic Method:
     public void StartLineRender(Vector3[] myLine)
     {
 
@@ -80,7 +72,86 @@ public class ChildLineRunner : MonoBehaviour//LineSource
 
         //render point array.
     }
-     
+
+
+    //Below is ETL Logic.
+    //-----------------------------------------------------------------
+    void GetVarsFromParent()
+    {
+        parentScript = transform.parent.GetComponent<LineSource>();
+        numPointsPerLine = parentScript.numPointsPerLine;
+        branchPointBuffer = parentScript.branchPointBuffer;
+        print("branchPointBuffer= " + branchPointBuffer);
+
+        if (_ChildLineRenderer == null)
+            _ChildLineRenderer = parentScript._ChildLineRenderer;
+    }
+
+    void CreateBranchGenerators()
+    {
+        int numBranches = GetBranchCount();
+
+        Vector3[,] branchMatrix;
+
+        //Vector3[,] thisReflBranchMatrix = parentScript.branchMatrixList[reflIndex]; //reflIndex exceeds size of Branch Matrix. 
+        Vector3 branchStartPoint;
+        Vector3[] lineToPass;
+        for (int branch = 0; branch < numBranches; branch++)
+        {
+            branchMatrix = parentScript.branchMatrixList[branch];
+
+            branchStartPoint = GetBranchStartPoint(branchMatrix, reflIndex);
+            MakeBranchChild(branchStartPoint);
+
+            lineToPass = GetLineToPass(branchMatrix, reflIndex);
+            PassBranchChildPoints(branch, lineToPass);
+        }
+    }
+
+    int GetBranchCount()
+    {
+        return parentScript.NumBranchesPerTrunk;
+    }
+
+    //-----------------------
+    Vector3 GetBranchStartPoint(Vector3[,] branchMatrix, int reflIndex)
+    {
+        return branchMatrix[reflIndex, 0];
+    }
+
+    void MakeBranchChild(Vector3 startPoint)
+    {
+        Instantiate(_branchChild, startPoint, Quaternion.identity, transform);//child to this gameObject
+    }
+    //----------------------
+
+
+    //-----------------------
+    Vector3[] GetLineToPass(Vector3[,] bMatrix, int reflIndex)
+    {
+        Vector3[] lineContainer = new Vector3[bMatrix.GetLength(1)];
+        for (int points = 0; points < bMatrix.GetLength(1); points++)
+        {
+            lineContainer[points] = bMatrix[reflIndex, points];
+        }
+        return lineContainer;
+    }
+
+    void PassBranchChildPoints(int childCount, Vector3[] lineToPass)
+    {
+        transform.GetChild(childCount).gameObject.GetComponent<BranchLR>().GetPoints(lineToPass);
+    }
+    //----------------------------
+
+
+
+    /// <summary>
+    /// Above is the ETL Point Logic.
+    /// Below is the Plot Point Logic.
+    /// </summary>
+
+
+
     //plots all the points in myLine at the same time.
     void PlotPoints()
     {
@@ -110,56 +181,18 @@ public class ChildLineRunner : MonoBehaviour//LineSource
         transform.GetChild(branch).gameObject.GetComponent<BranchLR>().PlotPoints();
     }
 
-    void CreateBranchGenerators()
-    {
-        int numBranches = GetBranchCount();
 
-        Vector3[,] branchMatrix;
 
-        //Vector3[,] thisReflBranchMatrix = parentScript.branchMatrixList[reflIndex]; //reflIndex exceeds size of Branch Matrix. 
-        Vector3 branchStartPoint;
-        Vector3[] lineToPass;
-        for (int branch = 0; branch < numBranches; branch++)
-        {
-            branchMatrix = parentScript.branchMatrixList[branch];
 
-            branchStartPoint = GetBranchStartPoint(branchMatrix, reflIndex);
-            MakeBranchChild(branchStartPoint);
 
-            lineToPass = GetLineToPass(branchMatrix, reflIndex);
-            PassBranchChildPoints(branch, lineToPass);
-        }
-    }
+    /// <summary>
+    /// Above is the Plot Point Logic.
+    /// Below is the Lerp Logic.
+    /// </summary>
 
-    Vector3[] GetLineToPass(Vector3[,] bMatrix, int reflIndex)
-    {
-        Vector3[] lineContainer = new Vector3[bMatrix.GetLength(1)];
-        for (int points = 0; points < bMatrix.GetLength(1); points++)
-        {
-            lineContainer[points] = bMatrix[reflIndex, points];
-        }
-        return lineContainer;
-    }
 
-    void PassBranchChildPoints(int childCount, Vector3[] lineToPass) 
-    {
-        transform.GetChild(childCount).gameObject.GetComponent<BranchLR>().GetPoints(lineToPass);
-    }
 
-    int GetBranchCount()
-    {
-        return parentScript.NumBranchesPerTrunk;
-    }
 
-    Vector3 GetBranchStartPoint(Vector3[,] branchMatrix, int reflIndex)
-    {
-        return branchMatrix[reflIndex, 0];
-    }
-
-    void MakeBranchChild(Vector3 startPoint)
-    {
-        Instantiate(_branchChild, startPoint, Quaternion.identity, transform);//child to this gameObject
-    }
 
 
     int counter = 0;
@@ -214,7 +247,6 @@ public class ChildLineRunner : MonoBehaviour//LineSource
         SendPointsToLR();
     }
     //everyone is getting the same set of points.
-
 
     void RenderBranch()
     {

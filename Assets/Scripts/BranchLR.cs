@@ -15,9 +15,9 @@ public class BranchLR : MonoBehaviour
 
     void PrepareLR()
     {
+        //Later, address the design requirement that forces us to move this to the origin at the start.
+        gameObject.transform.position = Vector3.zero;
         myLR = GetComponent<LineRenderer>();
-        //set position to origin for now.
-        myLR.SetPosition(0, transform.position);
         myLR.numCapVertices = 3;
         myLR.numCornerVertices = 3;
     }
@@ -25,20 +25,12 @@ public class BranchLR : MonoBehaviour
     public void GetPoints(Vector3[] newLine)
     {
         myLine = newLine;
-       // print("len of myLine is:" + myLine.Length); //len is correct
-
-        //foreach (Vector3 point in myLine)
-        //{
-        //    print(transform.GetSiblingIndex() + " points: " + point);
-        //}
     }
 
-    //
     public void PlotPoints()
     {
         foreach (Vector3 point in myLine)
         {
-            
             myLR.positionCount = lineCounter + 1;
             myLR.SetPosition(lineCounter, point);
 

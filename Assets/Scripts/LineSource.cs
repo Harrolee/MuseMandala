@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class LineSource : MonoBehaviour
 {
-
     public static int sectionCount = 1;
+
     public float speed = 1;//move to SO
     public int numPointsPerLine = 15;
     LineRenderer sourceLine;
@@ -124,27 +124,6 @@ public class LineSource : MonoBehaviour
     }
 
 
-
-
-
-    //Starts LineRenderer on children of LineSource.
-    void CallRender()
-    {
-        Vector3[] arrayToPass = new Vector3[numPointsPerLine];
-        //extract one line for each row of the multidimensional array
-        for (int ii = 0; ii < transform.childCount; ii++)
-        {
-            for (int jj = 0; jj < numPointsPerLine; jj++)
-            {
-                arrayToPass[jj] = sectionReflections[ii, jj];
-                arrayToPass[jj] = sectionReflections[ii, jj];
-            }
-            //pass a different line to each child.
-           transform.GetChild(ii).GetComponent<ChildLineRunner>().StartLineRender(arrayToPass);
-           //temp comment
-        }
-    }
-
     //takes the number of points you want. Returns a Vector3[] containing that number of points.
     Vector3[] MakePoints(int numPoints)
     {
@@ -169,6 +148,25 @@ public class LineSource : MonoBehaviour
         return pointsArr;
     }
 
+    //Starts Main Logic Method on children of LineSource. Begins Trunk Generation.
+    void CallRender()
+    {
+        Vector3[] arrayToPass = new Vector3[numPointsPerLine];
+        //extract one line for each row of the multidimensional array
+        for (int ii = 0; ii < transform.childCount; ii++)
+        {
+            for (int jj = 0; jj < numPointsPerLine; jj++)
+            {
+                arrayToPass[jj] = sectionReflections[ii, jj];
+                arrayToPass[jj] = sectionReflections[ii, jj];
+            }
+            //pass a different line to each child.
+           transform.GetChild(ii).GetComponent<ChildLineRunner>().StartLineRender(arrayToPass);
+           //temp comment
+        }
+    }
+
+  
 
     //presently ReflectLine supports only 4 reflections.
             //after demo with four, add parameter to take reflection count.
