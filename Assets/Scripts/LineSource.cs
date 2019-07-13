@@ -19,7 +19,12 @@ public class LineSource : MonoBehaviour
     //public List<LineRenderer> allLines = new List<LineRenderer>();//why tf is this a list of LineRenderers?--After 6/26
     //public List<Vector3[]> allLines = new List<Vector3[]>();
     public int branchPointBuffer;
-        //branchPointBuffer is the number of points between each branch start point.
+    //branchPointBuffer is the number of points between each branch start point.
+
+    public List<Vector3[,]> branchMatrixList;
+    //instead of making this static, send a message to all the children who want branches with this in it.
+        //or, make a messaging bus.
+            //place an instance of branchMatrixList into the bus. Send a message to the kids to grab the instance they need.
 
 
     void Awake()
@@ -93,12 +98,12 @@ public class LineSource : MonoBehaviour
         branchMatrix = MakeBranches(branchStartPoints, PointsPerBranch);
 
         //Each Vector3[] in List is a set of reflections for one branch on the trunk.
-        List<Vector3[,]> branchMatrixList = GenerateBranchList(branchMatrix);
+        branchMatrixList = GenerateBranchList(branchMatrix);
             //when it comes to rendering branches, I will have to render all of the rows of each matrix at the same time.
                     //the List datatype supplies an index for when each set of rows has to begin rendering.
                             //the system that cues the branch of each line to generate will select the matrix to generate one set of branches.
 
-
+        
 
 
 
@@ -135,7 +140,7 @@ public class LineSource : MonoBehaviour
                 arrayToPass[jj] = sectionReflections[ii, jj];
             }
             //pass a different line to each child.
-           // transform.GetChild(ii).GetComponent<ChildLineRunner>().StartLineRender(arrayToPass);
+           transform.GetChild(ii).GetComponent<ChildLineRunner>().StartLineRender(arrayToPass);
            //temp comment
         }
     }
@@ -177,6 +182,8 @@ public class LineSource : MonoBehaviour
         //multi-dimensional array to contain the reflected vector3 arrays.
         Vector3[,] fullSection = new Vector3[rowCount, columnCount];
 
+        //where is the number of times this method will reflect a line?
+
         float theta;
         Vector3 normal;
         theta = 360 / rowCount;
@@ -187,6 +194,7 @@ public class LineSource : MonoBehaviour
         Vector3 cPURinverse = Vector3.Scale(crossProdUpRight, new Vector3(-1, -1, -1));
         Vector3 temp3;
 
+        //outer loop is the number of reflections.
         //currently, ReflectLine supports only up to four reflections.
         for (int ii = 1; ii < rowCount + 1 ; ii++)
         {
@@ -236,6 +244,9 @@ public class LineSource : MonoBehaviour
         }
 
 
+
+
+
         //===================This Automatically Generates Trunks===================================
         //for (int ii = 1; ii < NumLinesPerSection + 1; ii++)
         //{
@@ -268,7 +279,6 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < NumBranchesPerTrunk; ii++)
         {
             branchStartPoints[ii] = line[(startPointIterator * (ii + 1))];
-            print("Should be " + NumBranchesPerTrunk + " different value(s) for this" + branchStartPoints[ii]);
         }
         //we need this value to track when to place branches.
         return startPointIterator;
@@ -278,8 +288,6 @@ public class LineSource : MonoBehaviour
     //returns a matrix of branches whose positions are set relative to points on each trunk.
     Vector3[,] MakeBranches(Vector3[] startPoints, int branchPointCount)
     {
-        print("startPoints length: " + startPoints.Length);//2
-        print("branchLength: " + branchPointCount);//3
         Vector3[,] branchMatrix = new Vector3[startPoints.Length, branchPointCount];
 
         Vector3[] newBranch;
@@ -316,9 +324,8 @@ public class LineSource : MonoBehaviour
             //ReflectLine reflects the given Vector3[] by a given number of times.
             //ReflectBranches returns an array of branch reflections. Each matrix in branchMatrixList contains reflections of the same original branch.
             //There are as many entries in branchMatrixList as there are branches for each trunk.
-            branchMatrixList.Add(ReflectLine(tempBranch, branchMatrixRows, branchMatrixCols));
+            branchMatrixList.Add(ReflectLine(tempBranch, NumLinesPerSection, branchMatrixCols));
         }
-        print("size of list: " + branchMatrixList.Count);
         return branchMatrixList;
         //There are as many entries in branchMatrixList as there are branches for each trunk.
     }
