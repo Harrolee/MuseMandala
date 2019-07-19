@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class LineSource : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class LineSource : MonoBehaviour
     public GameObject _ChildLineRenderer;
     public int NumLinesPerSection = 4;
     public int NumBranchesPerTrunk = 2;
-    public int PointsPerBranch = 3;
+    public int PointsPerBranch = 4;
     Vector3[] branchStartPoints;
     //the reflections of sourceLine in each section.
     Vector3[,] branchMatrix;
@@ -128,20 +128,44 @@ public class LineSource : MonoBehaviour
     Vector3[] MakePoints(int numPoints)
     {
         Vector3[] pointsArr = new Vector3[numPoints];
-
+        float pointCoeff= Random.Range(.5f, 1.2f);
         //I think i=1 because index 0 has to be vector3.zero
         for (int i = 1; i < numPoints; i++)
         {
             if (i % 7 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2, 1, -1));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2, 1 * pointCoeff, -1));
             else if (i % 5 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2, 2, -.5f));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2* pointCoeff, 2, -.5f));
             else if (i % 3 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 1, -.5f));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 1*pointCoeff, -.5f));
             else if (i % 2 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 0, -.2f));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1* pointCoeff, 0, -.2f));
             else
                 pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 0));
+            //after 6/26 demo, use a prime number function to scale this behaviour to the declared number of points
+            //add a coeff to each dimension to scale their tilt
+        }
+        return pointsArr;
+    }
+
+
+    Vector3[] MakeBranchPoints(int numPoints)
+    {
+        Vector3[] pointsArr = new Vector3[numPoints];
+        float pointCoeff = Random.Range(.5f, 1.2f);
+        //I think i=1 because index 0 has to be vector3.zero
+        for (int i = 1; i < numPoints; i++)
+        {
+            if (i % 7 == 0)
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2, 3 * pointCoeff, -1));
+            else if (i % 5 == 0)
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1.5f * pointCoeff, 2, -.5f));
+            else if (i % 3 == 0)
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 1.5f * pointCoeff, -.5f));
+            else if (i % 2 == 0)
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointCoeff, 2, -.2f));
+            else
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 *pointCoeff, 1));
             //after 6/26 demo, use a prime number function to scale this behaviour to the declared number of points
             //add a coeff to each dimension to scale their tilt
         }
@@ -292,7 +316,7 @@ public class LineSource : MonoBehaviour
 
         for (int branchCount = 0; branchCount < startPoints.Length; branchCount++)
         {
-            newBranch = MakePoints(branchPointCount);
+            newBranch = MakeBranchPoints(branchPointCount);
             for (int column = 0; column < branchPointCount; column++)
             {
                 //add starting point of branchMatrix to every value in array returned by MakePoints.

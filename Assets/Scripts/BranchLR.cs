@@ -8,6 +8,7 @@ public class BranchLR : MonoBehaviour
     LineRenderer myLR;
     int lineCounter;
 
+    //Wake up Logic:::::::
     void Awake()
     {
         PrepareLR();
@@ -20,11 +21,17 @@ public class BranchLR : MonoBehaviour
         myLR = GetComponent<LineRenderer>();
         myLR.numCapVertices = 3;
         myLR.numCornerVertices = 3;
+        myLR.sharedMaterial = transform.parent.GetComponent<LineRenderer>().sharedMaterial;
     }
+    //----------------------
+
+
 
     public void GetPoints(Vector3[] newLine)
     {
         myLine = newLine;
+
+        PlotPoints();
     }
 
     public void PlotPoints()
@@ -37,10 +44,4 @@ public class BranchLR : MonoBehaviour
             lineCounter++;
         }
     }
-
-    public void RenderBranch()
-    {
-        //lerp branch into existence.
-    }
-
 }
