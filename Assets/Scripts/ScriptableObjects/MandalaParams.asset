@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sections: 0
   PointsPerSection: 
-  Reflections: 0
+  Reflections: 1
   Branches: 0
   Material: 0
   WidthOfLine: 0

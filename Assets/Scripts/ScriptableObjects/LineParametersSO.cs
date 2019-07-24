@@ -12,6 +12,9 @@ public class LineParametersSO : ScriptableObject
     [Range(5, 15)]
     public List<int> PointsPerSection;
 
+    [Range(.01f, 1)]
+    public float Density;
+
     [Range(1, 7)]
     public int Reflections;
 

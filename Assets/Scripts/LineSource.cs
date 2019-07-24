@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class LineSource : MonoBehaviour
 {
+    public LineParametersSO lineParams;
+
+
     public static int sectionCount = 1;
 
+    [Range(.1f, 4)]
+    public float pointDensity = 1;
     public float speed = 1;//move to SO
     public int numPointsPerLine = 15;
     LineRenderer sourceLine;
@@ -23,10 +28,18 @@ public class LineSource : MonoBehaviour
 
     public List<Vector3[,]> branchMatrixList;
     //instead of making this static, send a message to all the children who want branches with this in it.
-        //or, make a messaging bus.
-            //place an instance of branchMatrixList into the bus. Send a message to the kids to grab the instance they need.
-
-
+    //or, make a messaging bus.
+    //place an instance of branchMatrixList into the bus. Send a message to the kids to grab the instance they need.
+    
+    /*
+     void ImportSO()
+     {
+         NumLinesPerSection = lineParams.Reflections;
+         sectionCount = lineParams.Sections;
+         NumBranchesPerTrunk = lineParams.Branches;
+        // numPointsPerLine = lineParams.PointsPerSection;
+     }
+     */
     void Awake()
     {       //center by force. For later, consider whether there is anything preventing this from working when not at origin.
         gameObject.transform.position = Vector3.zero;
@@ -39,10 +52,10 @@ public class LineSource : MonoBehaviour
         sourceLine.numCapVertices = 3;
         sourceLine.numCornerVertices = 3;
 
+        //ImportSO();
         //when the SO is implemented, reference data from SO
         /*
-        reflections = lineParams.Reflections;
-        sections = lineParams.Sections;
+
         */
 
         if (_ChildLineRenderer == null)
@@ -81,9 +94,10 @@ public class LineSource : MonoBehaviour
 
     void GenerateSection()
     {
+        //Create a source line for each section.
         Vector3[] line = MakePoints(numPointsPerLine);
-        //for 6/26 demo, all sections will have the same number of points and there will be 7 sections.
-        //this gives us a source line for each section.
+        
+
 
         //branchPointBuffer is the number of points between each branch start point.
         branchPointBuffer = MakeBranchStartPoints(line); //divide line length by 2 NumBranchesPerTrunk times.
@@ -102,11 +116,7 @@ public class LineSource : MonoBehaviour
             //when it comes to rendering branches, I will have to render all of the rows of each matrix at the same time.
                     //the List datatype supplies an index for when each set of rows has to begin rendering.
                             //the system that cues the branch of each line to generate will select the matrix to generate one set of branches.
-
         
-
-
-
         //The list<> index
         //cued by a check within the lerp function that looks for a specific point.
            //the function that passes declared points into the lerp function needs the point to check for.
@@ -114,58 +124,116 @@ public class LineSource : MonoBehaviour
                     //iterate on each point
                         //when the iterater meets numGap, reset the iterator and cue the next branch in branchMatrixList.
 
-                    
-
-        //On cue, fire a second method.
-            //second method lerps the branch at the same time as the trunks.
-            //this method selects the next branchMatrix in sequence.
+                   
 
         sectionReflections = ReflectLine(MakePoints(numPointsPerLine), NumLinesPerSection, numPointsPerLine);
+
+        //Save value farthest from center.
+        List<Vector3> farthestPoints = new List<Vector3>();
+        farthestPoints = GetFarthestPoints(farthestPoints);
+        
+
+        //Save final value in each array.
+        Vector3[] endPoints = new Vector3[NumLinesPerSection];
+        endPoints = GetEndpoints(endPoints);
+
+
+
+        
     }
 
+    List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)
+    {
+        //empty farthestPoints and add (0,0,0) as the first value.
+        farthestPoints.Clear();
+        farthestPoints.Add(Vector3.zero);
 
-    //takes the number of points you want. Returns a Vector3[] containing that number of points.
+        float maxlistPD = 0;
+        float currlistPD = 0;
+        float currPointDistance = 0;
+        
+        //will only be one maxDistance.
+        float maxDistance = 0;
+        //will be as many FarthestPoints as there are lines in this section.
+
+            //determine max distance.
+            for (int col = 0; col < sectionReflections.GetLength(1); col++)
+            {
+                //set current max distance of list.
+                for (int ii = 0; ii < farthestPoints.Count; ii++)
+                {
+                    currlistPD = Mathf.Abs(Vector3.Distance(Vector3.zero, farthestPoints[ii]));
+                    //traverse entire list. Find max distance of the list. Compare list max distance to currPointDistance. If cPD is greater, clear the list and add the new point.
+                    if (currlistPD > maxlistPD)
+                    {
+                        maxlistPD = currlistPD;
+                       
+                    }
+                }
+
+                currPointDistance = Mathf.Abs(Vector3.Distance(Vector3.zero, sectionReflections[0, col]));
+                if (maxlistPD < currPointDistance)
+                {
+                    farthestPoints.Clear();
+                    farthestPoints.Add(sectionReflections[0, col]);
+                }
+                else if (maxlistPD == currPointDistance)
+                {
+                    farthestPoints.Add(sectionReflections[0, col]);
+                }
+        }
+            maxDistance = maxlistPD;
+
+        //at this point, list<Vector3> farthestPoints has one value.It has the point of the first line that is farthest from the center.                   \
+        //Given that all succeeding lines are reflections of the first line, we need only check the maxDistance found in the first line against the points  \
+        //of the second line in order to determine which points ought to enter the farthestPoints list.                                                     \
+
+        for (int row = 1; row < sectionReflections.GetLength(0); row++)
+        {
+            for (int col = 0; col < sectionReflections.GetLength(1); col++)
+            {
+                currPointDistance = Mathf.Abs(Vector3.Distance(Vector3.zero, sectionReflections[row, col]));
+                if (currPointDistance > maxDistance)
+                {
+                    farthestPoints.Add(sectionReflections[row, col]);
+                    //print("new FP member: " +sectionReflections[row, col]);
+                }
+            }
+        }
+        print("fp count" + farthestPoints.Count);
+        return farthestPoints;
+    }
+
+    Vector3[] GetEndpoints(Vector3[] endPoints)
+    {
+        int lastCol = sectionReflections.GetLength(1) - 1;
+        for (int row = 0; row < sectionReflections.GetLength(0); row++)
+        {
+            endPoints[row] = sectionReflections[row, lastCol];
+            print("endpoints are " + endPoints[row]);
+        }
+        return endPoints;
+    }
+
+    //use a prime number function to scale this behaviour to the declared number of points
     Vector3[] MakePoints(int numPoints)
     {
         Vector3[] pointsArr = new Vector3[numPoints];
-        float pointCoeff= Random.Range(.5f, 1.2f);
+        float pointCoeff = 1;
         //I think i=1 because index 0 has to be vector3.zero
         for (int i = 1; i < numPoints; i++)
         {
+            pointCoeff = Random.Range(.5f, 1.2f);
             if (i % 7 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2, 1 * pointCoeff, -1));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2 * pointDensity * pointCoeff, 3 * pointCoeff, -1));
             else if (i % 5 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2* pointCoeff, 2, -.5f));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1.5f * pointDensity * pointCoeff, 2 * pointCoeff, -.5f));
             else if (i % 3 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 1*pointCoeff, -.5f));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointDensity * pointCoeff, 1.5f * pointCoeff, -.5f));
             else if (i % 2 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1* pointCoeff, 0, -.2f));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointDensity * pointCoeff, 2 * pointCoeff, -.2f));
             else
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 0));
-            //after 6/26 demo, use a prime number function to scale this behaviour to the declared number of points
-            //add a coeff to each dimension to scale their tilt
-        }
-        return pointsArr;
-    }
-
-
-    Vector3[] MakeBranchPoints(int numPoints)
-    {
-        Vector3[] pointsArr = new Vector3[numPoints];
-        float pointCoeff = Random.Range(.5f, 1.2f);
-        //I think i=1 because index 0 has to be vector3.zero
-        for (int i = 1; i < numPoints; i++)
-        {
-            if (i % 7 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2, 3 * pointCoeff, -1));
-            else if (i % 5 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1.5f * pointCoeff, 2, -.5f));
-            else if (i % 3 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1, 1.5f * pointCoeff, -.5f));
-            else if (i % 2 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointCoeff, 2, -.2f));
-            else
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 *pointCoeff, 1));
+                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointDensity * pointCoeff, 1 * pointCoeff));
             //after 6/26 demo, use a prime number function to scale this behaviour to the declared number of points
             //add a coeff to each dimension to scale their tilt
         }
@@ -316,7 +384,7 @@ public class LineSource : MonoBehaviour
 
         for (int branchCount = 0; branchCount < startPoints.Length; branchCount++)
         {
-            newBranch = MakeBranchPoints(branchPointCount);
+            newBranch = MakePoints(branchPointCount);
             for (int column = 0; column < branchPointCount; column++)
             {
                 //add starting point of branchMatrix to every value in array returned by MakePoints.

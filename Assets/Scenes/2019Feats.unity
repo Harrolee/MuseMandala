@@ -369,6 +369,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81466fc124d1253409976f320e949b90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineParams: {fileID: 0}
+  pointDensity: 3
   speed: 1
   numPointsPerLine: 15
   _ChildLineRenderer: {fileID: 4833455814010669063, guid: 50febc32d1a4ae040890867020368343,
