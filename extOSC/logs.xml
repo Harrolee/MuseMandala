@@ -1,0 +1,8 @@
+<root>
+  <message info="Receiver: 2000. From: 192.168.1.107:54963" type="Received">
+    <packet>L211c2UvdGVzdAAALGYAAD9MzM0=</packet>
+  </message>
+  <message info="Receiver: 2000. From: 192.168.1.107:54944" type="Received">
+    <packet>L211c2UvdGVzdAAALGYAAD5MzM0=</packet>
+  </message>
+</root>

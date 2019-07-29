@@ -721,6 +721,7 @@ GameObject:
   - component: {fileID: 1517841046}
   - component: {fileID: 1517841045}
   - component: {fileID: 1517841047}
+  - component: {fileID: 1517841048}
   m_Layer: 8
   m_Name: PostProc
   m_TagString: Untagged
@@ -772,3 +773,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  reciever: {fileID: 1517841048}
+--- !u!114 &1517841048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517841044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbba286dc10e549b2bdec947ef8dbd3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoConnect: 1
+  closeOnPause: 0
+  mapBundle: {fileID: 0}
+  workInEditor: 0
+  localHostMode: 1
+  localHost: 192.168.1.107
+  localPort: 2000
