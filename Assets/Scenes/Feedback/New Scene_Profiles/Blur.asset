@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Blur
   m_EditorClassIdentifier: 
   settings:
-  - {fileID: 7696591473515921734}
---- !u!114 &7696591473515921734
+  - {fileID: 6268861405288970862}
+--- !u!114 &6268861405288970862
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,7 +38,7 @@ MonoBehaviour:
     value: 1
   size:
     overrideState: 1
-    value: 3
+    value: 2.07
   lumContrib:
     overrideState: 1
-    value: 0
+    value: 0.8
