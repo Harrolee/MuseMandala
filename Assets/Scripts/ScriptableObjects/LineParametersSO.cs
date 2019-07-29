@@ -9,6 +9,9 @@ public class LineParametersSO : ScriptableObject
     [Range(1, 7)]
     public int Sections;
 
+    [Range(1, 7)]
+    public int LinesPerSection;
+
     [Range(5, 15)]
     public List<int> PointsPerSection;
 
@@ -21,11 +24,10 @@ public class LineParametersSO : ScriptableObject
     [Range(1, 7)]
     public int Branches;
 
-    [Range(1, 7)]
-    public int Material;
+    public List<Material> Materials;
 
-    [Range(1, 7)]
-    public int WidthOfLine;
+    [Range(0, 1)]
+    public float WidthOfLine;
 
     [Range(1, 7)]
     public int Color;

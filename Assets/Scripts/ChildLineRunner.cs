@@ -177,10 +177,6 @@ public class ChildLineRunner : MonoBehaviour//LineSource
         {
             distanceCovered += 1/distance;
             fracJourney = distanceCovered / distance;
-            if(fracJourney >= distance)
-            {
-                print(fracJourney + "fracJourney = distance" + distance);
-            }
             increment = Vector3.Slerp(currPoint, declaredPoint, fracJourney);
             //rad. connect this to a line renderer.
 

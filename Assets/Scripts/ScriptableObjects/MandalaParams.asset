@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c61714f0ab13240a915ae45aa574db, type: 3}
   m_Name: MandalaParams
   m_EditorClassIdentifier: 
-  Sections: 0
-  PointsPerSection: 
+  Sections: 2
+  LinesPerSection: 4
+  PointsPerSection: 0f0000000f000000
+  Density: 0.53
   Reflections: 1
-  Branches: 0
-  Material: 0
-  WidthOfLine: 0
-  Color: 0
+  Branches: 2
+  Materials:
+  - {fileID: 2100000, guid: 5d05eb4a968fd6f4eb7a9a4231682317, type: 2}
+  - {fileID: 2100000, guid: 861fcf549604a06478fd9ecaa57527c5, type: 2}
+  WidthOfLine: 0.5
+  Color: 1

@@ -6,7 +6,7 @@ public class LineSource : MonoBehaviour
     public LineParametersSO lineParams;
 
 
-    public static int sectionCount = 1;
+
 
     [Range(.1f, 4)]
     public float pointDensity = 1;
@@ -25,6 +25,8 @@ public class LineSource : MonoBehaviour
     //public List<Vector3[]> allLines = new List<Vector3[]>();
     public int branchPointBuffer;
     //branchPointBuffer is the number of points between each branch start point.
+
+    Vector3[] endPoints;
 
     public List<Vector3[,]> branchMatrixList;
     //instead of making this static, send a message to all the children who want branches with this in it.
@@ -64,40 +66,25 @@ public class LineSource : MonoBehaviour
         branchStartPoints = new Vector3[NumBranchesPerTrunk];
     }
 
-    void Start()
+
+    void GenerateSecondSection()
     {
-        if (sectionCount != 0)
-        {
-            //create children, one for each Reflection.
-            MakeChildLR(sourceLine, NumLinesPerSection);
-            sectionCount--;
-        }
-        else
-            print("Made Enough Children");
+        Vector3[] newLine = MakePoints(numPointsPerLine);
     }
 
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-            CallRender();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GenerateSection();
-            //the following for if children inherit this script
-            //if (transform.GetSiblingIndex() == 2 && transform.childCount == 4)
-            //{
-            //    WholeEnchilada();
-            //}
-        }
-    }
-
-    void GenerateSection()
+    public void GenerateSection()
     {
         //Create a source line for each section.
         Vector3[] line = MakePoints(numPointsPerLine);
-        
 
+        if (!(endPoints == null))
+        {
+            //add startPoints:
+            for (int i = 0; i < line.Length; i++)
+            {
+                line[i] += endPoints[0];
+            }
+        }
 
         //branchPointBuffer is the number of points between each branch start point.
         branchPointBuffer = MakeBranchStartPoints(line); //divide line length by 2 NumBranchesPerTrunk times.
@@ -126,7 +113,7 @@ public class LineSource : MonoBehaviour
 
                    
 
-        sectionReflections = ReflectLine(MakePoints(numPointsPerLine), NumLinesPerSection, numPointsPerLine);
+        sectionReflections = ReflectLine(line, NumLinesPerSection, numPointsPerLine);
 
         //Save value farthest from center.
         List<Vector3> farthestPoints = new List<Vector3>();
@@ -134,12 +121,9 @@ public class LineSource : MonoBehaviour
         
 
         //Save final value in each array.
-        Vector3[] endPoints = new Vector3[NumLinesPerSection];
+        endPoints = new Vector3[NumLinesPerSection];
         endPoints = GetEndpoints(endPoints);
 
-
-
-        
     }
 
     List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)
@@ -215,37 +199,45 @@ public class LineSource : MonoBehaviour
         return endPoints;
     }
 
-    //use a prime number function to scale this behaviour to the declared number of points
     Vector3[] MakePoints(int numPoints)
     {
+        //add logic to zfunction to apply depth to the mandala
+        float zfunction = 0;
+        float y = 0;
         Vector3[] pointsArr = new Vector3[numPoints];
-        float pointCoeff = 1;
         //I think i=1 because index 0 has to be vector3.zero
         for (int i = 1; i < numPoints; i++)
         {
-            pointCoeff = Random.Range(.5f, 1.2f);
-            if (i % 7 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(2 * pointDensity * pointCoeff, 3 * pointCoeff, -1));
-            else if (i % 5 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1.5f * pointDensity * pointCoeff, 2 * pointCoeff, -.5f));
-            else if (i % 3 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointDensity * pointCoeff, 1.5f * pointCoeff, -.5f));
-            else if (i % 2 == 0)
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointDensity * pointCoeff, 2 * pointCoeff, -.2f));
-            else
-                pointsArr[i] = (pointsArr[i - 1] + new Vector3(1 * pointDensity * pointCoeff, 1 * pointCoeff));
-            //after 6/26 demo, use a prime number function to scale this behaviour to the declared number of points
-            //add a coeff to each dimension to scale their tilt
+            y = Mathf.Sin(i);
+            pointsArr[i] = new Vector3(-i, y + i, zfunction);
+        }
+        return pointsArr;
+    }
+
+    //
+    Vector3[] MakeBranchPoints(int numPoints, Vector3[] startPoints)
+    {
+        //add logic to zfunction to apply depth to the mandala
+        float sizeCoeff = 1.5f;
+        float zfunction = 0;
+        float y = 0;
+        Vector3[] pointsArr = new Vector3[numPoints];
+
+        //I think i=1 because index 0 has to be vector3.zero
+        for (int i = 1; i < numPoints; i++)
+        {
+            y = Mathf.Sin(i);
+            pointsArr[i] = new Vector3(-i, (y + i) * sizeCoeff, zfunction);
         }
         return pointsArr;
     }
 
     //Starts Main Logic Method on children of LineSource. Begins Trunk Generation.
-    void CallRender()
+    public void CallRender()
     {
         Vector3[] arrayToPass = new Vector3[numPointsPerLine];
         //extract one line for each row of the multidimensional array
-        for (int ii = 0; ii < transform.childCount; ii++)
+        for (int ii = 0; ii < NumLinesPerSection; ii++)
         {
             for (int jj = 0; jj < numPointsPerLine; jj++)
             {
@@ -380,20 +372,54 @@ public class LineSource : MonoBehaviour
     {
         Vector3[,] branchMatrix = new Vector3[startPoints.Length, branchPointCount];
 
-        Vector3[] newBranch;
 
+        //pass startPoints into MakeBranchPoints. remove startPoints from the plotting section.
+        Vector3[] newBranch = MakeBranchPoints(branchPointCount, startPoints);
+        Vector3[] inverseNewBranch = new Vector3[newBranch.Length];
+
+        //Each iteration creates points for one branch.
         for (int branchCount = 0; branchCount < startPoints.Length; branchCount++)
         {
-            newBranch = MakePoints(branchPointCount);
-            for (int column = 0; column < branchPointCount; column++)
+            if (branchCount % 2 == 0)
             {
-                //add starting point of branchMatrix to every value in array returned by MakePoints.
-                branchMatrix[branchCount, column] = newBranch[column] + startPoints[branchCount]; //there won't always be as many startPoints as columns
+                print("ran");
+                //each iteration creates one point for one branch
+                for (int column = 0; column < branchPointCount; column++)
+                {
+                    //add starting point of branchMatrix to every value in array returned by MakePoints.
+                    branchMatrix[branchCount, column] = newBranch[column] + startPoints[branchCount]; //there won't always be as many startPoints as columns
+                }
+            }
+            else
+            {
+                inverseNewBranch = InvertLine(newBranch, startPoints[branchCount]);
+                print(branchCount+" inverseNewBranch" + inverseNewBranch[branchCount]);
+                print("i ran");
+                for (int column = 0; column < branchPointCount; column++)
+                {
+                    //adding the starting point locates the branch on the trunk.
+                    //add starting point of branchMatrix to every value in array returned by MakePoints.
+                    branchMatrix[branchCount, column] = inverseNewBranch[column] + startPoints[branchCount];
+                }
+                    
+                
             }
         }    
 
         return branchMatrix;
     }   //this contains all the branches of the source line.
+
+    Vector3[] InvertLine(Vector3[] line, Vector3 normal)
+    {
+        normal = new Vector3(1, 1, 0);
+        //Vector3 newPoint;
+        Vector3[] reflectedLine = new Vector3[line.Length];
+        for (int point = 0; point < line.Length; point++)
+        {
+            reflectedLine[point] = Vector3.Reflect(line[point], normal);
+        }
+        return reflectedLine;
+    }
 
     List<Vector3[,]> GenerateBranchList(Vector3[,] branchMatrix)
     {
@@ -420,12 +446,5 @@ public class LineSource : MonoBehaviour
         //There are as many entries in branchMatrixList as there are branches for each trunk.
     }
 
-    void MakeChildLR(LineRenderer parentLR, int numOfChildren)
-    {
-        for (int i = 0; i < numOfChildren; i++)
-        {
-            Instantiate(_ChildLineRenderer, parentLR.transform);
-        }
 
-    }
 }

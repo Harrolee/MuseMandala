@@ -8,12 +8,12 @@ public class Vignette : MonoBehaviour
     public float speed = .2f;
     float degree = 0;
     PostProcessVolume vol;
-    Material mat;
+   // Material mat;
 
     void Start()
     {
         vol = GetComponent<PostProcessVolume>();
-        mat = GetComponent<Renderer>().material;
+//        mat = GetComponent<Renderer>().material;
     }
 
     void Update()
@@ -30,7 +30,7 @@ public class Vignette : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            mat.SetFloat("_ApertureSize", mat.GetFloat("_ApertureSize") + .05f);
+    //        mat.SetFloat("_ApertureSize", mat.GetFloat("_ApertureSize") + .05f);
             //StopAllCoroutines();
             //StartCoroutine(OpenPlaneVignette());
         }
@@ -70,7 +70,7 @@ public class Vignette : MonoBehaviour
 
         while (degree < .5)
         {
-            mat.SetFloat("_ApertureSize", Mathf.Lerp(.5f, 0, degree));
+   //         mat.SetFloat("_ApertureSize", Mathf.Lerp(.5f, 0, degree));
             degree += (speed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
@@ -81,7 +81,7 @@ public class Vignette : MonoBehaviour
         degree = 0;
         while (degree < .5)
         {
-            mat.SetFloat("_ApertureSize", Mathf.Lerp(.5f, 0, degree));
+ //           mat.SetFloat("_ApertureSize", Mathf.Lerp(.5f, 0, degree));
             degree += (speed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
