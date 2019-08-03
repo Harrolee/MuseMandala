@@ -734,6 +734,8 @@ GameObject:
   - component: {fileID: 1517841045}
   - component: {fileID: 1517841047}
   - component: {fileID: 1517841048}
+  - component: {fileID: 1517841049}
+  - component: {fileID: 1517841050}
   m_Layer: 8
   m_Name: PostProc
   m_TagString: Untagged
@@ -809,6 +811,42 @@ MonoBehaviour:
   localHostMode: 1
   localHost: 192.168.1.107
   localPort: 2000
+--- !u!114 &1517841049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517841044}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7783cccba1f0d914c8bfaef08370ba89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtime: 15000
+  memory: 10
+  weightRatio: 0.5
+  history_size: 100
+  easiness: 0.5
+  fillratio: 0.5
+  padding: 0.2
+--- !u!114 &1517841050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517841044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10585b2bb2d23b44b60d80a1e0393e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: Person0/elements/alpha_absolute
+  memory: 10
+  weightRatio: 0.5
+  history_size: 100
+  recording_time: 900
 --- !u!1001 &7570353391607792236
 PrefabInstance:
   m_ObjectHideFlags: 0
