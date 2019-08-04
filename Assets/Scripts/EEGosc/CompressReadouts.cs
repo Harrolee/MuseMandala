@@ -17,6 +17,10 @@ namespace extOSC.Examples
 
         private OSCReceiver _receiver;
 
+        //Maya's team would have set runCount 
+        //in order to terminate the sequence.
+        //We're using music and setting the end
+        //to a soundtrack. So this is obsolete.
         public int runtime = 15000;
         private int runcount = 0;
 
@@ -45,7 +49,7 @@ namespace extOSC.Examples
         public double padding = 0.2; //padding is used to calculate the brightness.
 
         private int present = 0;
-        //public OSC_PostProcessing ;
+        private EffectsMaster effectsMaster;
 
 
         #endregion
@@ -76,6 +80,11 @@ namespace extOSC.Examples
             // Bind "MessageReceived" method to special address.
             _receiver.Bind(_oscAddress, MessageReceived);
 
+            //connect to EffectMaster, which CompressReadouts
+            //assumes to find on this gameobject.
+            effectsMaster = GetComponent<EffectsMaster>();
+
+            //Set Memory and Smoothing vars
             AFvals = new double[memory][];
             Tvals = new double[memory][];
             weightVals = new double[memory];
@@ -113,17 +122,19 @@ namespace extOSC.Examples
 
         protected void MessageReceived(OSCMessage message)
         {
-            //Debug.Log("message received!");
-            float[] contents = new float[4];
+            double[] contents = new double[4];
             int count = 0;
             //Debug.Log(message);
+            //forgive me, Iam1337, for using Convert rather than understanding your parsing system. -Lee
+            string newD;
             foreach (extOSC.OSCValue d in message.Values)
             {
-                //I (Lee) bet this is meant to be d, not d.FloatValue
-                contents[count] = d.FloatValue;
+                newD = d.StringValue;
+                contents[count] = Convert.ToDouble(newD);
+                print(Convert.ToDouble(newD));
                 count += 1;
             }
-            runcount += 1;
+
             MuseTracker(contents);
         }
 
@@ -185,7 +196,7 @@ namespace extOSC.Examples
             }
         }
 
-        protected void MuseTracker(float[] v)
+        protected void MuseTracker(double[] v)
         {
             //Debug.Log("IN MUSETRACKER");
             //            double avg = 0;
@@ -289,15 +300,17 @@ namespace extOSC.Examples
                     Debug.Log("AugMerge: " + augmented_merge.ToString());
                     Debug.Log("fillratio: " + fillratio.ToString());
                     message2.AddValue(OSCValue.Float((float)merge));
-                    _transmitter.Send(message2);
+                    //If I want to transmit in the future,
+                    //perhaps to save a recording while running,
+                    //I'll have to uncomment this.
+                    //_transmitter.Send(message2);
                     if (runtime < runcount)
                     {
                         Debug.Log("Runtime reached, terminating visual.");
-                        //draw.setMusemod(0);
+                        //cue "brushing/blowing away" of mandala.
                     }
                     else {
-                        //draw.setMusemod(augmented_merge + .2); 
-                        print("merged value is " + augmented_merge + .2);
+                        effectsMaster.GiveFeedback(Convert.ToSingle(augmented_merge));
                     }
                     present++;
                 }
