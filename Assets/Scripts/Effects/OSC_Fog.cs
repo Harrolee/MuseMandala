@@ -16,27 +16,34 @@ public class OSC_Fog : MonoBehaviour
     public List<ParticleSystem> _Fog;
     public WindZone _WindZone;
 
+    //need to suit value range to behavior of wind.4
+    //incoming range is  .5-.9999999
+    //wind range is .01w-.8w
+    //need .8w to be .3 and .01w to be .5
+    //variables for linear conversion:
+    readonly float oldMax = .3f;
+    readonly float oldMin = 1;
+    readonly float newMax = .9f;
+    readonly float newMin = .01f;
+    float oldRange;
+    float newRange;
+    float windValue;
+    //oldMax is smaller than oldMin because we 
+    //want ascent in the old scale to  
+    //translate to descent in the new scale.
+
     void Start()
     {
         receiver = gameObject.AddComponent<OSCReceiver>();
         //osc recieve setup:
-        receiver.Bind("/muse/fog", AdjustFog);
+        receiver.Bind("/muse/fog/*", AdjustFog);
         //receiver.Bind("/muse/grain", GrainOSC);
-        receiver.Bind("/muse/wind", AdjustWind);
+        receiver.Bind("/muse/*", AdjustWind);
         print("bound");
 
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            //vol.weight += .025f * GrainSpeed;
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            //vol.weight -= .025f * GrainSpeed;
-        }
+        //prepare linear conversion variables.
+        oldRange = oldMax - oldMin;
+        newRange = newMax - oldMin;
     }
 
     void AdjustFog(OSCMessage message)
@@ -44,9 +51,12 @@ public class OSC_Fog : MonoBehaviour
         if (message.ToFloat(out float value))
         {
             print("fog recieved Val: " + value);
+            //perform a linear conversion 
+            windValue = (value - oldMin) / oldRange * newRange + newMin;
+
             foreach (var pSystem in _Fog)
             {
-                StartCoroutine(AdjustFog(value, pSystem.main));
+                StartCoroutine(AdjustFog(windValue, pSystem.main));
             }
             
         }
