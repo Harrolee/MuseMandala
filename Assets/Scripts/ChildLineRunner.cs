@@ -82,8 +82,8 @@ public class ChildLineRunner : MonoBehaviour//LineSource
         branchPointBuffer = parentScript.branchPointBuffer;
         print("branchPointBuffer= " + branchPointBuffer);
 
-        if (_ChildLineRenderer == null)
-            _ChildLineRenderer = parentScript._ChildLineRenderer;
+        //if (_ChildLineRenderer == null)
+        //    _ChildLineRenderer = parentScript._ChildLineRenderer;
     }
 
     void CreateBranchGenerators()

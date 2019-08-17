@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Mandala;
 
 public class LineSource : MonoBehaviour
 {
@@ -13,7 +14,6 @@ public class LineSource : MonoBehaviour
     public float speed = 1;//move to SO
     public int numPointsPerLine = 15;
     LineRenderer sourceLine;
-    public GameObject _ChildLineRenderer;
     public int NumLinesPerSection = 4;
     public int NumBranchesPerTrunk = 2;
     public int PointsPerBranch = 4;
@@ -60,22 +60,19 @@ public class LineSource : MonoBehaviour
 
         */
 
-        if (_ChildLineRenderer == null)
-            _ChildLineRenderer = gameObject;
-
         branchStartPoints = new Vector3[NumBranchesPerTrunk];
     }
 
 
     void GenerateSecondSection()
     {
-        Vector3[] newLine = MakePoints(numPointsPerLine);
+        Vector3[] newLine = Patterns.Sin(numPointsPerLine);
     }
 
     public void GenerateSection()
     {
         //Create a source line for each section.
-        Vector3[] line = MakePoints(numPointsPerLine);
+        Vector3[] line = Patterns.Square(numPointsPerLine);
 
         if (!(endPoints == null))
         {
@@ -124,6 +121,31 @@ public class LineSource : MonoBehaviour
         endPoints = new Vector3[NumLinesPerSection];
         endPoints = GetEndpoints(endPoints);
 
+        //RenderCircle(endPoints);
+        RenderSquare(endPoints);
+    }
+    
+    void RenderSquare(Vector3[] endpoints)
+    {
+        //Debug.LogFormat("endpoints are: {0},   {1},   {2}", endPoints[0], endPoints[1], endPoints[2]);
+        GameObject square = new GameObject("square");
+        square.AddComponent<LineRenderer>();
+        LineRenderer squareLR = square.GetComponent<LineRenderer>();
+        squareLR.useWorldSpace = false;
+        squareLR.positionCount = 5;
+        squareLR.SetPositions(Boundaries.MakeSquare(endpoints, Vector3.Distance(endPoints[0], endPoints[1])));
+    }
+
+    void RenderCircle(Vector3[] endpoints)
+    {
+        GameObject square = new GameObject("circle");
+        square.AddComponent<LineRenderer>();
+        LineRenderer squareLR = square.GetComponent<LineRenderer>();
+        Vector3[] circlePoints = Boundaries.MakeCircle(endpoints[0], endpoints[2], Vector3.Distance(endpoints[0], endpoints[2]));
+        print("5th circle point: " + circlePoints[5]);
+        squareLR.useWorldSpace = false;
+        squareLR.positionCount = circlePoints.Length;
+        squareLR.SetPositions(circlePoints);
     }
 
     List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)
@@ -168,7 +190,7 @@ public class LineSource : MonoBehaviour
         }
             maxDistance = maxlistPD;
 
-        //at this point, list<Vector3> farthestPoints has one value.It has the point of the first line that is farthest from the center.                   \
+        //at this point, list<Vector3> farthestPoints has one value. It has the point of the first line that is farthest from the center.                   \
         //Given that all succeeding lines are reflections of the first line, we need only check the maxDistance found in the first line against the points  \
         //of the second line in order to determine which points ought to enter the farthestPoints list.                                                     \
 
@@ -197,21 +219,6 @@ public class LineSource : MonoBehaviour
             print("endpoints are " + endPoints[row]);
         }
         return endPoints;
-    }
-
-    Vector3[] MakePoints(int numPoints)
-    {
-        //add logic to zfunction to apply depth to the mandala
-        float zfunction = 0;
-        float y = 0;
-        Vector3[] pointsArr = new Vector3[numPoints];
-        //I think i=1 because index 0 has to be vector3.zero
-        for (int i = 1; i < numPoints; i++)
-        {
-            y = Mathf.Sin(i);
-            pointsArr[i] = new Vector3(-i, y + i, zfunction);
-        }
-        return pointsArr;
     }
 
     //
@@ -278,6 +285,8 @@ public class LineSource : MonoBehaviour
 
         //outer loop is the number of reflections.
         //currently, ReflectLine supports only up to four reflections.
+        //Further into the project, please automate this pattern so
+        //that it might scale automatically.
         for (int ii = 1; ii < rowCount + 1 ; ii++)
         {
             if(ii == 1)

@@ -3,7 +3,12 @@ guid: 81466fc124d1253409976f320e949b90
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - lineParams: {instanceID: 0}
+  - _Square: {fileID: 2055317083479754040, guid: bcf7b9d4ee1f8074f996dbb2cb082da1,
+      type: 3}
+  - _ChildLineRenderer: {fileID: 4833455814010669063, guid: 50febc32d1a4ae040890867020368343,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
