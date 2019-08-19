@@ -63,47 +63,54 @@ namespace Mandala
             List<Vector3> points = new List<Vector3>();
             float current = 0;
             float total = distance;
+            //call GetCenter()
             Vector3 center = (startPoint + endPoint) * .5f;
-            Vector3 relStart = startPoint + center;
-            Vector3 relEnd = endPoint + center;
+            //Arbitrarily define... FOR NOW!
+            Vector3 direction = Vector3.up;
+            center -= direction;
+            Vector3 relStart = startPoint - center;
+            Vector3 relEnd = endPoint - center;
             Vector3 nextPoint;
+
             while (current<total)
             {
-                center -= new Vector3(.5f, .5f, 0); 
                 nextPoint = Vector3.Slerp(relStart, relEnd, current/total);
-                Debug.Log("nextPoint is: " +nextPoint);
-                points.Add(nextPoint);
-                relStart = startPoint - center;
-                //relEnd = endPoint - center;
                 nextPoint += center;
+
+                points.Add(nextPoint);
+                
                 current += stepSize / distance;
+
                 if (current > total)
                     break;
-                        //current= total;
             }
 
             Debug.Log("# of points in this curve: " + points.Count);
-            //list now contains the first half of points.
+            //List<Vector3> points now contains half of the circle's points.
 
             //Now, add the other side:
-            //current = 0;
-            //center = (startPoint + endPoint) * .5f;
-            //relStart = endPoint + center;
-            //relEnd = startPoint + center;
-            //while (current <= total)
-            //{
-            //    center -= new Vector3(.5f, .5f, 0);
-            //    current += stepSize / distance;
-            //    nextPoint = Vector3.Slerp(relStart, relEnd, current / total);
-            //    points.Add(Vector3.Slerp(relStart, relEnd, current / total));
-            //    relStart = startPoint + center;
-            //    relEnd = endPoint + center;
-            //    nextPoint += center;
-            //}
+            current = 0;
+            center = (startPoint + endPoint) * .5f;
+            direction = Vector3.down;
+            center -= direction;
+            relStart = startPoint - center;
+            relEnd = endPoint - center;
+            while (current < total)
+            {
+                nextPoint = Vector3.Slerp(relEnd, relStart, current / total);
+                nextPoint += center;
+
+                points.Add(nextPoint);
+
+                current += stepSize / distance;
+
+                if (current > total)
+                    break;
+            }
 
             //Debug.Log("# of points in this circle: " + points.Count);
             //convert it to an array and return.
-            Vector3[] finalPoints = points.ToArray();//new Vector3[points.Count];
+            Vector3[] finalPoints = points.ToArray();
             return finalPoints;
         }
 

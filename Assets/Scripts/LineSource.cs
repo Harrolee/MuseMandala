@@ -121,7 +121,7 @@ public class LineSource : MonoBehaviour
         endPoints = new Vector3[NumLinesPerSection];
         endPoints = GetEndpoints(endPoints);
 
-        //RenderCircle(endPoints);
+        RenderCircle(endPoints);
         RenderSquare(endPoints);
     }
     
