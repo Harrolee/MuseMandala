@@ -7,7 +7,7 @@ public class LineSource : MonoBehaviour
     public LineParametersSO lineParams;
 
 
-
+    Vector3[] squarePoints = new Vector3[4];
 
     [Range(.1f, 4)]
     public float pointDensity = 1;
@@ -72,11 +72,14 @@ public class LineSource : MonoBehaviour
     public void GenerateSection()
     {
         //Create a source line for each section.
-        Vector3[] line = Patterns.Square(numPointsPerLine);
+        Vector3[] line = Patterns.Diagonal(numPointsPerLine);
 
+
+        //This sets line to start at the end of the last line.
+        //Vector3[] endpoints is filled with the endpoints of
+        //the line generated each pass.
         if (!(endPoints == null))
         {
-            //add startPoints:
             for (int i = 0; i < line.Length; i++)
             {
                 line[i] += endPoints[0];
@@ -121,31 +124,70 @@ public class LineSource : MonoBehaviour
         endPoints = new Vector3[NumLinesPerSection];
         endPoints = GetEndpoints(endPoints);
 
-        RenderCircle(endPoints);
-        RenderSquare(endPoints);
-    }
-    
-    void RenderSquare(Vector3[] endpoints)
-    {
-        //Debug.LogFormat("endpoints are: {0},   {1},   {2}", endPoints[0], endPoints[1], endPoints[2]);
-        GameObject square = new GameObject("square");
-        square.AddComponent<LineRenderer>();
-        LineRenderer squareLR = square.GetComponent<LineRenderer>();
-        squareLR.useWorldSpace = false;
-        squareLR.positionCount = 5;
-        squareLR.SetPositions(Boundaries.MakeSquare(endpoints, Vector3.Distance(endPoints[0], endPoints[1])));
+
+
+
+        //innermost circle
+        Boundaries.PlaceCircle(sectionReflections[0,7], sectionReflections[2,7]);
+
+
+        //innermost square
+        for (int ii = 0; ii < 4; ii++)
+        {
+            squarePoints[ii] = sectionReflections[ii, 7];
+        }
+        Boundaries.PlaceSquare(squarePoints);
+
+
+        //outermost square
+        Boundaries.PlaceSquare(endPoints);
+
+
+        //Three concentric squares:
+            //one will be a gate soon.
+        for (int ii = 0; ii < 4; ii++)
+        {
+            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 3];
+        }
+        Boundaries.PlaceSquare(squarePoints);
+
+        for (int ii = 0; ii < 4; ii++)
+        {
+            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 2];
+        }
+        Boundaries.PlaceSquare(squarePoints);
+
+        for (int ii = 0; ii < 4; ii++)
+        {
+            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 1];
+        }
+        Boundaries.PlaceSquare(squarePoints);
+
+
+        //circle[-4}
+        Boundaries.PlaceCircle(endPoints[0], endPoints[2]);
+        //four outermost concentric circles:
+        for (int offset = 0; offset < 4; offset++)
+        {
+            Boundaries.PlaceCircle(endPoints[0] - new Vector3(offset, offset, 0), endPoints[2] + new Vector3(offset, offset, 0));
+        }
+
+        SetBoundaryMaterials();
+        //give Materials to Circles:
+
     }
 
-    void RenderCircle(Vector3[] endpoints)
+    void SetBoundaryMaterials()
     {
-        GameObject square = new GameObject("circle");
-        square.AddComponent<LineRenderer>();
-        LineRenderer squareLR = square.GetComponent<LineRenderer>();
-        Vector3[] circlePoints = Boundaries.MakeCircle(endpoints[0], endpoints[2], Vector3.Distance(endpoints[0], endpoints[2]));
-        print("5th circle point: " + circlePoints[5]);
-        squareLR.useWorldSpace = false;
-        squareLR.positionCount = circlePoints.Length;
-        squareLR.SetPositions(circlePoints);
+        //Get Material from MGMT
+        Material cMat; 
+        GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
+        for (int ii = 0; ii < circles.Length; ii++)
+        {
+            cMat = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>().MaterialBank[ii];
+            circles[ii].GetComponent<LineRenderer>().material = cMat;
+        }
+        GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
     }
 
     List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)

@@ -7,6 +7,7 @@ public class MGMT : MonoBehaviour
     public PrefabsSO Prefabs;
     public LineParametersSO MandalaParams;
     public GameObject _LineSourceGO;
+    public List<Material> MaterialBank;
     List<LineSource> sectionRoots = new List<LineSource>();
 
     int currSectionRoot = 0;

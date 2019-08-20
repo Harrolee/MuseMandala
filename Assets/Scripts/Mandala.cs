@@ -7,6 +7,21 @@ namespace Mandala
 {
     public class Patterns
     {
+        public static Vector3[] Diagonal(int numPoints)
+        {
+            //add logic to zfunction to apply depth to the mandala
+            float zfunction = 0;
+            float y = 0;
+            Vector3[] pointsArr = new Vector3[numPoints];
+            //I think i=1 because index 0 has to be vector3.zero
+            for (int i = 1; i < numPoints; i++)
+            {
+                y = i;
+                pointsArr[i] = new Vector3(-i, y, zfunction);
+            }
+            return pointsArr;
+        }
+
         public static Vector3[] Sin(int numPoints)
         {
             //add logic to zfunction to apply depth to the mandala
@@ -56,8 +71,43 @@ namespace Mandala
 
     public class Boundaries
     {
-        //better know as "make two overlapping diagonal lines"
-        public static Vector3[] MakeCircle(Vector3 startPoint, Vector3 endPoint, float distance)
+        public static void PlaceSquare(Vector3[] cornerPoints)
+        {
+            //distance is here in case, in a future iteration 
+            //of MakeSquare, I derive a square from two given points.
+            //float distance = Vector3.Distance(endpoints[0], endpoints[1]);
+            GameObject square = new GameObject("square");
+            square.tag = "square";
+            square.AddComponent<LineRenderer>();
+            LineRenderer squareLR = square.GetComponent<LineRenderer>();
+            squareLR.useWorldSpace = false;
+            squareLR.positionCount = 5;
+            squareLR.SetPositions(MakeSquare(cornerPoints));
+        }
+
+        static Vector3[] MakeSquare(Vector3[] endpoints)
+        {
+            Vector3[] corners = new Vector3[5];
+            for (int i = 0; i < 4; i++)
+            {
+                corners[i] = endpoints[i];
+            }
+            corners[4] = endpoints[0];
+            return corners;
+        }
+
+        public static void PlaceCircle(Vector3 startPoint, Vector3 endpoint)
+        {
+            GameObject circle = new GameObject("circle");
+            circle.tag = "circle";
+            circle.AddComponent<LineRenderer>();
+            LineRenderer squareLR = circle.GetComponent<LineRenderer>();
+            Vector3[] circlePoints = MakeCircle(startPoint, endpoint, Vector3.Distance(startPoint, endpoint));
+            squareLR.positionCount = circlePoints.Length;
+            squareLR.SetPositions(circlePoints);
+        }
+
+        static Vector3[] MakeCircle(Vector3 startPoint, Vector3 endPoint, float distance)
         {
             float stepSize = 20;
             List<Vector3> points = new List<Vector3>();
@@ -65,7 +115,7 @@ namespace Mandala
             float total = distance;
             //call GetCenter()
             Vector3 center = (startPoint + endPoint) * .5f;
-            //Arbitrarily define... FOR NOW!
+            //Arbitrarily define direction... FOR NOW!
             Vector3 direction = Vector3.up;
             center -= direction;
             Vector3 relStart = startPoint - center;
@@ -74,8 +124,7 @@ namespace Mandala
 
             while (current<total)
             {
-                nextPoint = Vector3.Slerp(relStart, relEnd, current/total);
-                nextPoint += center;
+                nextPoint = Vector3.Slerp(relStart, relEnd, current/total) + center;
 
                 points.Add(nextPoint);
                 
@@ -107,22 +156,13 @@ namespace Mandala
                 if (current > total)
                     break;
             }
-
-            //Debug.Log("# of points in this circle: " + points.Count);
+            //Add the startpoint to the end of the
+            //array to cap the circle off.
+            points.Add(startPoint);
+            
             //convert it to an array and return.
             Vector3[] finalPoints = points.ToArray();
             return finalPoints;
-        }
-
-        public static Vector3[] MakeSquare(Vector3[] endpoints, float distance)
-        {
-            Vector3[] corners = new Vector3[5];
-            for (int i = 0; i < 4; i++)
-            {
-                corners[i] = endpoints[i];
-            }
-            corners[4] = endpoints[0];
-            return corners;
         }
     }
     //temp methods for 8/26 demo
