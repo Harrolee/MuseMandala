@@ -236,12 +236,18 @@ MonoBehaviour:
   MandalaParams: {fileID: 11400000, guid: 9458788c63ade784d81dad04e41befff, type: 2}
   _LineSourceGO: {fileID: 3937317369716843087, guid: cb8a57b41b1eecf45b36befef46fb799,
     type: 3}
-  MaterialBank:
+  CircleMatBank:
   - {fileID: 2100000, guid: 8d8239bb077090f46a1d305a37fb3e4e, type: 2}
   - {fileID: 2100000, guid: 8963b7ce30446534ab54ffb09b6d5ee9, type: 2}
   - {fileID: 2100000, guid: 0530a5baaa3ac2749a75b8d5553ec3c7, type: 2}
   - {fileID: 2100000, guid: dad9bd6223f2072498058bd3a2098434, type: 2}
-  - {fileID: 2100000, guid: dad9bd6223f2072498058bd3a2098434, type: 2}
+  - {fileID: 2100000, guid: 8666541039c15b74e9b07cc13107851c, type: 2}
+  SquareMatBank:
+  - {fileID: 2100000, guid: 013a0d5104cbeea44950ba0346430557, type: 2}
+  - {fileID: 2100000, guid: 3374c850f56253b4f942242b8e7b3c5e, type: 2}
+  - {fileID: 2100000, guid: d84b2c2968aa30949bc7a7ca39746843, type: 2}
+  - {fileID: 2100000, guid: 64f69d1a5b96f5d43bb5b28ae5df486b, type: 2}
+  - {fileID: 2100000, guid: 09011d50ef62f944c86f4c0732de128f, type: 2}
 --- !u!4 &171828281
 Transform:
   m_ObjectHideFlags: 0

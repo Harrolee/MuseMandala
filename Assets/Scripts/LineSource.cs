@@ -116,20 +116,22 @@ public class LineSource : MonoBehaviour
         sectionReflections = ReflectLine(line, NumLinesPerSection, numPointsPerLine);
 
         //Save value farthest from center.
-        List<Vector3> farthestPoints = new List<Vector3>();
-        farthestPoints = GetFarthestPoints(farthestPoints);
+        //There may be a case where the farthest point
+        //differs from the endpoints.
+        //List<Vector3> farthestPoints = new List<Vector3>();
+        //farthestPoints = GetFarthestPoints(farthestPoints);
         
-
         //Save final value in each array.
         endPoints = new Vector3[NumLinesPerSection];
         endPoints = GetEndpoints(endPoints);
 
+        MakeBoundaries(endPoints, sectionReflections);
+    }
 
-
-
+    void MakeBoundaries(Vector3[] endPoints, Vector3[,] sectionReflections)
+    {
         //innermost circle
-        Boundaries.PlaceCircle(sectionReflections[0,7], sectionReflections[2,7]);
-
+        Boundaries.PlaceCircle(sectionReflections[0, 7], sectionReflections[2, 7]);
 
         //innermost square
         for (int ii = 0; ii < 4; ii++)
@@ -144,7 +146,7 @@ public class LineSource : MonoBehaviour
 
 
         //Three concentric squares:
-            //one will be a gate soon.
+        //one will be a gate soon.
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 3];
@@ -163,31 +165,56 @@ public class LineSource : MonoBehaviour
         }
         Boundaries.PlaceSquare(squarePoints);
 
-
-        //circle[-4}
-        Boundaries.PlaceCircle(endPoints[0], endPoints[2]);
         //four outermost concentric circles:
         for (int offset = 0; offset < 4; offset++)
         {
             Boundaries.PlaceCircle(endPoints[0] - new Vector3(offset, offset, 0), endPoints[2] + new Vector3(offset, offset, 0));
         }
 
-        SetBoundaryMaterials();
+        //At this point, the boundaries have been placed.
         //give Materials to Circles:
+        GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
+        GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
+        AssignBoundaryMats(circles, squares);
 
+        //please Lee, for the love of Christ,
+        //sort out your spaghetti code.
+
+        //automate this sorting process once you've 
+        //procedurally generated the boundaries (like divorce?):
+
+        Material[] boundaryMats = new Material[circles.Length + squares.Length];
+        boundaryMats[0] = squares[0].GetComponent<LineRenderer>().material;
+        boundaryMats[1] = circles[0].GetComponent<LineRenderer>().material;
+        boundaryMats[2] = squares[1].GetComponent<LineRenderer>().material;
+        boundaryMats[3] = squares[2].GetComponent<LineRenderer>().material;
+        boundaryMats[4] = squares[3].GetComponent<LineRenderer>().material;
+        boundaryMats[5] = circles[1].GetComponent<LineRenderer>().material;
+        boundaryMats[6] = circles[2].GetComponent<LineRenderer>().material;
+        boundaryMats[7] = circles[3].GetComponent<LineRenderer>().material;
+        boundaryMats[8] = circles[4].GetComponent<LineRenderer>().material;
+
+
+        General.RevealBoundaries(boundaryMats);
     }
 
-    void SetBoundaryMaterials()
+
+
+    void AssignBoundaryMats(GameObject[] circles, GameObject[] squares)
     {
-        //Get Material from MGMT
-        Material cMat; 
-        GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
+        Material mat;
+        //circles
         for (int ii = 0; ii < circles.Length; ii++)
         {
-            cMat = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>().MaterialBank[ii];
-            circles[ii].GetComponent<LineRenderer>().material = cMat;
+            mat = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>().CircleMatBank[ii];
+            circles[ii].GetComponent<LineRenderer>().material = mat;
         }
-        GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
+        //squares
+        for (int ii = 0; ii < squares.Length; ii++)
+        {
+            mat = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>().SquareMatBank[ii];
+            squares[ii].GetComponent<LineRenderer>().material = mat;
+        }
     }
 
     List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)

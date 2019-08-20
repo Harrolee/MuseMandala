@@ -5,6 +5,40 @@ using UnityEngine;
 
 namespace Mandala
 {
+    //General is a staging bucket for new functions.
+    //When enough new functions pile up, I can form
+    //classes out of them.
+    public class General
+    {
+        public static IEnumerator RevealBoundaries(Material[] boundaryMats)
+        {
+            float alphaVal = 1f;
+            //Start by setting alpha to full.
+            foreach (Material mat in boundaryMats)
+            {
+                mat.SetFloat("Vector1", alphaVal);
+            }
+            
+            float startTime = Time.time;
+            float currTime = startTime;
+            float x;
+            float totalSecs = 5f;
+
+            foreach (Material mat in boundaryMats)
+            {
+                while (currTime < 5f)
+                {
+                    currTime = Time.time - startTime;
+                    Debug.Log("currTime: " + currTime);
+                    x = currTime / totalSecs;
+                    alphaVal = Mathf.Lerp(1, 0, x);
+                    mat.SetFloat("Vector1", alphaVal);
+                    yield return null;
+                }
+            }
+        }
+    }
+
     public class Patterns
     {
         public static Vector3[] Diagonal(int numPoints)
