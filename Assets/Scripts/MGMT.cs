@@ -34,8 +34,6 @@ public class MGMT : MonoBehaviour
             //    WholeEnchilada();
             //}
         }
-        if (Input.GetKeyDown(KeyCode.D))
-            sectionRoots[currSectionRoot].CallRender();
         //renderInverse
     }
 

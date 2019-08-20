@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c61714f0ab13240a915ae45aa574db, type: 3}
   m_Name: MandalaParams
   m_EditorClassIdentifier: 
-  Sections: 2
+  Sections: 1
   LinesPerSection: 4
   PointsPerSection: 0f0000000f000000
   Density: 0.53

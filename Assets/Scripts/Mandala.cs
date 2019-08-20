@@ -10,31 +10,41 @@ namespace Mandala
     //classes out of them.
     public class General
     {
-        public static IEnumerator RevealBoundaries(Material[] boundaryMats)
+       public static IEnumerator RevealBoundaries(Material[] boundaryMats)
         {
             float alphaVal = 1f;
             //Start by setting alpha to full.
+            Debug.Log("length is: " + boundaryMats.Length);
+            int count = 0;
             foreach (Material mat in boundaryMats)
             {
-                mat.SetFloat("Vector1", alphaVal);
+                Debug.Log("mat"+count);
+                mat.SetFloat("_Alpha", alphaVal);
+                count++;
             }
-            
-            float startTime = Time.time;
-            float currTime = startTime;
+
+            float startTime;
+            float currTime;
             float x;
             float totalSecs = 5f;
-
+            int counter = 0;
             foreach (Material mat in boundaryMats)
             {
-                while (currTime < 5f)
+                startTime = Time.time;
+                currTime = Time.time - startTime;
+                Debug.Log("counter: " + counter);
+                while (currTime < 3f)
                 {
                     currTime = Time.time - startTime;
                     Debug.Log("currTime: " + currTime);
                     x = currTime / totalSecs;
                     alphaVal = Mathf.Lerp(1, 0, x);
-                    mat.SetFloat("Vector1", alphaVal);
+                    Debug.Log("alphaVal: " + alphaVal);
+                    mat.SetFloat("_Alpha", alphaVal);
                     yield return null;
                 }
+                Debug.Log("Next");
+                counter++;
             }
         }
     }
@@ -114,7 +124,6 @@ namespace Mandala
             square.tag = "square";
             square.AddComponent<LineRenderer>();
             LineRenderer squareLR = square.GetComponent<LineRenderer>();
-            squareLR.useWorldSpace = false;
             squareLR.positionCount = 5;
             squareLR.SetPositions(MakeSquare(cornerPoints));
         }
@@ -168,7 +177,7 @@ namespace Mandala
                     break;
             }
 
-            Debug.Log("# of points in this curve: " + points.Count);
+            //Debug.Log("# of points in this curve: " + points.Count);
             //List<Vector3> points now contains half of the circle's points.
 
             //Now, add the other side:

@@ -140,13 +140,14 @@ public class LineSource : MonoBehaviour
         }
         Boundaries.PlaceSquare(squarePoints);
 
-
-        //outermost square
-        Boundaries.PlaceSquare(endPoints);
-
-
         //Three concentric squares:
         //one will be a gate soon.
+        for (int ii = 0; ii < 4; ii++)
+        {
+            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 4];
+        }
+        Boundaries.PlaceSquare(squarePoints);
+
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 3];
@@ -159,11 +160,8 @@ public class LineSource : MonoBehaviour
         }
         Boundaries.PlaceSquare(squarePoints);
 
-        for (int ii = 0; ii < 4; ii++)
-        {
-            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 1];
-        }
-        Boundaries.PlaceSquare(squarePoints);
+        //outermost square
+        Boundaries.PlaceSquare(endPoints);
 
         //four outermost concentric circles:
         for (int offset = 0; offset < 4; offset++)
@@ -172,13 +170,19 @@ public class LineSource : MonoBehaviour
         }
 
         //At this point, the boundaries have been placed.
-        //give Materials to Circles:
+        //give Materials to Circles and squares:
         GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
         AssignBoundaryMats(circles, squares);
 
         //please Lee, for the love of Christ,
         //sort out your spaghetti code.
+
+        //test:
+        //Material testMat = squares[0].GetComponent<LineRenderer>().material;
+        //testMat.shader = Shader.Find("SquareAlphaRamp");
+        //testMat.SetFloat("_Alpha", .5f);
+        //SetVector("Vector1", .8f);
 
         //automate this sorting process once you've 
         //procedurally generated the boundaries (like divorce?):
@@ -189,13 +193,15 @@ public class LineSource : MonoBehaviour
         boundaryMats[2] = squares[1].GetComponent<LineRenderer>().material;
         boundaryMats[3] = squares[2].GetComponent<LineRenderer>().material;
         boundaryMats[4] = squares[3].GetComponent<LineRenderer>().material;
-        boundaryMats[5] = circles[1].GetComponent<LineRenderer>().material;
-        boundaryMats[6] = circles[2].GetComponent<LineRenderer>().material;
-        boundaryMats[7] = circles[3].GetComponent<LineRenderer>().material;
-        boundaryMats[8] = circles[4].GetComponent<LineRenderer>().material;
+        boundaryMats[5] = squares[4].GetComponent<LineRenderer>().material;
+        boundaryMats[6] = circles[1].GetComponent<LineRenderer>().material;
+        boundaryMats[7] = circles[2].GetComponent<LineRenderer>().material;
+        boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
+        boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
+
+        StartCoroutine(General.RevealBoundaries(boundaryMats));
 
 
-        General.RevealBoundaries(boundaryMats);
     }
 
 
@@ -285,7 +291,7 @@ public class LineSource : MonoBehaviour
         for (int row = 0; row < sectionReflections.GetLength(0); row++)
         {
             endPoints[row] = sectionReflections[row, lastCol];
-            print("endpoints are " + endPoints[row]);
+            //print("endpoints are " + endPoints[row]);
         }
         return endPoints;
     }
@@ -460,7 +466,6 @@ public class LineSource : MonoBehaviour
         {
             if (branchCount % 2 == 0)
             {
-                print("ran");
                 //each iteration creates one point for one branch
                 for (int column = 0; column < branchPointCount; column++)
                 {
@@ -471,8 +476,8 @@ public class LineSource : MonoBehaviour
             else
             {
                 inverseNewBranch = InvertLine(newBranch, startPoints[branchCount]);
-                print(branchCount+" inverseNewBranch" + inverseNewBranch[branchCount]);
-                print("i ran");
+                //print(branchCount+" inverseNewBranch" + inverseNewBranch[branchCount]);
+
                 for (int column = 0; column < branchPointCount; column++)
                 {
                     //adding the starting point locates the branch on the trunk.
