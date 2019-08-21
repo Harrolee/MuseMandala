@@ -8,7 +8,7 @@ namespace Mandala
     //General is a staging bucket for new functions.
     //When enough new functions pile up, I can form
     //classes out of them.
-    public class General
+    public class Utilities
     {
        public static IEnumerator RevealBoundaries(Material[] boundaryMats)
         {
@@ -26,14 +26,14 @@ namespace Mandala
             float startTime;
             float currTime;
             float x;
-            float totalSecs = 5f;
+            float totalSecs = 3f;
             int counter = 0;
             foreach (Material mat in boundaryMats)
             {
                 startTime = Time.time;
                 currTime = Time.time - startTime;
                 Debug.Log("counter: " + counter);
-                while (currTime < 3f)
+                while (currTime < totalSecs)
                 {
                     currTime = Time.time - startTime;
                     Debug.Log("currTime: " + currTime);
@@ -123,9 +123,10 @@ namespace Mandala
             GameObject square = new GameObject("square");
             square.tag = "square";
             square.AddComponent<LineRenderer>();
-            LineRenderer squareLR = square.GetComponent<LineRenderer>();
-            squareLR.positionCount = 5;
-            squareLR.SetPositions(MakeSquare(cornerPoints));
+            LineRenderer lineRenderer = square.GetComponent<LineRenderer>();
+            lineRenderer.positionCount = 5;
+            lineRenderer.textureMode = LineTextureMode.Tile;
+            lineRenderer.SetPositions(MakeSquare(cornerPoints));
         }
 
         static Vector3[] MakeSquare(Vector3[] endpoints)
@@ -144,10 +145,11 @@ namespace Mandala
             GameObject circle = new GameObject("circle");
             circle.tag = "circle";
             circle.AddComponent<LineRenderer>();
-            LineRenderer squareLR = circle.GetComponent<LineRenderer>();
+            LineRenderer lineRenderer = circle.GetComponent<LineRenderer>();
             Vector3[] circlePoints = MakeCircle(startPoint, endpoint, Vector3.Distance(startPoint, endpoint));
-            squareLR.positionCount = circlePoints.Length;
-            squareLR.SetPositions(circlePoints);
+            lineRenderer.positionCount = circlePoints.Length;
+            lineRenderer.textureMode = LineTextureMode.Tile;
+            lineRenderer.SetPositions(circlePoints);
         }
 
         static Vector3[] MakeCircle(Vector3 startPoint, Vector3 endPoint, float distance)

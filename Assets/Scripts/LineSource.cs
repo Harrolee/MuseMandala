@@ -199,7 +199,7 @@ public class LineSource : MonoBehaviour
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
-        StartCoroutine(General.RevealBoundaries(boundaryMats));
+        StartCoroutine(Utilities.RevealBoundaries(boundaryMats));
 
 
     }

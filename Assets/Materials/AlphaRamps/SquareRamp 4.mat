@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SquareRamp 4
-  m_Shader: {fileID: -6465566751694194690, guid: d5b5a4bc4ecbd7d4cb5ac1127fc26ca9,
+  m_Shader: {fileID: -6465566751694194690, guid: 41b342f44f9570d4d88d51aa66632d3a,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
