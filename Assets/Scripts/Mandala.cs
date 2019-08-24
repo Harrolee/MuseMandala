@@ -10,40 +10,63 @@ namespace Mandala
     //classes out of them.
     public class Utilities
     {
-       public static IEnumerator RevealBoundaries(Material[] boundaryMats)
+        public static IEnumerator LerpMatOverTime(Material mat, float start, float end)
         {
-            float alphaVal = 1f;
-            //Start by setting alpha to full.
-            Debug.Log("length is: " + boundaryMats.Length);
+            float alphaVal;
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            float totalSecs = 3f;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                alphaVal = Mathf.Lerp(start, end, x);
+                mat.SetFloat("_Alpha", alphaVal);
+                yield return null;
+            }
+        }
+       public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material cMat)
+       {
+            float start = 0;
+            float end = 1.5f;
+            float alphaVal;
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            float totalSecs = 3f;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                alphaVal = Mathf.Lerp(start, end, x);
+                cMat.SetFloat("_Alpha", alphaVal);
+                yield return null;
+            }
+
+            //set alpha of all boundaries to 0;
+            alphaVal = 0;
             int count = 0;
             foreach (Material mat in boundaryMats)
             {
-                Debug.Log("mat"+count);
                 mat.SetFloat("_Alpha", alphaVal);
                 count++;
             }
 
-            float startTime;
-            float currTime;
-            float x;
-            float totalSecs = 3f;
+            //In sequence, lerp all boundaries.
             int counter = 0;
             foreach (Material mat in boundaryMats)
             {
                 startTime = Time.time;
                 currTime = Time.time - startTime;
-                Debug.Log("counter: " + counter);
                 while (currTime < totalSecs)
                 {
                     currTime = Time.time - startTime;
-                    Debug.Log("currTime: " + currTime);
                     x = currTime / totalSecs;
-                    alphaVal = Mathf.Lerp(1, 0, x);
-                    Debug.Log("alphaVal: " + alphaVal);
+                    alphaVal = Mathf.Lerp(0, 1, x);
                     mat.SetFloat("_Alpha", alphaVal);
                     yield return null;
                 }
-                Debug.Log("Next");
                 counter++;
             }
         }
@@ -126,6 +149,8 @@ namespace Mandala
             LineRenderer lineRenderer = square.GetComponent<LineRenderer>();
             lineRenderer.positionCount = 5;
             lineRenderer.textureMode = LineTextureMode.Tile;
+            lineRenderer.startWidth = 2;
+            lineRenderer.endWidth = 2;
             lineRenderer.SetPositions(MakeSquare(cornerPoints));
         }
 
@@ -149,6 +174,8 @@ namespace Mandala
             Vector3[] circlePoints = MakeCircle(startPoint, endpoint, Vector3.Distance(startPoint, endpoint));
             lineRenderer.positionCount = circlePoints.Length;
             lineRenderer.textureMode = LineTextureMode.Tile;
+            lineRenderer.startWidth = 2;
+            lineRenderer.endWidth = 2;
             lineRenderer.SetPositions(circlePoints);
         }
 
@@ -208,14 +235,6 @@ namespace Mandala
             //convert it to an array and return.
             Vector3[] finalPoints = points.ToArray();
             return finalPoints;
-        }
-    }
-    //temp methods for 8/26 demo
-    public class RemoveMeLater
-    {
-        public static void MakeLine()
-        {
-
         }
     }
 }

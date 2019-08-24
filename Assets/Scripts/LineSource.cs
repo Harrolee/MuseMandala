@@ -5,7 +5,7 @@ using Mandala;
 public class LineSource : MonoBehaviour
 {
     public LineParametersSO lineParams;
-
+    MGMT MGMT;
 
     Vector3[] squarePoints = new Vector3[4];
 
@@ -45,8 +45,12 @@ public class LineSource : MonoBehaviour
     void Awake()
     {       //center by force. For later, consider whether there is anything preventing this from working when not at origin.
         gameObject.transform.position = Vector3.zero;
-        //put on object with a lineRenderer
 
+
+        //set reference to singleton.
+        MGMT = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>();
+
+        //put on object with a lineRenderer
         //prepare lineRend to carry the points
         sourceLine = GetComponent<LineRenderer>();
         sourceLine.SetPosition(0, transform.position);
@@ -62,7 +66,6 @@ public class LineSource : MonoBehaviour
 
         branchStartPoints = new Vector3[NumBranchesPerTrunk];
     }
-
 
     void GenerateSecondSection()
     {
@@ -140,34 +143,50 @@ public class LineSource : MonoBehaviour
         }
         Boundaries.PlaceSquare(squarePoints);
 
+        //When finished tuning, collapse into a nested for loop.
         //Three concentric squares:
         //one will be a gate soon.
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 4];
+            squarePoints[ii].z -= 1;
         }
         Boundaries.PlaceSquare(squarePoints);
 
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 3];
+            squarePoints[ii].z -= 2;
         }
         Boundaries.PlaceSquare(squarePoints);
 
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 2];
+            squarePoints[ii].z -= 3;
         }
         Boundaries.PlaceSquare(squarePoints);
 
-        //outermost square
-        Boundaries.PlaceSquare(endPoints);
+        //outermost square. Use endpoints rather than sectionReflections.
+        //note that endPoints lie within sectionReflections.
+        for (int ii = 0; ii < 4; ii++)
+        {
+            squarePoints[ii] = endPoints[ii];
+            squarePoints[ii].z -= 4;
+        }
+        Boundaries.PlaceSquare(squarePoints);
 
         //four outermost concentric circles:
-        for (int offset = 0; offset < 4; offset++)
+        //4 is the offset at which the squares left off.
+        //int z = -4;
+        for (int XYoffset = 0; XYoffset < 4; XYoffset++)
         {
-            Boundaries.PlaceCircle(endPoints[0] - new Vector3(offset, offset, 0), endPoints[2] + new Vector3(offset, offset, 0));
+            Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0));
+            //z--;
         }
+        
+
+
 
         //At this point, the boundaries have been placed.
         //give Materials to Circles and squares:
@@ -199,12 +218,14 @@ public class LineSource : MonoBehaviour
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
-        StartCoroutine(Utilities.RevealBoundaries(boundaryMats));
+
+        //Reveal CenterPiece
+        //StartCoroutine(Utilities.LerpMatOverTime(MGMT._CenterPiece, 0, 1.5f));
+        //Reveal Rest
+        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece));
 
 
     }
-
-
 
     void AssignBoundaryMats(GameObject[] circles, GameObject[] squares)
     {
@@ -212,13 +233,13 @@ public class LineSource : MonoBehaviour
         //circles
         for (int ii = 0; ii < circles.Length; ii++)
         {
-            mat = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>().CircleMatBank[ii];
+            mat = MGMT.CircleMatBank[ii];
             circles[ii].GetComponent<LineRenderer>().material = mat;
         }
         //squares
         for (int ii = 0; ii < squares.Length; ii++)
         {
-            mat = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>().SquareMatBank[ii];
+            mat = MGMT.SquareMatBank[ii];
             squares[ii].GetComponent<LineRenderer>().material = mat;
         }
     }

@@ -6,9 +6,11 @@ public class MGMT : MonoBehaviour
 {
     public PrefabsSO Prefabs;
     public LineParametersSO MandalaParams;
+    public List<ColorSwatch> ColorSwatches;
     public GameObject _LineSourceGO;
     public List<Material> CircleMatBank;
     public List<Material> SquareMatBank;
+    public Material _CenterPiece;
     List<LineSource> sectionRoots = new List<LineSource>();
 
     int currSectionRoot = 0;
