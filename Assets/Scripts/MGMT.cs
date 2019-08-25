@@ -8,9 +8,10 @@ public class MGMT : MonoBehaviour
     public PrefabsSO Prefabs;
     public LineParametersSO MandalaParams;
     public List<ColorSwatch> ColorSwatches;
+    public List<ColorSwatch> BackgroundPalletes;
     public GameObject _LineSourceGO;
-    public List<Material> CircleMatBank;
-    public List<Material> SquareMatBank;
+    public Material CircleMat;
+    public Material SquareMat;
     public Material _CenterPiece;
     List<LineSource> sectionRoots = new List<LineSource>();
 
@@ -23,6 +24,9 @@ public class MGMT : MonoBehaviour
     {
         MakeSectionSources();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
+
+        //Randomly Set CenterFold
+        _CenterPiece.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
     }
 
     void Update()
@@ -45,6 +49,4 @@ public class MGMT : MonoBehaviour
             Utilities.MakeLR(Prefabs._TrunkLR, MandalaParams.LinesPerSection, sectionRoots[sections].transform);
         }
     }
-
-
 }

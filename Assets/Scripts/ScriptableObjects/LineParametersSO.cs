@@ -29,8 +29,9 @@ public class LineParametersSO : ScriptableObject
     [Range(0, 5)]
     public float BoundaryWidth;
 
+    public List<Texture2D> AlphaTextures;
 
-
+    public List<Texture2D> Textures;
 
     //[Range(1, 7)]
     //public int Color;

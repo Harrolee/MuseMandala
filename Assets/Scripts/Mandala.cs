@@ -35,7 +35,7 @@ namespace Mandala
             }
         }
 
-        //this is becoming the central game loop
+       //this is becoming the central game loop
        public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material centerpieceMat)
        {
             //this first section is the centerpiece generation

@@ -252,7 +252,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 939b966958f396549bd7d168fa4f900a, type: 2}
+  - {fileID: 2100000, guid: 7f0087577a9c3944fa88960caa8da898, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -328,7 +328,8 @@ MonoBehaviour:
   ColorSwatches:
   - {fileID: 11400000, guid: 14c36c0fbb6c101458d458cb4d5cb70a, type: 2}
   - {fileID: 11400000, guid: 3e64b09544225424f9b459fb63b5609c, type: 2}
-  - {fileID: 11400000, guid: 3e64b09544225424f9b459fb63b5609c, type: 2}
+  BackgroundPalletes:
+  - {fileID: 11400000, guid: 13897015191438042b23b3f9456feba1, type: 2}
   _LineSourceGO: {fileID: 3937317369716843087, guid: cb8a57b41b1eecf45b36befef46fb799,
     type: 3}
   CircleMatBank:
@@ -343,6 +344,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d84b2c2968aa30949bc7a7ca39746843, type: 2}
   - {fileID: 2100000, guid: 64f69d1a5b96f5d43bb5b28ae5df486b, type: 2}
   - {fileID: 2100000, guid: 09011d50ef62f944c86f4c0732de128f, type: 2}
+  CircleMat: {fileID: 2100000, guid: 672395084d745ae4aa4a152a3b8afda3, type: 2}
+  SquareMat: {fileID: 2100000, guid: 013a0d5104cbeea44950ba0346430557, type: 2}
   _CenterPiece: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
   BackgroundTriangles: []
 --- !u!4 &171828281

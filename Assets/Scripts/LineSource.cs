@@ -226,16 +226,11 @@ public class LineSource : MonoBehaviour
 
         //Reveal Rest
         StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece));
-        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);
-
-        
+        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
     }
 
     void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
     {
-        
-
-
         Vector3[] avg = new Vector3[endPoints.Length];
         //first section of averages
         for (int ii = 1; ii < avg.Length; ii++)
@@ -262,10 +257,9 @@ public class LineSource : MonoBehaviour
             lrArray[ii].endWidth = Vector3.Distance(endPoints[0], endPoints[1]);
 
             //lerp material in for each
-            lrArray[ii].material.SetColor("_Color", MGMT.ColorSwatches[2].colors[ii].color);
-            
-            Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, 5f);
-            Debug.Log("lerp occurs");
+            lrArray[ii].material.SetColor("_Color", MGMT.BackgroundPalletes[Random.Range(0, MGMT.BackgroundPalletes.Count)].colors[ii].color);
+           // lrArray[ii].material.SetFloat("_Alpha", 0);
+            StartCoroutine(Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, 10f));
         }
     }
 
@@ -275,18 +269,20 @@ public class LineSource : MonoBehaviour
         //circles
         for (int ii = 0; ii < circles.Length; ii++)
         {
-            mat = MGMT.CircleMatBank[ii];
+            mat = MGMT.CircleMat;
             circles[ii].GetComponent<LineRenderer>().material = mat;
             circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
+            circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
             //set design here too
-            //make a Texture2D array and place it in the same way
+
         }
         //squares
         for (int ii = 0; ii < squares.Length; ii++)
         {
-            mat = MGMT.SquareMatBank[ii];
+            mat = MGMT.SquareMat;
             squares[ii].GetComponent<LineRenderer>().material = mat;
             squares[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
+            squares[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
         }
     }
 
