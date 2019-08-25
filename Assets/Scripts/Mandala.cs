@@ -10,24 +10,35 @@ namespace Mandala
     //classes out of them.
     public class Utilities
     {
-       public static IEnumerator LerpMatOverTime(Material mat, float start, float end)
+        public static LineRenderer[] MakeLR(GameObject prefab, int numOfChildren, Transform parent)
+        {
+            LineRenderer[] lrArray= new LineRenderer[numOfChildren];
+            for (int ii = 0; ii < numOfChildren; ii++)
+                {
+                    lrArray[ii] = MonoBehaviour.Instantiate(prefab, parent).GetComponent<LineRenderer>();
+                }
+            return lrArray;
+        }
+        public static IEnumerator LerpMatOverTime(Material mat, float startVal, float endVal, float totalSecs)
         {
             float alphaVal;
             float startTime = Time.time;
             float currTime = Time.time - startTime;
             float x;
-            float totalSecs = 3f;
             while (currTime < totalSecs)
             {
                 currTime = Time.time - startTime;
                 x = currTime / totalSecs;
-                alphaVal = Mathf.Lerp(start, end, x);
+                alphaVal = Mathf.Lerp(startVal, endVal, x);
                 mat.SetFloat("_Alpha", alphaVal);
                 yield return null;
             }
         }
-       public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material cMat)
+
+        //this is becoming the central game loop
+       public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material centerpieceMat)
        {
+            //this first section is the centerpiece generation
             float start = 0;
             float end = 1.5f;
             float alphaVal;
@@ -40,9 +51,11 @@ namespace Mandala
                 currTime = Time.time - startTime;
                 x = currTime / totalSecs;
                 alphaVal = Mathf.Lerp(start, end, x);
-                cMat.SetFloat("_Alpha", alphaVal);
+                centerpieceMat.SetFloat("_Alpha", alphaVal);
                 yield return null;
             }
+            //====================================----------------------
+
 
             //set alpha of all boundaries to 1;
             alphaVal = 1;
@@ -53,11 +66,12 @@ namespace Mandala
                 count++;
             }
 
+            //This is the central experience loop.
+            //In sequence, lerp all boundaries.
             start = 1;
             end = 0;
-            //In sequence, lerp all boundaries.
-            int counter = 0;
-            foreach (Material mat in boundaryMats)
+
+            for (int ii = 0; ii < boundaryMats.Length; ii++)
             {
                 startTime = Time.time;
                 currTime = Time.time - startTime;
@@ -66,10 +80,9 @@ namespace Mandala
                     currTime = Time.time - startTime;
                     x = currTime / totalSecs;
                     alphaVal = Mathf.Lerp(start, end, x);
-                    mat.SetFloat("_Alpha", alphaVal);
+                    boundaryMats[ii].SetFloat("_Alpha", alphaVal);
                     yield return null;
                 }
-                counter++;
             }
         }
     }
@@ -140,7 +153,7 @@ namespace Mandala
 
     public class Boundaries
     {
-        public static void PlaceSquare(Vector3[] cornerPoints)
+        public static void PlaceSquare(Vector3[] cornerPoints, float startWidth, float endWidth)
         {
             //distance is here in case, in a future iteration 
             //of MakeSquare, I derive a square from two given points.
@@ -149,11 +162,19 @@ namespace Mandala
             square.tag = "square";
             square.AddComponent<LineRenderer>();
             LineRenderer lineRenderer = square.GetComponent<LineRenderer>();
+            ConfigureSquareLR(lineRenderer, startWidth, endWidth);
+            lineRenderer.SetPositions(MakeSquare(cornerPoints));
+        }
+
+        static void ConfigureSquareLR(LineRenderer lineRenderer, float startWidth, float endWidth)
+        {
+            lineRenderer.startWidth = startWidth;
+            lineRenderer.endWidth = endWidth;
             lineRenderer.positionCount = 5;
             lineRenderer.textureMode = LineTextureMode.Tile;
-            lineRenderer.startWidth = 2;
-            lineRenderer.endWidth = 2;
-            lineRenderer.SetPositions(MakeSquare(cornerPoints));
+            lineRenderer.loop = true;
+            lineRenderer.useWorldSpace = false;
+            lineRenderer.numCornerVertices = 4;
         }
 
         static Vector3[] MakeSquare(Vector3[] endpoints)
@@ -167,18 +188,24 @@ namespace Mandala
             return corners;
         }
 
-        public static void PlaceCircle(Vector3 startPoint, Vector3 endpoint)
+        public static void PlaceCircle(Vector3 startPoint, Vector3 endpoint, float startWidth, float endWidth)
         {
             GameObject circle = new GameObject("circle");
             circle.tag = "circle";
             circle.AddComponent<LineRenderer>();
             LineRenderer lineRenderer = circle.GetComponent<LineRenderer>();
+            ConfigureCircleLR(lineRenderer, startWidth, endWidth);
             Vector3[] circlePoints = MakeCircle(startPoint, endpoint, Vector3.Distance(startPoint, endpoint));
             lineRenderer.positionCount = circlePoints.Length;
-            lineRenderer.textureMode = LineTextureMode.Tile;
-            lineRenderer.startWidth = 2;
-            lineRenderer.endWidth = 2;
             lineRenderer.SetPositions(circlePoints);
+        }
+        static void ConfigureCircleLR(LineRenderer lineRenderer, float startWidth, float endWidth)
+        {
+            lineRenderer.startWidth = startWidth;
+            lineRenderer.endWidth = endWidth;
+            lineRenderer.textureMode = LineTextureMode.Tile;
+            lineRenderer.loop = true;
+            lineRenderer.useWorldSpace = false;
         }
 
         static Vector3[] MakeCircle(Vector3 startPoint, Vector3 endPoint, float distance)

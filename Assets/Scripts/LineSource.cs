@@ -4,11 +4,11 @@ using Mandala;
 
 public class LineSource : MonoBehaviour
 {
-    public LineParametersSO lineParams;
+    LineParametersSO lineParams;
     MGMT MGMT;
 
     Vector3[] squarePoints = new Vector3[4];
-
+    
     [Range(.1f, 4)]
     public float pointDensity = 1;
     public float speed = 1;//move to SO
@@ -51,6 +51,9 @@ public class LineSource : MonoBehaviour
         //set reference to singleton.
         MGMT = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>();
 
+        //set reference to MandalaParameters
+        lineParams = MGMT.MandalaParams;
+        
         //put on object with a lineRenderer
         //prepare lineRend to carry the points
         sourceLine = GetComponent<LineRenderer>();
@@ -133,44 +136,43 @@ public class LineSource : MonoBehaviour
         endPoints = GetEndpoints(endPoints);
 
         MakeBoundaries(endPoints, sectionReflections);
+
+        //GenerateBackground(endPoints);
+
     }
 
+    void GenerateBackground(Vector3[] endpoints)
+    {
+        //use endpoints to generate the second points in the background ramps.
+        //endPoints
+    }
+
+    //This section will remain expanded until I 
     void MakeBoundaries(Vector3[] endPoints, Vector3[,] sectionReflections)
     {
         //innermost circle
-        Boundaries.PlaceCircle(sectionReflections[0, 7], sectionReflections[2, 7]);
+        Boundaries.PlaceCircle(sectionReflections[0, 7], sectionReflections[2, 7], lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
         //innermost square
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = sectionReflections[ii, 7];
         }
-        Boundaries.PlaceSquare(squarePoints);
+        Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
-        //When finished tuning, collapse into a nested for loop.
         //Three concentric squares:
         //one will be a gate soon.
-        for (int ii = 0; ii < 4; ii++)
+        int col = 4;
+        for (int z = 1; z < 4; z++)
         {
-            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 4];
-            squarePoints[ii].z -= 1;
+            for (int ii = 0; ii < 4; ii++)
+            {
+                squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - col];
+                squarePoints[ii].z -= z;
+            }
+            Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+            col--;
         }
-        Boundaries.PlaceSquare(squarePoints);
-
-        for (int ii = 0; ii < 4; ii++)
-        {
-            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 3];
-            squarePoints[ii].z -= 2;
-        }
-        Boundaries.PlaceSquare(squarePoints);
-
-        for (int ii = 0; ii < 4; ii++)
-        {
-            squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - 2];
-            squarePoints[ii].z -= 3;
-        }
-        Boundaries.PlaceSquare(squarePoints);
-
         //outermost square. Use endpoints rather than sectionReflections.
         //note that endPoints lie within sectionReflections.
         for (int ii = 0; ii < 4; ii++)
@@ -178,14 +180,14 @@ public class LineSource : MonoBehaviour
             squarePoints[ii] = endPoints[ii];
             squarePoints[ii].z -= 4;
         }
-        Boundaries.PlaceSquare(squarePoints);
+        Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
         //four outermost concentric circles:
         //4 is the offset at which the squares left off.
         //int z = -4;
         for (int XYoffset = 0; XYoffset < 4; XYoffset++)
         {
-            Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0));
+            Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             //z--;
         }
         
@@ -222,13 +224,49 @@ public class LineSource : MonoBehaviour
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
-
-        //Reveal CenterPiece
-        //StartCoroutine(Utilities.LerpMatOverTime(MGMT._CenterPiece, 0, 1.5f));
         //Reveal Rest
         StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece));
+        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);
+
+        
+    }
+
+    void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
+    {
+        
 
 
+        Vector3[] avg = new Vector3[endPoints.Length];
+        //first section of averages
+        for (int ii = 1; ii < avg.Length; ii++)
+        {
+            avg[ii-1] = (endPoints[ii] + endPoints[ii - 1]) * .5f;
+        }
+        //last average
+        avg[avg.Length-1] = (endPoints[0] + endPoints[endPoints.Length-1]) * .5f;
+
+        //move avg[] to the background
+        for (int i = 0; i < avg.Length; i++)
+        {
+            avg[i].z += 5;
+        }
+
+        //prep for lerping. Includes:
+        //place backgroundLR points
+        //set their width
+        for (int ii = 0; ii < lrArray.Length; ii++)
+        {
+            lrArray[ii].startWidth = .1f;
+            lrArray[ii].SetPosition(0, new Vector3(0,0,2));
+            lrArray[ii].SetPosition(1, avg[ii]);
+            lrArray[ii].endWidth = Vector3.Distance(endPoints[0], endPoints[1]);
+
+            //lerp material in for each
+            lrArray[ii].material.SetColor("_Color", MGMT.ColorSwatches[2].colors[ii].color);
+            
+            Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, 5f);
+            Debug.Log("lerp occurs");
+        }
     }
 
     void AssignBoundaryMats(GameObject[] circles, GameObject[] squares)
@@ -277,7 +315,6 @@ public class LineSource : MonoBehaviour
                     if (currlistPD > maxlistPD)
                     {
                         maxlistPD = currlistPD;
-                       
                     }
                 }
 

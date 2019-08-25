@@ -8,4 +8,6 @@ public class PrefabsSO : ScriptableObject
     public GameObject _TrunkLR;
 
     public GameObject _BranchLR;
+
+    public GameObject _Background;
 }
