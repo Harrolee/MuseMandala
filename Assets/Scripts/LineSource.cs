@@ -26,6 +26,7 @@ public class LineSource : MonoBehaviour
     public int branchPointBuffer;
     //branchPointBuffer is the number of points between each branch start point.
 
+    ColorSwatch colorSwatch;
     Vector3[] endPoints;
 
     public List<Vector3[,]> branchMatrixList;
@@ -58,13 +59,16 @@ public class LineSource : MonoBehaviour
         sourceLine.numCapVertices = 3;
         sourceLine.numCornerVertices = 3;
 
-        //ImportSO();
-        //when the SO is implemented, reference data from SO
-        /*
-
-        */
+        PickColorSwatch();
 
         branchStartPoints = new Vector3[NumBranchesPerTrunk];
+
+    }
+
+    //each run, randomly select a color theme.
+    void PickColorSwatch()
+    {
+        colorSwatch = MGMT.ColorSwatches[Random.Range(0, MGMT.ColorSwatches.Count)];
     }
 
     void GenerateSecondSection()
@@ -189,7 +193,7 @@ public class LineSource : MonoBehaviour
 
 
         //At this point, the boundaries have been placed.
-        //give Materials to Circles and squares:
+        //give Materials and set color for Circles and squares:
         GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
         AssignBoundaryMats(circles, squares);
@@ -235,12 +239,16 @@ public class LineSource : MonoBehaviour
         {
             mat = MGMT.CircleMatBank[ii];
             circles[ii].GetComponent<LineRenderer>().material = mat;
+            circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
+            //set design here too
+            //make a Texture2D array and place it in the same way
         }
         //squares
         for (int ii = 0; ii < squares.Length; ii++)
         {
             mat = MGMT.SquareMatBank[ii];
             squares[ii].GetComponent<LineRenderer>().material = mat;
+            squares[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
         }
     }
 

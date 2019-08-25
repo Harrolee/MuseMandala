@@ -10,7 +10,7 @@ namespace Mandala
     //classes out of them.
     public class Utilities
     {
-        public static IEnumerator LerpMatOverTime(Material mat, float start, float end)
+       public static IEnumerator LerpMatOverTime(Material mat, float start, float end)
         {
             float alphaVal;
             float startTime = Time.time;
@@ -44,8 +44,8 @@ namespace Mandala
                 yield return null;
             }
 
-            //set alpha of all boundaries to 0;
-            alphaVal = 0;
+            //set alpha of all boundaries to 1;
+            alphaVal = 1;
             int count = 0;
             foreach (Material mat in boundaryMats)
             {
@@ -53,6 +53,8 @@ namespace Mandala
                 count++;
             }
 
+            start = 1;
+            end = 0;
             //In sequence, lerp all boundaries.
             int counter = 0;
             foreach (Material mat in boundaryMats)
@@ -63,7 +65,7 @@ namespace Mandala
                 {
                     currTime = Time.time - startTime;
                     x = currTime / totalSecs;
-                    alphaVal = Mathf.Lerp(0, 1, x);
+                    alphaVal = Mathf.Lerp(start, end, x);
                     mat.SetFloat("_Alpha", alphaVal);
                     yield return null;
                 }

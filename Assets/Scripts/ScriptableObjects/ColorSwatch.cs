@@ -14,6 +14,7 @@ public class ColorSwatch : ScriptableObject
 
     public List<Entry> colors = new List<Entry>();
 
+    //in case I want a specific color for something:
     public Color GetColor(string name)
     {
         Entry entry = colors.Find(c => c.name == name);
@@ -21,6 +22,7 @@ public class ColorSwatch : ScriptableObject
         {
             return entry.color;
         }
-        return Color.white;
+        else
+            return Color.white;
     }
 }
