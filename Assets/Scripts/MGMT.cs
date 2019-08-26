@@ -12,7 +12,10 @@ public class MGMT : MonoBehaviour
     public GameObject _LineSourceGO;
     public Material CircleMat;
     public Material SquareMat;
+    public List<Material> MatBank;
     public Material _CenterPiece;
+    //390secs is 6.6mins
+    public float TotalSeconds = 390;
     List<LineSource> sectionRoots = new List<LineSource>();
 
     [HideInInspector]

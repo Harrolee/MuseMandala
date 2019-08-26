@@ -84,7 +84,6 @@ public class LineSource : MonoBehaviour
         //Create a source line for each section.
         Vector3[] line = Patterns.Diagonal(numPointsPerLine);
 
-
         //This sets line to start at the end of the last line.
         //Vector3[] endpoints is filled with the endpoints of
         //the line generated each pass.
@@ -110,17 +109,6 @@ public class LineSource : MonoBehaviour
 
         //Each Vector3[] in List is a set of reflections for one branch on the trunk.
         branchMatrixList = GenerateBranchList(branchMatrix);
-            //when it comes to rendering branches, I will have to render all of the rows of each matrix at the same time.
-                    //the List datatype supplies an index for when each set of rows has to begin rendering.
-                            //the system that cues the branch of each line to generate will select the matrix to generate one set of branches.
-        
-        //The list<> index
-        //cued by a check within the lerp function that looks for a specific point.
-           //the function that passes declared points into the lerp function needs the point to check for.
-                //it only needs to know the number of points between each branch(numGap).
-                    //iterate on each point
-                        //when the iterater meets numGap, reset the iterator and cue the next branch in branchMatrixList.
-
                    
 
         sectionReflections = ReflectLine(line, NumLinesPerSection, numPointsPerLine);
@@ -141,13 +129,8 @@ public class LineSource : MonoBehaviour
 
     }
 
-    void GenerateBackground(Vector3[] endpoints)
-    {
-        //use endpoints to generate the second points in the background ramps.
-        //endPoints
-    }
-
-    //This section will remain expanded until I 
+    //This section will remain expanded until I
+    //Move the Circles here by changing their transform.
     void MakeBoundaries(Vector3[] endPoints, Vector3[,] sectionReflections)
     {
         //innermost circle
@@ -200,6 +183,12 @@ public class LineSource : MonoBehaviour
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
         AssignBoundaryMats(circles, squares);
 
+        //assign opaque ribbon
+        squares[2].GetComponent<LineRenderer>().material = MGMT.MatBank[0];
+
+        //assign filigree
+        circles[1].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
+
         //please Lee, for the love of Christ,
         //sort out your spaghetti code.
 
@@ -214,18 +203,26 @@ public class LineSource : MonoBehaviour
 
         Material[] boundaryMats = new Material[circles.Length + squares.Length];
         boundaryMats[0] = squares[0].GetComponent<LineRenderer>().material;
+        //first circle should render quickly and then shimmer.
         boundaryMats[1] = circles[0].GetComponent<LineRenderer>().material;
+        //These squares box in the 4 triangles.
         boundaryMats[2] = squares[1].GetComponent<LineRenderer>().material;
+            //Use an opaque texture for this square.
         boundaryMats[3] = squares[2].GetComponent<LineRenderer>().material;
         boundaryMats[4] = squares[3].GetComponent<LineRenderer>().material;
+        //5th square, the square below this line, should actually be a gate.
         boundaryMats[5] = squares[4].GetComponent<LineRenderer>().material;
+        //Only 3 rings in sample mandala. 
+        //Lotus
         boundaryMats[6] = circles[1].GetComponent<LineRenderer>().material;
+        //Diamond/Thunder
         boundaryMats[7] = circles[2].GetComponent<LineRenderer>().material;
+        //Fire
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
         //Reveal Rest
-        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece));
+        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.TotalSeconds));
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
     }
 
@@ -259,7 +256,7 @@ public class LineSource : MonoBehaviour
             //lerp material in for each
             lrArray[ii].material.SetColor("_Color", MGMT.BackgroundPalletes[Random.Range(0, MGMT.BackgroundPalletes.Count)].colors[ii].color);
            // lrArray[ii].material.SetFloat("_Alpha", 0);
-            StartCoroutine(Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, 10f));
+            StartCoroutine(Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, MGMT.TotalSeconds/7));
         }
     }
 

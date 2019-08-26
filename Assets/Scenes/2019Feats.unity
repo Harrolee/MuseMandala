@@ -221,7 +221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &116497878
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -332,21 +332,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 13897015191438042b23b3f9456feba1, type: 2}
   _LineSourceGO: {fileID: 3937317369716843087, guid: cb8a57b41b1eecf45b36befef46fb799,
     type: 3}
-  CircleMatBank:
-  - {fileID: 2100000, guid: 672395084d745ae4aa4a152a3b8afda3, type: 2}
-  - {fileID: 2100000, guid: 8946a94d4e895794c9e6eb497c18e6ff, type: 2}
-  - {fileID: 2100000, guid: 5037676d0c7439e4399b350e1f00e5d0, type: 2}
-  - {fileID: 2100000, guid: 86a39d25137f9bc4ea7591f03fa006dd, type: 2}
-  - {fileID: 2100000, guid: 27d75dc9137b34f4ab2894e6f50c4d33, type: 2}
-  SquareMatBank:
-  - {fileID: 2100000, guid: 013a0d5104cbeea44950ba0346430557, type: 2}
-  - {fileID: 2100000, guid: 3374c850f56253b4f942242b8e7b3c5e, type: 2}
-  - {fileID: 2100000, guid: d84b2c2968aa30949bc7a7ca39746843, type: 2}
-  - {fileID: 2100000, guid: 64f69d1a5b96f5d43bb5b28ae5df486b, type: 2}
-  - {fileID: 2100000, guid: 09011d50ef62f944c86f4c0732de128f, type: 2}
   CircleMat: {fileID: 2100000, guid: 672395084d745ae4aa4a152a3b8afda3, type: 2}
   SquareMat: {fileID: 2100000, guid: 013a0d5104cbeea44950ba0346430557, type: 2}
   _CenterPiece: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
+  TotalSeconds: 390
   BackgroundTriangles: []
 --- !u!4 &171828281
 Transform:
