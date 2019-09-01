@@ -19,21 +19,6 @@ namespace Mandala
                 }
             return lrArray;
         }
-        public static IEnumerator LerpMatOverTime(Material mat, float startVal, float endVal, float totalSecs)
-        {
-            float alphaVal;
-            float startTime = Time.time;
-            float currTime = Time.time - startTime;
-            float x;
-            while (currTime < totalSecs)
-            {
-                currTime = Time.time - startTime;
-                x = currTime / totalSecs;
-                alphaVal = Mathf.Lerp(startVal, endVal, x);
-                mat.SetFloat("_Alpha", alphaVal);
-                yield return null;
-            }
-        }
 
        //this is becoming the central game loop
        public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material centerpieceMat, float totalSecs)
@@ -102,6 +87,63 @@ namespace Mandala
        }
     }
 
+    public class Effects
+    {
+
+        //we want this to advance at ten hertz or ten times a second.
+        //Every 1/10th second, the background changes.
+        public static IEnumerator PingPongLerp(Material mat, string floatToPing, float periodLength)
+        {
+            float startTime;
+            float currTime;
+            float x;
+            float newVal;
+            int counter = 0;
+            while(0 < 1)
+            {
+                startTime = Time.time;
+                currTime = Time.time - startTime;
+
+                while (currTime < periodLength * .5)
+                {
+                    currTime = Time.time - startTime;
+                    x = currTime / (periodLength * .5f);
+                    newVal = Mathf.Lerp(-1, 1, x);
+                    mat.SetFloat(floatToPing, newVal);
+                    yield return new WaitForSeconds(.1f);
+                }
+
+                startTime = Time.time;
+                currTime = Time.time - startTime;
+
+                while (currTime < periodLength * .5)
+                {
+                    currTime = Time.time - startTime;
+                    x = currTime / (periodLength * .5f);
+                    newVal = Mathf.Lerp(1, -1, x);
+                    mat.SetFloat(floatToPing, newVal);
+                    yield return new WaitForSeconds(.1f);
+                }
+                counter++;
+            }
+        }
+
+        public static IEnumerator LerpFloatOverTime(Material mat, string floatToLerp, float startVal, float endVal, float totalSecs)
+        {
+            float alphaVal;
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                alphaVal = Mathf.Lerp(startVal, endVal, x);
+                mat.SetFloat(floatToLerp, alphaVal);
+                yield return null;
+            }
+        }
+    }
     public class Patterns
     {
         public static Vector3[] Diagonal(int numPoints)

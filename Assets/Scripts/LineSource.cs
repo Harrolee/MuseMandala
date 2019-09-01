@@ -183,20 +183,44 @@ public class LineSource : MonoBehaviour
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
         AssignBoundaryMats(circles, squares);
 
+        //squares[0]
+        squares[0].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
+        squares[0].GetComponent<LineRenderer>().startWidth = .5f;
+        squares[0].GetComponent<LineRenderer>().endWidth = .5f;
+
+        //squares[1]
+        squares[1].GetComponent<LineRenderer>().startWidth = 2;
+        squares[1].GetComponent<LineRenderer>().endWidth = 2;
+
         //assign opaque ribbon
         squares[2].GetComponent<LineRenderer>().material = MGMT.MatBank[0];
 
+        //render this circle before the first square
+        circles[0].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
+        circles[0].GetComponent<LineRenderer>().startWidth = .2f;
+        circles[0].GetComponent<LineRenderer>().endWidth = .2f;
+        circles[0].transform.localScale = new Vector3(.56f, .56f, .56f);
+
+
         //assign filigree
         circles[1].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
+        circles[1].transform.position += new Vector3(0,0,-6);
+        circles[1].GetComponent<LineRenderer>().startWidth = 2;
+        circles[1].GetComponent<LineRenderer>().endWidth = 2;
 
-        //please Lee, for the love of Christ,
-        //sort out your spaghetti code.
 
-        //test:
-        //Material testMat = squares[0].GetComponent<LineRenderer>().material;
-        //testMat.shader = Shader.Find("SquareAlphaRamp");
-        //testMat.SetFloat("_Alpha", .5f);
-        //SetVector("Vector1", .8f);
+        circles[2].transform.position += new Vector3(0,0,-8);
+        circles[2].GetComponent<LineRenderer>().startWidth = 3;
+        circles[2].GetComponent<LineRenderer>().endWidth = 3;
+
+        circles[3].transform.position += new Vector3(0,0,-11);
+        circles[3].GetComponent<LineRenderer>().startWidth = 4;
+        circles[3].GetComponent<LineRenderer>().endWidth = 4;
+
+        circles[4].transform.position += new Vector3(0,0,-15);
+        circles[4].GetComponent<LineRenderer>().startWidth = 5;
+        circles[4].GetComponent<LineRenderer>().endWidth = 5;
+
 
         //automate this sorting process once you've 
         //procedurally generated the boundaries (like divorce?):
@@ -224,6 +248,7 @@ public class LineSource : MonoBehaviour
         //Reveal Rest
         StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.TotalSeconds));
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
+
     }
 
     void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
@@ -256,7 +281,7 @@ public class LineSource : MonoBehaviour
             //lerp material in for each
             lrArray[ii].material.SetColor("_Color", MGMT.BackgroundPalletes[Random.Range(0, MGMT.BackgroundPalletes.Count)].colors[ii].color);
            // lrArray[ii].material.SetFloat("_Alpha", 0);
-            StartCoroutine(Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, MGMT.TotalSeconds/7));
+            StartCoroutine(Effects.LerpFloatOverTime(lrArray[ii].material, "_Alpha", 1, 0, MGMT.TotalSeconds/7));
         }
     }
 

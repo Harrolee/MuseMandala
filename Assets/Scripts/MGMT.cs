@@ -20,6 +20,8 @@ public class MGMT : MonoBehaviour
     public float TotalSeconds = 390;
     List<LineSource> sectionRoots = new List<LineSource>();
 
+    public Material _BackPlaneMat;
+
     [HideInInspector]
     public LineRenderer[] BackgroundTriangles;
 
@@ -27,6 +29,9 @@ public class MGMT : MonoBehaviour
     //make section sources
     void Start()
     {
+        //start background pulse
+        StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
+
         MakeSectionSources();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 

@@ -342,6 +342,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 3bb4c8a240b228f4599f56f6ff4e8ff3, type: 2}
   _CenterPiece: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
   TotalSeconds: 390
+  _BackPlaneMat: {fileID: 2100000, guid: 939b966958f396549bd7d168fa4f900a, type: 2}
   BackgroundTriangles: []
 --- !u!4 &171828281
 Transform:
@@ -10281,46 +10282,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.influenceMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.influenceMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 7570353390473516639, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10375,6 +10336,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.influenceMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.influenceMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7570353391410177582, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
