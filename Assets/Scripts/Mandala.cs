@@ -96,10 +96,7 @@ namespace Mandala
                 //reset timing for next run.
                 boundarySecs = totalSecs / boundaryMats.Length;
             }
-
-
-            //Next is the finale: the closing ring dance.
-       }
+        }
     }
 
     public class Patterns

@@ -5,8 +5,11 @@ using Mandala;
 
 public class MGMT : MonoBehaviour
 {
+<<<<<<< HEAD
     [SerializeField]
     GameObject _camera;
+=======
+>>>>>>> parent of ac0b451... Added Camera track && two demo scenes
     public PrefabsSO Prefabs;
     public LineParametersSO MandalaParams;
     public List<ColorSwatch> ColorSwatches;
@@ -39,6 +42,7 @@ public class MGMT : MonoBehaviour
             sectionRoots[currSectionRoot].CallRender();
 
         if (Input.GetKeyDown(KeyCode.Space))
+<<<<<<< HEAD
         {
             StartCoroutine(MoveCamera(_camera.transform.position.z, _camera.transform.position.z - 3f, MandalaParams.ExperienceLength * .85f));
             sectionRoots[currSectionRoot].GenerateSection();
@@ -77,6 +81,9 @@ public class MGMT : MonoBehaviour
 
 
         }
+=======
+            sectionRoots[currSectionRoot].GenerateSection();
+>>>>>>> parent of ac0b451... Added Camera track && two demo scenes
     }
 
     void MakeSectionSources()
