@@ -33,8 +33,6 @@ public class LineParametersSO : ScriptableObject
 
     public List<Texture2D> Textures;
 
-    public float ExperienceLength;
-
     //[Range(1, 7)]
     //public int Color;
 

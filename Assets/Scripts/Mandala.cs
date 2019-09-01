@@ -190,9 +190,6 @@ namespace Mandala
             lineRenderer.loop = true;
             lineRenderer.useWorldSpace = false;
             lineRenderer.numCornerVertices = 4;
-            Debug.Log("Got here");
-            Vector4 tileVec = new Vector4(.2f, 1, 0, 0);
-            lineRenderer.material.SetVector("Tiling", tileVec);
         }
 
         static Vector3[] MakeSquare(Vector3[] endpoints)
