@@ -189,11 +189,17 @@ public class LineSource : MonoBehaviour
         squares[0].GetComponent<LineRenderer>().endWidth = .5f;
 
         //squares[1]
+        squares[1].transform.localScale = new Vector3(.72f, .72f, .72f);
+        squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .32f);
+        squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .88f);
         squares[1].GetComponent<LineRenderer>().startWidth = 2;
         squares[1].GetComponent<LineRenderer>().endWidth = 2;
 
-        //assign opaque ribbon
+        //portraits
         squares[2].GetComponent<LineRenderer>().material = MGMT.MatBank[0];
+        squares[2].transform.localScale = new Vector3(.9f, .9f, .9f);
+        squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .41f);
+
 
         //render this circle before the first square
         circles[0].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
@@ -253,6 +259,8 @@ public class LineSource : MonoBehaviour
 
     void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
     {
+        float zEndPoint = 5;
+        float zStartPoint = 10;
         Vector3[] avg = new Vector3[endPoints.Length];
         //first section of averages
         for (int ii = 1; ii < avg.Length; ii++)
@@ -265,7 +273,7 @@ public class LineSource : MonoBehaviour
         //move avg[] to the background
         for (int i = 0; i < avg.Length; i++)
         {
-            avg[i].z += 5;
+            avg[i].z -= zEndPoint;
         }
 
         //prep for lerping. Includes:
@@ -274,7 +282,7 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < lrArray.Length; ii++)
         {
             lrArray[ii].startWidth = .1f;
-            lrArray[ii].SetPosition(0, new Vector3(0,0,2));
+            lrArray[ii].SetPosition(0, new Vector3(0,0,zStartPoint));
             lrArray[ii].SetPosition(1, avg[ii]);
             lrArray[ii].endWidth = Vector3.Distance(endPoints[0], endPoints[1]);
 
