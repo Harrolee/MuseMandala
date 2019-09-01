@@ -30,19 +30,8 @@ public class LineParametersSO : ScriptableObject
     public float BoundaryWidth;
 
     public List<Texture2D> AlphaTextures;
+
     public List<Texture2D> Textures;
-
-
-    public Material CircleMat;
-    public Material SquareMat;
-    public List<Material> MatBank;
-    public Material _CenterPiece;
-
-    public List<float> XTile;
-    public List<float> YTile;
-
-    public List<float> XOffset;
-    public List<float> YOffSet;
 
     public float ExperienceLength;
 

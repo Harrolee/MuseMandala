@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Mandala;
-using System.Collections;
 
 public class LineSource : MonoBehaviour
 {
@@ -174,36 +173,34 @@ public class LineSource : MonoBehaviour
             Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             //z--;
         }
+        
 
 
-        //Collect the placed boundaries of the mandala.
+
+        //At this point, the boundaries have been placed.
+        //give Materials and set color for Circles and squares:
         GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
         ConfigureBoundaryMats(circles, squares);
 
-
-
-        circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.MatBank[0];
-        circles[0].GetComponent<LineRenderer>().startWidth = .1f;
-        circles[0].GetComponent<LineRenderer>().endWidth = .1f;
-
-        squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.MatBank[1];
-        squares[0].GetComponent<LineRenderer>().startWidth = .2f;
-        squares[0].GetComponent<LineRenderer>().endWidth = .2f;
-        
-        //squares 1 is good.
-
-
-        //squares 2 would be gate
-        squares[2].GetComponent<LineRenderer>().material = MGMT.MandalaParams.MatBank[2];
+        //assign opaque ribbon
+        squares[2].GetComponent<LineRenderer>().material = MGMT.MatBank[0];
 
         //assign filigree
-        circles[1].GetComponent<LineRenderer>().material = MGMT.MandalaParams.MatBank[3];
+        circles[1].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
 
+        //please Lee, for the love of Christ,
+        //sort out your spaghetti code.
 
+        //test:
+        //Material testMat = squares[0].GetComponent<LineRenderer>().material;
+        //testMat.shader = Shader.Find("SquareAlphaRamp");
+        //testMat.SetFloat("_Alpha", .5f);
+        //SetVector("Vector1", .8f);
 
+        //automate this sorting process once you've 
+        //procedurally generated the boundaries (like divorce?):
 
-        //make an arrary of the mats in the mandala.
         Material[] boundaryMats = new Material[circles.Length + squares.Length];
         boundaryMats[0] = squares[0].GetComponent<LineRenderer>().material;
         //first circle should render quickly and then shimmer.
@@ -224,32 +221,14 @@ public class LineSource : MonoBehaviour
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
-        //Temp Coroutine to set values:
-        StartCoroutine(SetVals(boundaryMats));
-
-
+        //
+        //specific edits
 
 
 
         //Reveal Rest
-        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT.MandalaParams._CenterPiece, MGMT.MandalaParams.ExperienceLength));
+        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.MandalaParams.ExperienceLength));
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
-    }
-
-    //use this coroutine to set values from the MandalaParams Scriptable Object.
-    IEnumerator SetVals(Material[] boundaryMats)
-    {
-        while (0 < 1)
-        {
-            for (int ii = 0; ii < boundaryMats.Length; ii++)
-            {
-                boundaryMats[ii].SetFloat("_TilingX", MGMT.MandalaParams.XTile[ii]);
-                boundaryMats[ii].SetFloat("_TilingY", MGMT.MandalaParams.YTile[ii]);
-                boundaryMats[ii].SetFloat("_OffsetY", MGMT.MandalaParams.XOffset[ii]);
-                boundaryMats[ii].SetFloat("_OffsetY", MGMT.MandalaParams.YOffSet[ii]);
-            }
-            yield return null;
-        }
     }
 
     void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
@@ -282,7 +261,7 @@ public class LineSource : MonoBehaviour
             //lerp material in for each
             lrArray[ii].material.SetColor("_Color", MGMT.BackgroundPalletes[Random.Range(0, MGMT.BackgroundPalletes.Count)].colors[ii].color);
            // lrArray[ii].material.SetFloat("_Alpha", 0);
-            StartCoroutine(Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, MGMT.MandalaParams.ExperienceLength/7));
+            StartCoroutine(Utilities.LerpMatOverTime(lrArray[ii].material, 1, 0, MGMT.TotalSeconds/7));
         }
     }
 
@@ -292,7 +271,7 @@ public class LineSource : MonoBehaviour
         //circles
         for (int ii = 0; ii < circles.Length; ii++)
         {
-            mat = MGMT.MandalaParams.CircleMat;
+            mat = MGMT.CircleMat;
             circles[ii].GetComponent<LineRenderer>().material = mat;
             circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
             circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
@@ -303,7 +282,7 @@ public class LineSource : MonoBehaviour
         //squares
         for (int ii = 0; ii < squares.Length; ii++)
         {
-            mat = MGMT.MandalaParams.SquareMat;
+            mat = MGMT.SquareMat;
             squares[ii].GetComponent<LineRenderer>().material = mat;
             squares[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
             squares[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);

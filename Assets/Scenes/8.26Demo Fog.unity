@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d8b90ba6693a94ba826e06e6e77555, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 1644562}
+  Camera: {fileID: 1644562}
   Prefabs: {fileID: 11400000, guid: 47f376917a1393b4ca1f84a98749454a, type: 2}
   MandalaParams: {fileID: 11400000, guid: 9458788c63ade784d81dad04e41befff, type: 2}
   ColorSwatches:
@@ -335,6 +335,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 13897015191438042b23b3f9456feba1, type: 2}
   _LineSourceGO: {fileID: 3937317369716843087, guid: cb8a57b41b1eecf45b36befef46fb799,
     type: 3}
+  CircleMat: {fileID: 2100000, guid: 672395084d745ae4aa4a152a3b8afda3, type: 2}
+  SquareMat: {fileID: 2100000, guid: 013a0d5104cbeea44950ba0346430557, type: 2}
+  MatBank:
+  - {fileID: 2100000, guid: b239250ebdaa5b044ae06c52b5fe6184, type: 2}
+  - {fileID: 2100000, guid: 3bb4c8a240b228f4599f56f6ff4e8ff3, type: 2}
+  _CenterPiece: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
   TotalSeconds: 390
   BackgroundTriangles: []
 --- !u!4 &171828281

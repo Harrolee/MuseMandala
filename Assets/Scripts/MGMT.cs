@@ -6,16 +6,19 @@ using Mandala;
 public class MGMT : MonoBehaviour
 {
     [SerializeField]
-    GameObject _camera;
+    GameObject Camera;
     public PrefabsSO Prefabs;
     public LineParametersSO MandalaParams;
     public List<ColorSwatch> ColorSwatches;
     public List<ColorSwatch> BackgroundPalletes;
     public GameObject _LineSourceGO;
-
+    public Material CircleMat;
+    public Material SquareMat;
+    public List<Material> MatBank;
+    public Material _CenterPiece;
     //390secs is 6.6mins
+    public float TotalSeconds = 390;
     List<LineSource> sectionRoots = new List<LineSource>();
-    
 
     [HideInInspector]
     public LineRenderer[] BackgroundTriangles;
@@ -24,12 +27,11 @@ public class MGMT : MonoBehaviour
     //make section sources
     void Start()
     {
-
         MakeSectionSources();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
         //Randomly Set CenterFold
-        MandalaParams._CenterPiece.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
+        _CenterPiece.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
     }
 
     void Update()
@@ -40,7 +42,7 @@ public class MGMT : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(MoveCamera(_camera.transform.position.z, _camera.transform.position.z - 3f, MandalaParams.ExperienceLength * .85f));
+            StartCoroutine(MoveCamera(Camera.transform.position.z, Camera.transform.position.z - 3f, MandalaParams.ExperienceLength * .85f));
             sectionRoots[currSectionRoot].GenerateSection();
         }
             
@@ -67,13 +69,13 @@ public class MGMT : MonoBehaviour
                 d = currTime / ((totalSecs - (pauseLength * 7)) / 7);
                 Debug.Log("d is" + d);
                 currZ = Mathf.Lerp(startZ, endZ, d);
-                _camera.transform.position = new Vector3(0,0,currZ);
+                Camera.transform.position = new Vector3(0,0,currZ);
                 yield return null;
             }
             yield return new WaitForSeconds(pauseLength * .75f);
             Debug.Log("done first pause");
             endZ -= retreatInc;
-            startZ = _camera.transform.position.z;
+            startZ = Camera.transform.position.z;
 
 
         }
