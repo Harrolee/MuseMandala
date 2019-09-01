@@ -129,7 +129,7 @@ public class LineSource : MonoBehaviour
 
     }
 
-    //This section will remain expanded until I
+    //This section will remain expanded until I further automate the process.
     //Move the Circles here by changing their transform.
     void MakeBoundaries(Vector3[] endPoints, Vector3[,] sectionReflections)
     {
@@ -181,7 +181,7 @@ public class LineSource : MonoBehaviour
         //give Materials and set color for Circles and squares:
         GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
-        AssignBoundaryMats(circles, squares);
+        ConfigureBoundaryMats(circles, squares);
 
         //assign opaque ribbon
         squares[2].GetComponent<LineRenderer>().material = MGMT.MatBank[0];
@@ -221,8 +221,13 @@ public class LineSource : MonoBehaviour
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
+        //
+        //specific edits
+
+
+
         //Reveal Rest
-        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.TotalSeconds));
+        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.MandalaParams.ExperienceLength));
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
     }
 
@@ -260,7 +265,7 @@ public class LineSource : MonoBehaviour
         }
     }
 
-    void AssignBoundaryMats(GameObject[] circles, GameObject[] squares)
+    void ConfigureBoundaryMats(GameObject[] circles, GameObject[] squares)
     {
         Material mat;
         //circles
@@ -272,6 +277,7 @@ public class LineSource : MonoBehaviour
             circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
             //set design here too
 
+            circles[ii].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .2f);
         }
         //squares
         for (int ii = 0; ii < squares.Length; ii++)
@@ -280,6 +286,8 @@ public class LineSource : MonoBehaviour
             squares[ii].GetComponent<LineRenderer>().material = mat;
             squares[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
             squares[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
+
+            squares[ii].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .2f);
         }
     }
 

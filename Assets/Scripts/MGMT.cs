@@ -42,7 +42,7 @@ public class MGMT : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(MoveCamera(Camera.transform.position.z, Camera.transform.position.z - 3f, 340f));
+            StartCoroutine(MoveCamera(Camera.transform.position.z, Camera.transform.position.z - 3f, MandalaParams.ExperienceLength * .85f));
             sectionRoots[currSectionRoot].GenerateSection();
         }
             
