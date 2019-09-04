@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
-    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -177,7 +177,6 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -495,7 +494,6 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -632,7 +630,6 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -724,7 +721,6 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -817,14 +813,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517841044}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e25d3a83c92a9b641a09a66b01c8377d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FogSpeed: 1
   WindSpeed: 1
-  ReceivePort: 7005
   _Fog:
   - {fileID: 1774461563}
   - {fileID: 2065884189}
@@ -836,14 +831,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517841044}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7783cccba1f0d914c8bfaef08370ba89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransmitIP: 192.168.56.1
-  TransmitPort: 7005
-  RecievePort: 7003
   runtime: 15000
   memory: 10
   weightRatio: 0.5
@@ -880,22 +872,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
       propertyPath: ExternalForcesModule.enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
       propertyPath: ExternalForcesModule.influenceMask.m_Bits
       value: 256
       objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
       propertyPath: ExternalForcesModule.enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
       propertyPath: ExternalForcesModule.influenceMask.m_Bits
       value: 256
