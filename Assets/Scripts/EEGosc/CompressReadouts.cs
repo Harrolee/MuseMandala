@@ -11,6 +11,11 @@ namespace extOSC.Examples
 
     public class CompressReadouts : MonoBehaviour
     {
+        public string TransmitIP = "127.0.0.1";
+        public int TransmitPort = 7001;
+        //public string RecieveIP = "127.0.0.1";
+        public int RecievePort = 7000;
+
         #region Private Vars
 
         private OSCTransmitter _transmitter;
@@ -26,7 +31,7 @@ namespace extOSC.Examples
 
 
         //networking
-        private const string _oscAddress = "/muse/*"; //"muse/*";   // Also, you can use mask in address: /example/*/
+        private const string _oscAddress = "/muse/acc"; //"muse/*";   // Also, you can use mask in address: /example/*/
         private const string _transmitAddress = "/muse/elements/alpha_absolute";
         private const string _transmitAddressErf = "/erf";
         //public string key = "Person0/elements/alpha_absolute"; // channel name?
@@ -59,23 +64,24 @@ namespace extOSC.Examples
 
         protected virtual void Start()
         {
-
             //Debug.Log("in Start()!");
             // Creating a transmitter.
             _transmitter = gameObject.AddComponent<OSCTransmitter>();
 
             // Set remote host address.
-            _transmitter.RemoteHost = "127.0.0.1";
+            _transmitter.RemoteHost = TransmitIP;
 
             // Set remote port;
-            _transmitter.RemotePort = 11000;
+            _transmitter.RemotePort = TransmitPort;
 
 
             // Creating a receiver.
             _receiver = gameObject.AddComponent<OSCReceiver>();
 
             // Set local port.
-            _receiver.LocalPort = 7000;
+            _receiver.LocalPort = RecievePort;
+
+            //_receiver.LocalHost = RecieveIP;
 
             // Bind "MessageReceived" method to special address.
             _receiver.Bind(_oscAddress, MessageReceived);
@@ -124,14 +130,14 @@ namespace extOSC.Examples
         {
             double[] contents = new double[4];
             int count = 0;
-            //Debug.Log(message);
-            //forgive me, Iam1337, for using Convert rather than understanding your parsing system. -Lee
+            Debug.Log("got message");
+            //forgive me, Iam1337, for using Convert rather than learning your parsing system. -Lee
             string newD;
             foreach (extOSC.OSCValue d in message.Values)
             {
                 newD = d.StringValue;
                 contents[count] = Convert.ToDouble(newD);
-                print(Convert.ToDouble(newD));
+                Debug.Log(Convert.ToDouble(newD));
                 count += 1;
             }
 
@@ -303,7 +309,7 @@ namespace extOSC.Examples
                     //If I want to transmit in the future,
                     //perhaps to save a recording while running,
                     //I'll have to uncomment this.
-                    //_transmitter.Send(message2);
+                    _transmitter.Send(message2);
                     if (runtime < runcount)
                     {
                         Debug.Log("Runtime reached, terminating visual.");

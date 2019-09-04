@@ -12,6 +12,7 @@ public class OSC_Fog : MonoBehaviour
     [Range(0, 10.0f)]
     public float WindSpeed = 1;
 
+    public int ReceivePort = 7001;
     OSCReceiver receiver;
     public List<ParticleSystem> _Fog;
     public WindZone _WindZone;
@@ -35,7 +36,11 @@ public class OSC_Fog : MonoBehaviour
     void Start()
     {
         receiver = gameObject.AddComponent<OSCReceiver>();
+        receiver.LocalPort = ReceivePort;
         //osc recieve setup:
+        receiver.Bind("/erf", TestOut0);
+        receiver.Bind("/muse/elements/alpha_absolute", TestOut1);
+
         receiver.Bind("/muse/fog/*", AdjustFog);
         //receiver.Bind("/muse/grain", GrainOSC);
         receiver.Bind("/muse/*", AdjustWind);
@@ -44,6 +49,22 @@ public class OSC_Fog : MonoBehaviour
         //prepare linear conversion variables.
         oldRange = oldMax - oldMin;
         newRange = newMax - oldMin;
+    }
+
+    void TestOut0(OSCMessage message)
+    {
+        if (message.ToString(out string value))
+        {
+            Debug.Log("erf recieved " + value);
+        }
+    }
+
+    void TestOut1(OSCMessage message)
+    {
+        if (message.ToString(out string value))
+        {
+            Debug.Log("test1 recieved " + value);
+        }
     }
 
     void AdjustFog(OSCMessage message)
