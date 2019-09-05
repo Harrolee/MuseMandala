@@ -69,11 +69,11 @@ public class MGMT : MonoBehaviour
         {
             SectionSeconds.Add((TotalSeconds - IntroSeconds) / MandalaParams.Sections);
         }
-
+        print("sectionCOutn is " + SectionSeconds.Count);
         //Give the first section, the centerpiece, 1/5th of every other section's time.
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
-            SectionSeconds[0] = SectionSeconds[i] * .2f;
+            SectionSeconds[0] += SectionSeconds[i] * .2f;
         }
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
