@@ -26,14 +26,14 @@ public class EffectsMaster : MonoBehaviour
         //sends value to _Fog
         foreach (var pSystem in _Fog)
         {
-            StartCoroutine(AdjustFog(feedback, pSystem.main));
+            StartCoroutine(AdjustFog(feedback * 10, pSystem.main));
         }
-        print("feedback is: " + feedback);
+        //print("feedback is: " + feedback);
     }
 
     public IEnumerator AdjustFog(float endVal, ParticleSystem.MainModule fog)
     {
-        print("fog in coro " + endVal);
+        //print("fog in coro " + endVal);
             float startLifeMult = fog.startLifetimeMultiplier;
             float degree = 0;
             if (startLifeMult < endVal)
@@ -56,6 +56,5 @@ public class EffectsMaster : MonoBehaviour
                     yield return new WaitForEndOfFrame();
                 }
             }
-        print("done");
     }
 }
