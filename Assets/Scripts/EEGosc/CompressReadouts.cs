@@ -128,25 +128,11 @@ namespace extOSC.Examples
         protected void MessageReceived(OSCMessage message)
         {
             double[] contents = new double[4];
-<<<<<<< HEAD
-            int count = 0;
-            //Debug.Log(message);
-            //forgive me, Iam1337, for using Convert rather than understanding your parsing system. -Lee
-            string newD;
-            foreach (extOSC.OSCValue d in message.Values)
-            {
-                newD = d.StringValue;
-                contents[count] = Convert.ToDouble(newD);
-                print(Convert.ToDouble(newD));
-                count += 1;
-=======
-
             OSCValue[] preContents = message.GetValues(OSCValueType.Double);
 
             for (int ii = 0; ii < 4; ii++)
             {
                 contents[ii] = preContents[ii].DoubleValue;
->>>>>>> d9c9a4a3c1b2d7e6bcea0b5e04767366cf578a4e
             }
 
             MuseTracker(contents);
