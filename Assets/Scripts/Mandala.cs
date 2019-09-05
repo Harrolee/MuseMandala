@@ -21,7 +21,7 @@ namespace Mandala
         }
 
        //this is becoming the central game loop
-       public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material centerpieceMat, float totalSecs)
+       public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material centerpieceMat, List<float> sectionSeconds, int sectionCount)
        {
             //this first section is the centerpiece generation
             float start = 0;
@@ -30,8 +30,8 @@ namespace Mandala
             float startTime = Time.time;
             float currTime = Time.time - startTime;
             float x;
+            float centerpieceSecs = sectionSeconds[0];
             //7 is the number of sections.
-            float centerpieceSecs = totalSecs/7;
             while (currTime < centerpieceSecs)
             {
                 currTime = Time.time - startTime;
@@ -53,7 +53,8 @@ namespace Mandala
             }
 
             //first ring is quick.
-            //After it's appearance, it should perform. I imagine making a radial wave by changing the width.
+            //After it's appearance, it should perform. 
+            //I imagine making a radial wave by changing the width.
 
 
 
@@ -61,10 +62,12 @@ namespace Mandala
             //In sequence, lerp all boundaries.
             start = 1;
             end = 0;
-            float boundarySecs = totalSecs / boundaryMats.Length;
-            for (int ii = 0; ii < boundaryMats.Length; ii++)
+            float boundarySecs = sectionSeconds[1];//totalSecs / boundaryMats.Length;
+            int sectionCounter = 0;
+
+            for (int boundary = 0; boundary < boundaryMats.Length; boundary++)
             {
-                if (ii == 1)
+                if (boundary == 1)
                 {
                     boundarySecs = 10f;
                 }
@@ -75,11 +78,35 @@ namespace Mandala
                     currTime = Time.time - startTime;
                     x = currTime / boundarySecs;
                     alphaVal = Mathf.Lerp(start, end, x);
-                    boundaryMats[ii].SetFloat("_Alpha", alphaVal);
+                    boundaryMats[boundary].SetFloat("_Alpha", alphaVal);
                     yield return null;
                 }
                 //reset timing for next run.
-                boundarySecs = totalSecs / boundaryMats.Length;
+                if (boundary == 1)
+                {
+                    sectionCounter++;
+                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
+                }
+                if (boundary == 5)
+                {
+                    sectionCount++;
+                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
+                }
+                if (boundary == 7)
+                {
+                    sectionCount++;
+                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
+                }
+                if (boundary == 8)
+                {
+                    sectionCount++;
+                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
+                }
+                if (boundary == 9)
+                {
+                    sectionCount++;
+                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
+                }
             }
 
 

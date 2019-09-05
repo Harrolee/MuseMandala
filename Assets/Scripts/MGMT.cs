@@ -18,6 +18,10 @@ public class MGMT : MonoBehaviour
     public Material _CenterPiece;
     //390secs is 6.6mins
     public float TotalSeconds = 390;
+    [HideInInspector]
+    public float IntroSeconds = 60;
+    [HideInInspector]
+    public List<float> SectionSeconds;
     List<LineSource> sectionRoots = new List<LineSource>();
 
     public Material _BackPlaneMat;
@@ -29,6 +33,8 @@ public class MGMT : MonoBehaviour
     //make section sources
     void Start()
     {
+        TimeBreakdown();
+
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
@@ -38,6 +44,7 @@ public class MGMT : MonoBehaviour
         //Randomly Set CenterFold
         _CenterPiece.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
     }
+
 
     void Update()
     {
@@ -51,6 +58,28 @@ public class MGMT : MonoBehaviour
             sectionRoots[currSectionRoot].GenerateSection();
         }
             
+    }
+
+    void TimeBreakdown()
+    {        
+        //Time Breakdown:
+        //Subtract 60secs from the total time.
+        //give all sections 1/7th of the total time.
+        for (int ii = 0; ii < MandalaParams.Sections; ii++)
+        {
+            SectionSeconds.Add((TotalSeconds - IntroSeconds) / MandalaParams.Sections);
+        }
+
+        //Give the first section, the centerpiece, 1/5th of every other section's time.
+        for (int i = 0; i < MandalaParams.Sections; i++)
+        {
+            SectionSeconds[0] = SectionSeconds[i] * .2f;
+        }
+        for (int i = 0; i < MandalaParams.Sections; i++)
+        {
+            SectionSeconds[i] -= SectionSeconds[i] * .2f;
+        }
+        //Do more time stuff here.
     }
 
     IEnumerator MoveCamera(float startZ, float endZ, float totalSecs)
@@ -72,7 +101,7 @@ public class MGMT : MonoBehaviour
             {
                 currTime = Time.time - startTime;
                 d = currTime / ((totalSecs - (pauseLength * 7)) / 7);
-                Debug.Log("d is" + d);
+                //Debug.Log("d is" + d);
                 currZ = Mathf.Lerp(startZ, endZ, d);
                 Camera.transform.position = new Vector3(0,0,currZ);
                 yield return null;

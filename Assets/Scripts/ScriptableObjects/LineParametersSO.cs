@@ -18,8 +18,11 @@ public class LineParametersSO : ScriptableObject
     [Range(1, 7)]
     public int Reflections;
 
-    [Range(1, 7)]
+    [Range(0, 7)]
     public int Branches;
+
+    [Range(0, 7)]
+    public int PointsPerBranch;
 
     public List<Material> Materials;
 

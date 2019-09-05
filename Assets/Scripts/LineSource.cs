@@ -8,15 +8,21 @@ public class LineSource : MonoBehaviour
     MGMT MGMT;
 
     Vector3[] squarePoints = new Vector3[4];
-    
+
+    #region Import Vars from LineParameters SO
     [Range(.1f, 4)]
     public float pointDensity = 1;
     public float speed = 1;//move to SO
-    public int numPointsPerLine = 15;
+    [HideInInspector]
+    public int numPointsPerLine;
+    int NumLinesPerSection;
+    [HideInInspector]
+    public int NumBranchesPerTrunk;
+    [HideInInspector]
+    public int PointsPerBranch;
+    #endregion
+
     LineRenderer sourceLine;
-    public int NumLinesPerSection = 4;
-    public int NumBranchesPerTrunk = 2;
-    public int PointsPerBranch = 4;
     Vector3[] branchStartPoints;
     //the reflections of sourceLine in each section.
     Vector3[,] branchMatrix;
@@ -34,18 +40,20 @@ public class LineSource : MonoBehaviour
     //or, make a messaging bus.
     //place an instance of branchMatrixList into the bus. Send a message to the kids to grab the instance they need.
     
-    /*
-     void ImportSO()
+    
+     void ImportLineParams()
      {
          NumLinesPerSection = lineParams.Reflections;
-         sectionCount = lineParams.Sections;
+         //sectionCount = lineParams.Sections;
          NumBranchesPerTrunk = lineParams.Branches;
-        // numPointsPerLine = lineParams.PointsPerSection;
+         numPointsPerLine = lineParams.PointsPerSection[0];
+         PointsPerBranch = lineParams.PointsPerBranch;
      }
-     */
+     
     void Awake()
     {       //center by force. For later, consider whether there is anything preventing this from working when not at origin.
         gameObject.transform.position = Vector3.zero;
+
 
 
         //set reference to singleton.
@@ -53,7 +61,8 @@ public class LineSource : MonoBehaviour
 
         //set reference to MandalaParameters
         lineParams = MGMT.MandalaParams;
-        
+        ImportLineParams();
+
         //put on object with a lineRenderer
         //prepare lineRend to carry the points
         sourceLine = GetComponent<LineRenderer>();
@@ -144,7 +153,7 @@ public class LineSource : MonoBehaviour
         Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
         //Three concentric squares:
-        //one will be a gate soon.
+        //one will be a gate, eventually.
         int col = 4;
         for (int z = 1; z < 4; z++)
         {
@@ -174,15 +183,28 @@ public class LineSource : MonoBehaviour
             //z--;
         }
         
-
-
-
         //At this point, the boundaries have been placed.
         //give Materials and set color for Circles and squares:
         GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");
         GameObject[] squares = GameObject.FindGameObjectsWithTag("square");
         AssignBoundaryMats(circles, squares);
 
+        //set width, offset, and tiling
+        ConfigureBoundaryCostumes(circles, squares);
+
+        //Order when each boundary appears
+        Material[] boundaryMats = OrderBoundaries(circles, squares);
+
+        //Reveal the Boundaries
+        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.SectionSeconds, lineParams.Sections));
+        //Reveal the Background triangles
+        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
+
+    }
+
+    #region BoundaryConfig Methods
+    void ConfigureBoundaryCostumes(GameObject[] circles, GameObject[] squares)
+    {
         //squares[0]
         squares[0].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
         squares[0].GetComponent<LineRenderer>().startWidth = .5f;
@@ -210,34 +232,36 @@ public class LineSource : MonoBehaviour
 
         //assign filigree
         circles[1].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
-        circles[1].transform.position += new Vector3(0,0,-6);
+        circles[1].transform.position += new Vector3(0, 0, -6);
         circles[1].GetComponent<LineRenderer>().startWidth = 2;
         circles[1].GetComponent<LineRenderer>().endWidth = 2;
 
 
-        circles[2].transform.position += new Vector3(0,0,-8);
+        circles[2].transform.position += new Vector3(0, 0, -8);
         circles[2].GetComponent<LineRenderer>().startWidth = 3;
         circles[2].GetComponent<LineRenderer>().endWidth = 3;
 
-        circles[3].transform.position += new Vector3(0,0,-11);
+        circles[3].transform.position += new Vector3(0, 0, -11);
         circles[3].GetComponent<LineRenderer>().startWidth = 4;
         circles[3].GetComponent<LineRenderer>().endWidth = 4;
 
-        circles[4].transform.position += new Vector3(0,0,-15);
+        circles[4].transform.position += new Vector3(0, 0, -15);
         circles[4].GetComponent<LineRenderer>().startWidth = 5;
         circles[4].GetComponent<LineRenderer>().endWidth = 5;
+    }
 
-
-        //automate this sorting process once you've 
-        //procedurally generated the boundaries (like divorce?):
-
+    Material[] OrderBoundaries(GameObject[] circles, GameObject[] squares)
+    {
         Material[] boundaryMats = new Material[circles.Length + squares.Length];
-        boundaryMats[0] = squares[0].GetComponent<LineRenderer>().material;
+
         //first circle should render quickly and then shimmer.
-        boundaryMats[1] = circles[0].GetComponent<LineRenderer>().material;
+        boundaryMats[0] = circles[0].GetComponent<LineRenderer>().material;
+
+        boundaryMats[1] = squares[0].GetComponent<LineRenderer>().material;
+
         //These squares box in the 4 triangles.
         boundaryMats[2] = squares[1].GetComponent<LineRenderer>().material;
-            //Use an opaque texture for this square.
+        //Use an opaque texture for this square.
         boundaryMats[3] = squares[2].GetComponent<LineRenderer>().material;
         boundaryMats[4] = squares[3].GetComponent<LineRenderer>().material;
         //5th square, the square below this line, should actually be a gate.
@@ -251,10 +275,7 @@ public class LineSource : MonoBehaviour
         boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
         boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
 
-        //Reveal Rest
-        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.TotalSeconds));
-        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
-
+        return boundaryMats;
     }
 
     void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
@@ -303,7 +324,6 @@ public class LineSource : MonoBehaviour
             circles[ii].GetComponent<LineRenderer>().material = mat;
             circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
             circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
-            //set design here too
 
         }
         //squares
@@ -315,6 +335,8 @@ public class LineSource : MonoBehaviour
             squares[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
         }
     }
+
+#endregion
 
     List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)
     {
@@ -388,6 +410,7 @@ public class LineSource : MonoBehaviour
         return endPoints;
     }
 
+    #region Line and Branch Generation Methods
     //
     Vector3[] MakeBranchPoints(int numPoints, Vector3[] startPoints)
     {
@@ -620,6 +643,6 @@ public class LineSource : MonoBehaviour
         return branchMatrixList;
         //There are as many entries in branchMatrixList as there are branches for each trunk.
     }
-
+    #endregion
 
 }
