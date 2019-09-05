@@ -39,7 +39,6 @@ public class OSC_Fog : MonoBehaviour
         receiver.Bind("/muse/fog/*", AdjustFog);
         //receiver.Bind("/muse/grain", GrainOSC);
         receiver.Bind("/muse/*", AdjustWind);
-        print("bound");
 
         //prepare linear conversion variables.
         oldRange = oldMax - oldMin;

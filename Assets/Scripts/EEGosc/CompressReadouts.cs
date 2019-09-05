@@ -31,7 +31,7 @@ namespace extOSC.Examples
 
         //networking
 
-        private const string _oscAddress = "muse/elements/alpha_absolute"; //muse/*";// Also, you can use mask in address: /example/*/
+        private const string _oscAddress = "muse/elements/alpha_absolute"; 
         private const string _transmitAddress = "/muse/elements/alpha_absolute";
         private const string _transmitAddressErf = "/erf";
         //public string key = "Person0/elements/alpha_absolute"; // channel name?
@@ -138,7 +138,7 @@ namespace extOSC.Examples
             MuseTracker(contents);
         }
 
-        double[] smoothprocess(double[][] vals)
+        double[] Smoothprocess(double[][] vals)
         {
             double[] smooth = new double[2];
             smooth[0] = 0;
@@ -184,7 +184,7 @@ namespace extOSC.Examples
 
 
 
-        private void store(double[] v)
+        private void Store(double[] v)
         {
             string t = "";
             for (int i = 0; i < 4; i++) { t += v[i].ToString() + "\t"; }
@@ -280,8 +280,8 @@ namespace extOSC.Examples
 
                 if (AFvals[0][0] != -1)
                 {
-                    double[] AFweighted = smoothprocess(AFvals);
-                    double[] Tweighted = smoothprocess(Tvals);
+                    double[] AFweighted = Smoothprocess(AFvals);
+                    double[] Tweighted = Smoothprocess(Tvals);
 
                     var message = new OSCMessage(_transmitAddress);
                     message.AddValue(OSCValue.Double(Tweighted[0]));
@@ -307,7 +307,7 @@ namespace extOSC.Examples
                     if (runtime < runcount)
                     {
                         Debug.Log("Runtime reached, terminating visual.");
-                        //cue "brushing/blowing away" of mandala.
+                        effectsMaster.BlowAwayMandala();
                     }
                     else {
                         effectsMaster.GiveFeedback(Convert.ToSingle(augmented_merge));
