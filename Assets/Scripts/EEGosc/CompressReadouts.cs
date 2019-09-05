@@ -12,9 +12,8 @@ namespace extOSC.Examples
     public class CompressReadouts : MonoBehaviour
     {
         public string TransmitIP = "127.0.0.1";
-        public int TransmitPort = 7001;
-        //public string RecieveIP = "127.0.0.1";
-        public int RecievePort = 7000;
+        public int TransmitPort = 5010;
+        public int RecievePort = 5000;
 
         #region Private Vars
 
@@ -31,7 +30,7 @@ namespace extOSC.Examples
 
 
         //networking
-        private const string _oscAddress = "/muse/acc"; //"muse/*";   // Also, you can use mask in address: /example/*/
+        private const string _oscAddress = "muse/elements/alpha_absolute"; //muse/*";// Also, you can use mask in address: /example/*/
         private const string _transmitAddress = "/muse/elements/alpha_absolute";
         private const string _transmitAddressErf = "/erf";
         //public string key = "Person0/elements/alpha_absolute"; // channel name?
@@ -129,16 +128,12 @@ namespace extOSC.Examples
         protected void MessageReceived(OSCMessage message)
         {
             double[] contents = new double[4];
-            int count = 0;
-            Debug.Log("got message");
-            //forgive me, Iam1337, for using Convert rather than learning your parsing system. -Lee
-            string newD;
-            foreach (extOSC.OSCValue d in message.Values)
+
+            OSCValue[] preContents = message.GetValues(OSCValueType.Double);
+
+            for (int ii = 0; ii < 4; ii++)
             {
-                newD = d.StringValue;
-                contents[count] = Convert.ToDouble(newD);
-                Debug.Log(Convert.ToDouble(newD));
-                count += 1;
+                contents[ii] = preContents[ii].DoubleValue;
             }
 
             MuseTracker(contents);
@@ -195,7 +190,7 @@ namespace extOSC.Examples
             string t = "";
             for (int i = 0; i < 4; i++) { t += v[i].ToString() + "\t"; }
             t += "\n";
-            Debug.Log("T: " + t);
+            //Debug.Log("T: " + t);
             using (System.IO.StreamWriter sw = File.CreateText("log.txt"))
             {
                 sw.WriteLine(t);
@@ -252,14 +247,14 @@ namespace extOSC.Examples
                         for (int j = 0; j < 4; j++)
                         {
                             std_devs[j] += Math.Pow(history[i][j] - means[j], 2);
-                            Debug.LogFormat("step before, {0} {1}", j, std_devs[j]);
+                            //Debug.LogFormat("step before, {0} {1}", j, std_devs[j]);
                         }
                     }
                     for (int i = 0; i < 4; i++)
                     {
                         std_devs[i] /= numSamps;
                         std_devs[i] = Math.Sqrt(std_devs[i]);
-                        Debug.LogFormat("std devs[{0}]:{1}", i, std_devs[i]);
+                        //Debug.LogFormat("std devs[{0}]:{1}", i, std_devs[i]);
                     }           
                     numSamps++;
                 }
@@ -302,9 +297,9 @@ namespace extOSC.Examples
                     //Debug.Log("std_devs[1]: " + std_devs[1] + "std_devs[2]: " +std_devs[2]);
                     double merge = (1 - Phi((left + right) * Math.Sqrt(easiness) / 2));
                     double augmented_merge = fillratio + (1 - fillratio) * merge;
-                    Debug.Log("CERF:" + merge.ToString());
-                    Debug.Log("AugMerge: " + augmented_merge.ToString());
-                    Debug.Log("fillratio: " + fillratio.ToString());
+                    //Debug.Log("CERF:" + merge.ToString());
+                    //Debug.Log("AugMerge: " + augmented_merge.ToString());
+                    //Debug.Log("fillratio: " + fillratio.ToString());
                     message2.AddValue(OSCValue.Float((float)merge));
                     //If I want to transmit in the future,
                     //perhaps to save a recording while running,

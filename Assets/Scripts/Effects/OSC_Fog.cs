@@ -38,7 +38,7 @@ public class OSC_Fog : MonoBehaviour
         receiver = gameObject.AddComponent<OSCReceiver>();
         receiver.LocalPort = ReceivePort;
         //osc recieve setup:
-        receiver.Bind("/erf", TestOut0);
+        receiver.Bind("*/erf", TestOut0);
         receiver.Bind("/muse/elements/alpha_absolute", TestOut1);
 
         receiver.Bind("/muse/fog/*", AdjustFog);

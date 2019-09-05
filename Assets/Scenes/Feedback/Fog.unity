@@ -824,7 +824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FogSpeed: 1
   WindSpeed: 1
-  ReceivePort: 7005
+  ReceivePort: 5010
   _Fog:
   - {fileID: 1774461563}
   - {fileID: 2065884189}
@@ -841,9 +841,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7783cccba1f0d914c8bfaef08370ba89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransmitIP: 192.168.56.1
-  TransmitPort: 7005
-  RecievePort: 7003
+  TransmitIP: 172.0.0.1
+  TransmitPort: 5010
+  RecievePort: 5000
   runtime: 15000
   memory: 10
   weightRatio: 0.5
