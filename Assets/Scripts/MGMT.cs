@@ -38,7 +38,7 @@ public class MGMT : MonoBehaviour
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
-        MakeSectionSources();
+        MakeSectionSource();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
         //Randomly Set CenterFold
@@ -54,7 +54,7 @@ public class MGMT : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(MoveCamera(Camera.transform.position.z, Camera.transform.position.z - 3f, 340f));
+            StartCoroutine(MoveCamera(Camera.transform.position.z, Camera.transform.position.z - 3f, IntroSeconds, SectionSeconds));
             sectionRoots[currSectionRoot].GenerateSection();
         }
             
@@ -82,47 +82,78 @@ public class MGMT : MonoBehaviour
         //Do more time stuff here.
     }
 
-    IEnumerator MoveCamera(float startZ, float endZ, float totalSecs)
+    IEnumerator MoveCamera(float startZ, float endZ, float introSecs, List<float> sectionSecs)
     {
-        float retreatInc = 3f;
-        float pauseLength = 20f;
+        float retreatInc = 5f;
+        float pauseLength = 5f;
         float currZ;
         float startTime;
         float currTime;
         float d;
+
+        //remove pause time from section time
+        for (int ii = 0; ii < sectionSecs.Count; ii++)
+        {
+            sectionSecs[ii] -= pauseLength/sectionSecs.Count;
+        }
+
+        //intro
+        //no movement for introsecs
+        print("set camerawork for intro" + introSecs);
+
+        //main event
+
         for (int i = 0; i < 7; i++)
         {
             Debug.Log("round" + (i + 1));
             yield return new WaitForSeconds(pauseLength * .25f);
             startTime = Time.time;
             currTime = Time.time - startTime;
-            Debug.Log("starting round" + (i + 2));
-            while (currTime < (totalSecs-(pauseLength * 7))/7)
+            print(sectionSecs[i]);
+            while (currTime < (sectionSecs[i]))
             {
                 currTime = Time.time - startTime;
-                d = currTime / ((totalSecs - (pauseLength * 7)) / 7);
+                d = currTime / sectionSecs[i];
                 //Debug.Log("d is" + d);
                 currZ = Mathf.Lerp(startZ, endZ, d);
-                Camera.transform.position = new Vector3(0,0,currZ);
+                Camera.transform.position = new Vector3(0, 0, currZ);
                 yield return null;
             }
             yield return new WaitForSeconds(pauseLength * .75f);
             Debug.Log("done first pause");
             endZ -= retreatInc;
             startZ = Camera.transform.position.z;
-
-
         }
+
+
+        //for (int i = 0; i < 7; i++)
+        //{
+        //    Debug.Log("round" + (i + 1));
+        //    yield return new WaitForSeconds(pauseLength * .25f);
+        //    startTime = Time.time;
+        //    currTime = Time.time - startTime;
+        //    Debug.Log("starting round" + (i + 2));
+        //    while (currTime < (mainDuration-(pauseLength * 7))/7)
+        //    {
+        //        currTime = Time.time - startTime;
+        //        d = currTime / ((mainDuration - (pauseLength * 7)) / 7);
+        //        //Debug.Log("d is" + d);
+        //        currZ = Mathf.Lerp(startZ, endZ, d);
+        //        Camera.transform.position = new Vector3(0,0,currZ);
+        //        yield return null;
+        //    }
+        //    yield return new WaitForSeconds(pauseLength * .75f);
+        //    Debug.Log("done first pause");
+        //    endZ -= retreatInc;
+        //    startZ = Camera.transform.position.z;
+        //}
     }
 
-    void MakeSectionSources()
+    void MakeSectionSource()
     {
         GameObject newSection;
-        for (int sections = 0; sections < MandalaParams.Sections; sections++)
-        {
-            newSection = Instantiate(_LineSourceGO);
-            sectionRoots.Add(newSection.GetComponent<LineSource>());
-            Utilities.MakeLR(Prefabs._TrunkLR, MandalaParams.LinesPerSection, sectionRoots[sections].transform);
-        }
+        newSection = Instantiate(_LineSourceGO);
+        sectionRoots.Add(newSection.GetComponent<LineSource>());
+        Utilities.MakeLR(Prefabs._TrunkLR, MandalaParams.LinesPerSection, sectionRoots[0].transform);        
     }
 }

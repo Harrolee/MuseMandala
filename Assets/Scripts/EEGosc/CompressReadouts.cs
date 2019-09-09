@@ -316,9 +316,6 @@ namespace extOSC.Examples
                 }
 
             }
-
-
-
         }
 
         #endregion

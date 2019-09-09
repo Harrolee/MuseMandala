@@ -206,32 +206,34 @@ public class LineSource : MonoBehaviour
     void ConfigureBoundaryCostumes(GameObject[] circles, GameObject[] squares)
     {
         //squares[0]
-        squares[0].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
-        squares[0].GetComponent<LineRenderer>().startWidth = .5f;
-        squares[0].GetComponent<LineRenderer>().endWidth = .5f;
+        squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];//thunder
+        squares[0].GetComponent<LineRenderer>().startWidth = 2f;
+        squares[0].GetComponent<LineRenderer>().endWidth = 2f;
+
 
         //squares[1]
         squares[1].transform.localScale = new Vector3(.72f, .72f, .72f);
         squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .32f);
-        squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .88f);
+        squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 2.89f);
+        squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .03f);
         squares[1].GetComponent<LineRenderer>().startWidth = 2;
         squares[1].GetComponent<LineRenderer>().endWidth = 2;
 
         //portraits
-        squares[2].GetComponent<LineRenderer>().material = MGMT.MatBank[0];
+        squares[2].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[1];//opaque ribbon
         squares[2].transform.localScale = new Vector3(.9f, .9f, .9f);
         squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .41f);
 
 
         //render this circle before the first square
-        circles[0].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
+        circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
         circles[0].GetComponent<LineRenderer>().startWidth = .2f;
         circles[0].GetComponent<LineRenderer>().endWidth = .2f;
         circles[0].transform.localScale = new Vector3(.56f, .56f, .56f);
 
 
         //assign filigree
-        circles[1].GetComponent<LineRenderer>().material = MGMT.MatBank[1];
+        circles[1].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];//thunder
         circles[1].transform.position += new Vector3(0, 0, -6);
         circles[1].GetComponent<LineRenderer>().startWidth = 2;
         circles[1].GetComponent<LineRenderer>().endWidth = 2;

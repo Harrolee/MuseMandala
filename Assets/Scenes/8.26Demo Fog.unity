@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -262,6 +262,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -341,7 +342,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b239250ebdaa5b044ae06c52b5fe6184, type: 2}
   - {fileID: 2100000, guid: 3bb4c8a240b228f4599f56f6ff4e8ff3, type: 2}
   _CenterPiece: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
-  TotalSeconds: 390
+  TotalSeconds: 100
+  IntroSeconds: 60
+  SectionSeconds: []
   _BackPlaneMat: {fileID: 2100000, guid: 939b966958f396549bd7d168fa4f900a, type: 2}
   BackgroundTriangles: []
 --- !u!4 &171828281
@@ -559,7 +562,7 @@ Transform:
 --- !u!199 &937013051
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -583,6 +586,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -5379,6 +5383,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -5444,8 +5449,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436adbf1540f664489595ee4e11d3414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WindSpeed: 1
   FogSpeed: 1
-  GrainSpeed: 0.5
   _Fog:
   - {fileID: 1774461563}
   - {fileID: 2065884189}
@@ -5494,6 +5499,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7783cccba1f0d914c8bfaef08370ba89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TransmitIP: 127.0.0.1
+  TransmitPort: 5010
+  RecievePort: 5000
   runtime: 15000
   memory: 10
   weightRatio: 0.5
@@ -5542,7 +5550,7 @@ Transform:
 --- !u!199 &1845401690
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -5566,6 +5574,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
