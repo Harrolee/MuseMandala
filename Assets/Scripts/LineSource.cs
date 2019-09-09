@@ -198,8 +198,7 @@ public class LineSource : MonoBehaviour
         //Reveal the Boundaries
         StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.SectionSeconds, lineParams.Sections));
         //Reveal the Background triangles
-        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);  
-
+        SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);
     }
 
     #region BoundaryConfig Methods
@@ -210,12 +209,12 @@ public class LineSource : MonoBehaviour
         squares[0].GetComponent<LineRenderer>().startWidth = 2f;
         squares[0].GetComponent<LineRenderer>().endWidth = 2f;
 
-
         //squares[1]
         squares[1].transform.localScale = new Vector3(.72f, .72f, .72f);
         squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .32f);
         squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 2.89f);
         squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .03f);
+        Debug.Log("offset for square 1 is " + squares[1].GetComponent<LineRenderer>().material.GetFloat("_OffsetX"));
         squares[1].GetComponent<LineRenderer>().startWidth = 2;
         squares[1].GetComponent<LineRenderer>().endWidth = 2;
 
@@ -240,16 +239,22 @@ public class LineSource : MonoBehaviour
 
 
         circles[2].transform.position += new Vector3(0, 0, -8);
+        circles[2].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);//
         circles[2].GetComponent<LineRenderer>().startWidth = 3;
         circles[2].GetComponent<LineRenderer>().endWidth = 3;
 
         circles[3].transform.position += new Vector3(0, 0, -11);
-        circles[3].GetComponent<LineRenderer>().startWidth = 4;
-        circles[3].GetComponent<LineRenderer>().endWidth = 4;
+        circles[3].transform.localScale = new Vector3(1.49f, 1.49f, 1.49f);//
+        circles[3].GetComponent<LineRenderer>().startWidth = 3;
+        circles[3].GetComponent<LineRenderer>().endWidth = 3;
+        circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .01f);
 
         circles[4].transform.position += new Vector3(0, 0, -15);
-        circles[4].GetComponent<LineRenderer>().startWidth = 5;
-        circles[4].GetComponent<LineRenderer>().endWidth = 5;
+        circles[4].transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);//
+        circles[4].GetComponent<LineRenderer>().startWidth = 3;
+        circles[4].GetComponent<LineRenderer>().endWidth = 3;
+        circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .37f);
+        circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", .95f);
     }
 
     Material[] OrderBoundaries(GameObject[] circles, GameObject[] squares)

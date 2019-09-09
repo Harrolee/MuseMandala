@@ -124,29 +124,6 @@ public class MGMT : MonoBehaviour
             endZ -= retreatInc;
             startZ = Camera.transform.position.z;
         }
-
-
-        //for (int i = 0; i < 7; i++)
-        //{
-        //    Debug.Log("round" + (i + 1));
-        //    yield return new WaitForSeconds(pauseLength * .25f);
-        //    startTime = Time.time;
-        //    currTime = Time.time - startTime;
-        //    Debug.Log("starting round" + (i + 2));
-        //    while (currTime < (mainDuration-(pauseLength * 7))/7)
-        //    {
-        //        currTime = Time.time - startTime;
-        //        d = currTime / ((mainDuration - (pauseLength * 7)) / 7);
-        //        //Debug.Log("d is" + d);
-        //        currZ = Mathf.Lerp(startZ, endZ, d);
-        //        Camera.transform.position = new Vector3(0,0,currZ);
-        //        yield return null;
-        //    }
-        //    yield return new WaitForSeconds(pauseLength * .75f);
-        //    Debug.Log("done first pause");
-        //    endZ -= retreatInc;
-        //    startZ = Camera.transform.position.z;
-        //}
     }
 
     void MakeSectionSource()
