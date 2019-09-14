@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -177,6 +177,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -312,7 +313,6 @@ GameObject:
   m_Component:
   - component: {fileID: 637691021}
   - component: {fileID: 637691020}
-  - component: {fileID: 637691019}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -320,66 +320,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &637691019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637691018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volumeTrigger: {fileID: 637691021}
-  volumeLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  stopNaNPropagation: 1
-  finalBlitToCameraTarget: 0
-  antialiasingMode: 0
-  temporalAntialiasing:
-    jitterSpread: 0.75
-    sharpness: 0.25
-    stationaryBlending: 0.95
-    motionBlending: 0.85
-  subpixelMorphologicalAntialiasing:
-    quality: 2
-  fastApproximateAntialiasing:
-    fastMode: 0
-    keepAlpha: 0
-  fog:
-    enabled: 1
-    excludeSkybox: 1
-  debugLayer:
-    lightMeter:
-      width: 512
-      height: 256
-      showCurves: 1
-    histogram:
-      width: 512
-      height: 256
-      channel: 3
-    waveform:
-      exposure: 0.12
-      height: 256
-    vectorscope:
-      size: 256
-      exposure: 0.12
-    overlaySettings:
-      linearDepth: 0
-      motionColorIntensity: 4
-      motionGridSize: 64
-      colorBlindnessType: 0
-      colorBlindnessStrength: 1
-  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 1
-  m_ShowCustomSorter: 1
-  breakBeforeColorGrading: 0
-  m_BeforeTransparentBundles: []
-  m_BeforeStackBundles: []
-  m_AfterStackBundles: []
 --- !u!20 &637691020
 Camera:
   m_ObjectHideFlags: 0
@@ -494,6 +434,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -630,6 +571,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -721,6 +663,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -766,7 +709,6 @@ GameObject:
   - component: {fileID: 1517841046}
   - component: {fileID: 1517841049}
   - component: {fileID: 1517841045}
-  - component: {fileID: 1517841047}
   m_Layer: 8
   m_Name: EffectMGMT
   m_TagString: Untagged
@@ -786,8 +728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436adbf1540f664489595ee4e11d3414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WindSpeed: 1
   FogSpeed: 1
-  GrainSpeed: 0.5
   _Fog:
   - {fileID: 1774461563}
   - {fileID: 2065884189}
@@ -806,7 +748,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1517841047
+--- !u!114 &1517841049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -815,37 +757,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1517841044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e25d3a83c92a9b641a09a66b01c8377d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FogSpeed: 1
-  WindSpeed: 1
-<<<<<<< HEAD
-=======
-  ReceivePort: 5010
->>>>>>> d9c9a4a3c1b2d7e6bcea0b5e04767366cf578a4e
-  _Fog:
-  - {fileID: 1774461563}
-  - {fileID: 2065884189}
-  _WindZone: {fileID: 974407429}
---- !u!114 &1517841049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517841044}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7783cccba1f0d914c8bfaef08370ba89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-=======
-  TransmitIP: 172.0.0.1
   TransmitPort: 5010
-  RecievePort: 5000
->>>>>>> d9c9a4a3c1b2d7e6bcea0b5e04767366cf578a4e
+  ReceivePort: 5000
   runtime: 15000
   memory: 10
   weightRatio: 0.5
@@ -881,26 +797,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.influenceMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
-        type: 3}
-      propertyPath: ExternalForcesModule.influenceMask.m_Bits
-      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7570353390473516639, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}
@@ -956,6 +852,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391410177576, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.influenceMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570353391450872285, guid: c6e2163d02d628d40ad0e3faca06f649,
+        type: 3}
+      propertyPath: ExternalForcesModule.influenceMask.m_Bits
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7570353391410177582, guid: c6e2163d02d628d40ad0e3faca06f649,
         type: 3}

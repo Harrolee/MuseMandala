@@ -11,9 +11,8 @@ namespace extOSC.Examples
 
     public class CompressReadouts : MonoBehaviour
     {
-        public string TransmitIP = "127.0.0.1";
         public int TransmitPort = 5010;
-        public int RecievePort = 5000;
+        public int ReceivePort = 5000;
 
         #region Private Vars
 
@@ -73,18 +72,17 @@ namespace extOSC.Examples
             _transmitter.RemoteHost = "127.0.0.1";
 
             // Set remote port;
-            _transmitter.RemotePort = 11000;
+            _transmitter.RemotePort = TransmitPort;
 
 
             // Creating a receiver.
             _receiver = gameObject.AddComponent<OSCReceiver>();
 
             // Set local port.
-            _receiver.LocalPort = 7000;
+            _receiver.LocalPort = ReceivePort;
 
             // Bind "MessageReceived" method to special address.
             _receiver.Bind(_oscAddress, MessageReceived);
-
             //connect to EffectMaster, which CompressReadouts
             //assumes to find on this gameobject.
             effectsMaster = GetComponent<EffectsMaster>();
@@ -125,6 +123,7 @@ namespace extOSC.Examples
 
         #region Protected Methods
 
+
         protected void MessageReceived(OSCMessage message)
         {
             double[] contents = new double[4];
@@ -134,7 +133,7 @@ namespace extOSC.Examples
             {
                 contents[ii] = preContents[ii].DoubleValue;
             }
-
+           //Debug.LogFormat("contents 0 are: {0}", contents[0]);
             MuseTracker(contents);
         }
 
@@ -202,7 +201,7 @@ namespace extOSC.Examples
             //            double avg = 0;
 
             // skip if any sensor is over 1
-            // for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
+            for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
 
 
             //Filling history with samples from the users. It is currently set to take 75 samples. (history_size is set to 300, there are four entries per each sample, 300/4 = 75)
@@ -297,7 +296,7 @@ namespace extOSC.Examples
                     double merge = (1 - Phi((left + right) * Math.Sqrt(easiness) / 2));
                     double augmented_merge = fillratio + (1 - fillratio) * merge;
                     //Debug.Log("CERF:" + merge.ToString());
-                    //Debug.Log("AugMerge: " + augmented_merge.ToString());
+                    Debug.Log("AugMerge: " + augmented_merge.ToString());
                     //Debug.Log("fillratio: " + fillratio.ToString());
                     message2.AddValue(OSCValue.Float((float)merge));
                     //If I want to transmit in the future,
