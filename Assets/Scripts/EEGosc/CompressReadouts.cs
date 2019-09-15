@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using System;
-
-
 //Copied on Aug/2/2019 from Maya Ackerman's team.
 namespace extOSC.Examples
 {
-
     public class CompressReadouts : MonoBehaviour
     {
         public int TransmitPort = 5010;
@@ -20,10 +18,7 @@ namespace extOSC.Examples
 
         private OSCReceiver _receiver;
 
-        //Maya's team would have set runCount 
-        //in order to terminate the sequence.
-        //We're using music and setting the end
-        //to a soundtrack. So this is obsolete.
+        //Connect to timer
         public int runtime = 15000;
         private int runcount = 0;
 
@@ -55,6 +50,13 @@ namespace extOSC.Examples
         private int present = 0;
         private EffectsMaster effectsMaster;
 
+        //Fixed Window Average (after implementation, consider using a sliding window avg)
+        private float[] smoothedMerged;
+        [SerializeField]
+        int avgThreshold = 30;
+        int mergedCount;
+        float avgFromArray;
+        float avg_total;
 
         #endregion
 
@@ -117,6 +119,8 @@ namespace extOSC.Examples
                     history[i][j] = 0;
                 }
             }
+            //instantiate int array
+            smoothedMerged = new float[50];
         }
 
         #endregion
@@ -195,6 +199,8 @@ namespace extOSC.Examples
             }
         }
 
+        //I think I could break this into 2 sections 
+        //and put the second into a coroutine
         protected void MuseTracker(double[] v)
         {
             //Debug.Log("IN MUSETRACKER");
@@ -204,7 +210,9 @@ namespace extOSC.Examples
             for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
 
 
-            //Filling history with samples from the users. It is currently set to take 75 samples. (history_size is set to 300, there are four entries per each sample, 300/4 = 75)
+            //Filling history with samples from the users. 
+            //It is currently set to take 75 samples. 
+            //(history_size is set to 300, there are four entries per each sample, 300/4 = 75)
             if (numSamps <= history_size)
             {
                 if (numSamps == 1)
@@ -281,15 +289,16 @@ namespace extOSC.Examples
                 {
                     double[] AFweighted = Smoothprocess(AFvals);
                     double[] Tweighted = Smoothprocess(Tvals);
-
+                    /*
                     var message = new OSCMessage(_transmitAddress);
                     message.AddValue(OSCValue.Double(Tweighted[0]));
                     message.AddValue(OSCValue.Double(AFweighted[0]));
                     message.AddValue(OSCValue.Double(AFweighted[1]));
                     message.AddValue(OSCValue.Double(Tweighted[1]));
                     _transmitter.Send(message);
-
-                    var message2 = new OSCMessage(_transmitAddressErf);
+                    //If avg of 50 doesn't work, consider using transmitter to set up a messaging system
+                    */
+                    //var message2 = new OSCMessage(_transmitAddressErf);
                     double left = (v[1] - means[1]) / std_devs[1];
                     double right = (v[2] - means[2]) / std_devs[2];
                     //Debug.Log("std_devs[1]: " + std_devs[1] + "std_devs[2]: " +std_devs[2]);
@@ -297,23 +306,63 @@ namespace extOSC.Examples
                     double augmented_merge = fillratio + (1 - fillratio) * merge;
                     //Debug.Log("CERF:" + merge.ToString());
                     Debug.Log("AugMerge: " + augmented_merge.ToString());
+                    if(augmented_merge.ToString() == "NaN")
+                    {
+                        Debug.Log("Restart Muse Direct");
+                    }
                     //Debug.Log("fillratio: " + fillratio.ToString());
-                    message2.AddValue(OSCValue.Float((float)merge));
+                    //message2.AddValue(OSCValue.Float((float)merge));
+
                     //If I want to transmit in the future,
                     //perhaps to save a recording while running,
                     //I'll have to uncomment this.
+
                     //_transmitter.Send(message2);
-                    if (runtime < runcount)
+
+
+                    //add augmerge to array of fifty
+                    //get the average
+                    //send the average to effects Master
+                    if (mergedCount < avgThreshold)
                     {
-                        Debug.Log("Runtime reached, terminating visual.");
-                        effectsMaster.BlowAwayMandala();
+                        smoothedMerged[mergedCount] = Convert.ToSingle(augmented_merge);
+                        Debug.Log("Converted to single: " + Convert.ToSingle(augmented_merge));
+                        mergedCount++;
                     }
-                    else {
-                        effectsMaster.GiveFeedback(Convert.ToSingle(augmented_merge));
+                    else
+                    {
+                        print("reached Threshold");
+                        
+                        for (int i = 0; i < smoothedMerged.Length; i++)
+                        {
+                            avg_total += smoothedMerged[i];
+                        }
+                        avgFromArray = avg_total / avgThreshold;
+
+                        //This gave low values. It's probably my data.
+                        ///\/^^\/\-->-->-->smoothedMerged.Average()
+                        //Debug.LogFormat("avg from array: {0} || avg from linq: {1}", avgFromArray, smoothedMerged.Average());
+                        ThrottleWind(avgFromArray);
+                        mergedCount = 0;
+                        avg_total = 0;
                     }
-                    present++;
                 }
 
+            }
+        }
+
+        void ThrottleWind(float augMergeAvg)
+        {
+            
+            if (runtime < runcount)//change to the timer
+            {
+                Debug.Log("Runtime reached, terminating visual.");
+                effectsMaster.BlowAwayMandala();
+            }
+            else
+            {
+                print("throttling wind");
+                effectsMaster.GiveFeedback(Convert.ToSingle(augMergeAvg));
             }
         }
 

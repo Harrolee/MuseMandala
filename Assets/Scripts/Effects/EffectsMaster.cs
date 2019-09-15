@@ -46,16 +46,19 @@ public class EffectsMaster : MonoBehaviour
     //feedback seems to range between .5 and .98
     public void GiveFeedback(float feedback)
     {
+        //this is what's wonky.
         Debug.Log("recieved val is: " + feedback);
         changeValue = (feedback - oldMin) / oldRange * newRange + newMin;
         StartCoroutine(AdjustWind(changeValue));
 
         //the foreach provides support for modulating 
         //multiple fog generators.
+        /*
         foreach (var pSystem in _Fog)
         {
             StartCoroutine(AdjustFog(changeValue * 10, pSystem.main));
         }
+        */
     }
 
     public void BlowAwayMandala()
@@ -63,7 +66,7 @@ public class EffectsMaster : MonoBehaviour
         //end of experience.
         Debug.Log("Thanks for playing!");
     }
-
+/*
     public IEnumerator AdjustFog(float endVal, ParticleSystem.MainModule fog)
     {
             float startLifeMult = fog.startLifetimeMultiplier;
@@ -89,7 +92,7 @@ public class EffectsMaster : MonoBehaviour
                 }
             }
     }
-
+    */
 
     IEnumerator AdjustWind(float endVal)
     {
@@ -103,7 +106,7 @@ public class EffectsMaster : MonoBehaviour
             {
                 degree += (WindSpeed * Time.deltaTime);
                 _WindZone.windMain = Mathf.Lerp(startWind, endVal, degree);
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
         }
         else
@@ -112,7 +115,7 @@ public class EffectsMaster : MonoBehaviour
             {
                 degree += (WindSpeed * Time.deltaTime);
                 _WindZone.windMain = Mathf.Lerp(startWind, endVal, degree);
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
         }
     }
