@@ -208,21 +208,36 @@ public class LineSource : MonoBehaviour
         squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];//thunder
         squares[0].GetComponent<LineRenderer>().startWidth = 2f;
         squares[0].GetComponent<LineRenderer>().endWidth = 2f;
+        squares[0].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.249f);
+        squares[0].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .39f);
 
         //squares[1]
-        squares[1].transform.localScale = new Vector3(.72f, .72f, .72f);
-        squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .32f);
-        squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 2.89f);
-        squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .03f);
-        Debug.Log("offset for square 1 is " + squares[1].GetComponent<LineRenderer>().material.GetFloat("_OffsetX"));
-        squares[1].GetComponent<LineRenderer>().startWidth = 2;
-        squares[1].GetComponent<LineRenderer>().endWidth = 2;
+        squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
+        squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .7f);
+        squares[1].GetComponent<LineRenderer>().startWidth = 3;
+        squares[1].GetComponent<LineRenderer>().endWidth = 3;
+        squares[1].transform.localScale = new Vector3(.85f, .85f, .85f);
 
         //portraits
         squares[2].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[1];//opaque ribbon
-        squares[2].transform.localScale = new Vector3(.9f, .9f, .9f);
-        squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .41f);
+        squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
+        squares[2].GetComponent<LineRenderer>().startWidth = 3;
+        squares[2].GetComponent<LineRenderer>().endWidth = 3;
+        squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.22f);
 
+        //squares 3 and 4:
+        //make ginormous and animate!
+        squares[3].GetComponent<LineRenderer>().startWidth = 7;
+        squares[3].GetComponent<LineRenderer>().endWidth = 7;
+        squares[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
+        squares[3].transform.Rotate(new Vector3(0, 0, 45));
+
+        squares[4].GetComponent<LineRenderer>().startWidth = 7;
+        squares[4].GetComponent<LineRenderer>().endWidth = 7;
+        squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
+        squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 10f);
+        squares[4].transform.localScale = new Vector3(.85f, .85f, .85f);
+        squares[4].transform.Rotate(new Vector3(0, 0, 45));
 
         //render this circle before the first square
         circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
@@ -230,29 +245,29 @@ public class LineSource : MonoBehaviour
         circles[0].GetComponent<LineRenderer>().endWidth = .2f;
         circles[0].transform.localScale = new Vector3(.56f, .56f, .56f);
 
-
         //assign filigree
-        circles[1].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];//thunder
+        circles[1].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[8]);
         circles[1].transform.position += new Vector3(0, 0, -6);
         circles[1].GetComponent<LineRenderer>().startWidth = 2;
         circles[1].GetComponent<LineRenderer>().endWidth = 2;
-
+        circles[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .1f);
 
         circles[2].transform.position += new Vector3(0, 0, -8);
         circles[2].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);//
-        circles[2].GetComponent<LineRenderer>().startWidth = 3;
-        circles[2].GetComponent<LineRenderer>().endWidth = 3;
+        circles[2].GetComponent<LineRenderer>().startWidth = 12;
+        circles[2].GetComponent<LineRenderer>().endWidth = 12;
+        circles[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .09f);
 
         circles[3].transform.position += new Vector3(0, 0, -11);
         circles[3].transform.localScale = new Vector3(1.49f, 1.49f, 1.49f);//
-        circles[3].GetComponent<LineRenderer>().startWidth = 3;
-        circles[3].GetComponent<LineRenderer>().endWidth = 3;
-        circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .01f);
+        circles[3].GetComponent<LineRenderer>().startWidth = 12f;
+        circles[3].GetComponent<LineRenderer>().endWidth = 12f;
+        circles[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .09f);
 
         circles[4].transform.position += new Vector3(0, 0, -15);
         circles[4].transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);//
-        circles[4].GetComponent<LineRenderer>().startWidth = 3;
-        circles[4].GetComponent<LineRenderer>().endWidth = 3;
+        circles[4].GetComponent<LineRenderer>().startWidth = 13;
+        circles[4].GetComponent<LineRenderer>().endWidth = 13;
         circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .37f);
         circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", .95f);
     }
