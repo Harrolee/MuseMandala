@@ -205,7 +205,11 @@ namespace extOSC.Examples
         {
             //Debug.Log("IN MUSETRACKER");
             //            double avg = 0;
-
+            if (v[1].ToString() == "NaN")
+            {
+                Debug.Log("NaN reset Something.");
+                Debug.Break();
+            }
             // skip if any sensor is over 1
             for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
 
@@ -305,7 +309,7 @@ namespace extOSC.Examples
                     double merge = (1 - Phi((left + right) * Math.Sqrt(easiness) / 2));
                     double augmented_merge = fillratio + (1 - fillratio) * merge;
                     //Debug.Log("CERF:" + merge.ToString());
-                    Debug.Log("AugMerge: " + augmented_merge.ToString());
+                    //Debug.Log("AugMerge: " + augmented_merge.ToString());
                     if(augmented_merge.ToString() == "NaN")
                     {
                         Debug.Log("Restart Muse Direct");
@@ -331,7 +335,6 @@ namespace extOSC.Examples
                     }
                     else
                     {
-                        print("reached Threshold");
                         
                         for (int i = 0; i < smoothedMerged.Length; i++)
                         {
@@ -361,7 +364,6 @@ namespace extOSC.Examples
             }
             else
             {
-                print("throttling wind");
                 effectsMaster.GiveFeedback(Convert.ToSingle(augMergeAvg));
             }
         }

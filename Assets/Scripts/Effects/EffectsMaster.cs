@@ -19,14 +19,14 @@ public class EffectsMaster : MonoBehaviour
     //Learn the new value range and inflate accordingly.
 
     //need to suit value range to behavior of wind.4
-    //incoming range is  .5-.9999999
+    //incoming range is  .5-.85
     //wind range is .01w-.8w
     //need .8w to be .3 and .01w to be .5
     //variables for linear conversion:
-    readonly float oldMax = .3f;
-    readonly float oldMin = 1;
-    readonly float newMax = .9f;
-    readonly float newMin = .01f;
+    readonly float oldMax = .85f;
+    readonly float oldMin = .5f;
+    readonly float newMax = 3.5f;
+    readonly float newMin = .1f;
     float oldRange;
     float newRange;
     float changeValue;
@@ -47,8 +47,9 @@ public class EffectsMaster : MonoBehaviour
     public void GiveFeedback(float feedback)
     {
         //this is what's wonky.
-        Debug.Log("recieved val is: " + feedback);
+        Debug.Log("received val is: " + feedback);
         changeValue = (feedback - oldMin) / oldRange * newRange + newMin;
+        Debug.Log("change val is: " + changeValue);
         StartCoroutine(AdjustWind(changeValue));
 
         //the foreach provides support for modulating 
