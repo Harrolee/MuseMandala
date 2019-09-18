@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 
@@ -19,99 +20,6 @@ namespace Mandala
                 }
             return lrArray;
         }
-
-       //this is becoming the central game loop
-       public static IEnumerator RevealBoundaries(Material[] boundaryMats, Material centerpieceMat, List<float> sectionSeconds, int sectionCount)
-       {
-            //this first section is the centerpiece generation
-            float start = 0;
-            float end = 1.5f;
-            float alphaVal;
-            float startTime = Time.time;
-            float currTime = Time.time - startTime;
-            float x;
-            float centerpieceSecs = sectionSeconds[0];
-            //7 is the number of sections.
-            while (currTime < centerpieceSecs)
-            {
-                currTime = Time.time - startTime;
-                x = currTime / centerpieceSecs;
-                alphaVal = Mathf.Lerp(start, end, x);
-                centerpieceMat.SetFloat("_Alpha", alphaVal);
-                yield return null;
-            }
-            //====================================----------------------
-
-
-            //set alpha of all boundaries to 1;
-            alphaVal = 1;
-            int count = 0;
-            foreach (Material mat in boundaryMats)
-            {
-                mat.SetFloat("_Alpha", alphaVal);
-                count++;
-            }
-
-            //first ring is quick.
-            //After it's appearance, it should perform. 
-            //I imagine making a radial wave by changing the width.
-
-
-
-            //This is the central experience loop.
-            //In sequence, lerp all boundaries.
-            start = 1;
-            end = 0;
-            float boundarySecs = sectionSeconds[1];//totalSecs / boundaryMats.Length;
-            int sectionCounter = 0;
-
-            for (int boundary = 0; boundary < boundaryMats.Length; boundary++)
-            {
-                if (boundary == 1)
-                {
-                    boundarySecs = 10f;
-                }
-                startTime = Time.time;
-                currTime = Time.time - startTime;
-                while (currTime < boundarySecs)
-                {
-                    currTime = Time.time - startTime;
-                    x = currTime / boundarySecs;
-                    alphaVal = Mathf.Lerp(start, end, x);
-                    boundaryMats[boundary].SetFloat("_Alpha", alphaVal);
-                    yield return null;
-                }
-                //reset timing for next run.
-                if (boundary == 1)
-                {
-                    sectionCounter++;
-                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                }
-                if (boundary == 5)
-                {
-                    sectionCount++;
-                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                }
-                if (boundary == 7)
-                {
-                    sectionCount++;
-                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                }
-                if (boundary == 8)
-                {
-                    sectionCount++;
-                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                }
-                if (boundary == 9)
-                {
-                    sectionCount++;
-                    boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                }
-            }
-
-
-            //Next is the finale: the closing ring dance.
-       }
     }
 
     public class Effects
@@ -119,7 +27,7 @@ namespace Mandala
 
         //we want this to advance at ten hertz or ten times a second.
         //Every 1/10th second, the background changes.
-        public static IEnumerator PingPongLerp(Material mat, string floatToPing, float periodLength)
+        public static IEnumerator PingPongLerp(Material mat, string floatToPing, float periodLength, float startVal = -1, float endVal = 1)
         {
             float startTime;
             float currTime;
@@ -135,7 +43,7 @@ namespace Mandala
                 {
                     currTime = Time.time - startTime;
                     x = currTime / (periodLength * .5f);
-                    newVal = Mathf.Lerp(-1, 1, x);
+                    newVal = Mathf.Lerp(startVal, endVal, x);
                     mat.SetFloat(floatToPing, newVal);
                     yield return new WaitForSeconds(.1f);
                 }
@@ -147,7 +55,7 @@ namespace Mandala
                 {
                     currTime = Time.time - startTime;
                     x = currTime / (periodLength * .5f);
-                    newVal = Mathf.Lerp(1, -1, x);
+                    newVal = Mathf.Lerp(endVal, startVal, x);
                     mat.SetFloat(floatToPing, newVal);
                     yield return new WaitForSeconds(.1f);
                 }
@@ -155,7 +63,7 @@ namespace Mandala
             }
         }
 
-        public static IEnumerator LerpFloatOverTime(Material mat, string floatToLerp, float startVal, float endVal, float totalSecs)
+        public static IEnumerator LerpMatOverTime(Material mat, string floatToLerp, float startVal, float endVal, float totalSecs)
         {
             float alphaVal;
             float startTime = Time.time;
@@ -169,6 +77,45 @@ namespace Mandala
                 mat.SetFloat(floatToLerp, alphaVal);
                 yield return null;
             }
+        }
+
+        public static IEnumerator RotateOverTime(Transform go, float startVal, float endVal, float totalSecs)
+        {
+            Debug.Log("got to rotate");
+            float rotateVal;
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                rotateVal = Mathf.Lerp(startVal, endVal, x);
+                go.localEulerAngles = new Vector3(0, 0, rotateVal);
+                yield return null;
+            }
+        }
+
+        public static IEnumerator RotateOverTime(Transform go, float startVal, float endVal, float totalSecs, float waitToStart)
+        {
+            //a pause at the beginning
+            yield return new WaitForSeconds(waitToStart);
+            
+            float rotateVal;
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            //the real loop
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                rotateVal = Mathf.Lerp(startVal, endVal, x);
+                go.transform.localEulerAngles = new Vector3(0, 0, rotateVal);
+                Debug.LogFormat("rotateVal is: {0} and go's z is: {1}", rotateVal, go.transform.rotation.eulerAngles.z);
+                yield return null;
+            }
+            
         }
     }
     public class Patterns

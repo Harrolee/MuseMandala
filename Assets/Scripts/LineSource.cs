@@ -196,7 +196,7 @@ public class LineSource : MonoBehaviour
         Material[] boundaryMats = OrderBoundaries(circles, squares);
 
         //Reveal the Boundaries
-        StartCoroutine(Utilities.RevealBoundaries(boundaryMats, MGMT._CenterPiece, MGMT.SectionSeconds, lineParams.Sections));
+        StartCoroutine(MGMT.CentralLoop(boundaryMats, MGMT._CenterPiece, MGMT.SectionSeconds, lineParams.Sections, squares, circles));
         //Reveal the Background triangles
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);
     }
@@ -230,14 +230,13 @@ public class LineSource : MonoBehaviour
         squares[3].GetComponent<LineRenderer>().startWidth = 7;
         squares[3].GetComponent<LineRenderer>().endWidth = 7;
         squares[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
-        squares[3].transform.Rotate(new Vector3(0, 0, 45));
+        
 
         squares[4].GetComponent<LineRenderer>().startWidth = 7;
         squares[4].GetComponent<LineRenderer>().endWidth = 7;
         squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
         squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 10f);
         squares[4].transform.localScale = new Vector3(.85f, .85f, .85f);
-        squares[4].transform.Rotate(new Vector3(0, 0, 45));
 
         //render this circle before the first square
         circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
@@ -302,6 +301,7 @@ public class LineSource : MonoBehaviour
 
     void SetBackgroundTriangles(LineRenderer[] lrArray, Vector3[] endPoints)
     {
+
         float zEndPoint = 5;
         float zStartPoint = 10;
         Vector3[] avg = new Vector3[endPoints.Length];
@@ -332,7 +332,7 @@ public class LineSource : MonoBehaviour
             //lerp material in for each
             lrArray[ii].material.SetColor("_Color", MGMT.BackgroundPalletes[Random.Range(0, MGMT.BackgroundPalletes.Count)].colors[ii].color);
            // lrArray[ii].material.SetFloat("_Alpha", 0);
-            StartCoroutine(Effects.LerpFloatOverTime(lrArray[ii].material, "_Alpha", 1, 0, MGMT.TotalSeconds/7));
+            StartCoroutine(Effects.LerpMatOverTime(lrArray[ii].material, "_Alpha", 1, 0, MGMT.TotalSeconds/7));
         }
     }
 
@@ -358,7 +358,7 @@ public class LineSource : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
     List<Vector3> GetFarthestPoints(List<Vector3> farthestPoints)
     {
@@ -666,5 +666,6 @@ public class LineSource : MonoBehaviour
         //There are as many entries in branchMatrixList as there are branches for each trunk.
     }
     #endregion
+
 
 }

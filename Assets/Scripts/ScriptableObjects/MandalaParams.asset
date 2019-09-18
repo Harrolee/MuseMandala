@@ -23,7 +23,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b239250ebdaa5b044ae06c52b5fe6184, type: 2}
   - {fileID: 2100000, guid: 3bb4c8a240b228f4599f56f6ff4e8ff3, type: 2}
   - {fileID: 2100000, guid: 73bc3d5f08add3843a76baed6f87fb6d, type: 2}
-  - {fileID: 2100000, guid: 861fcf549604a06478fd9ecaa57527c5, type: 2}
   WidthOfLine: 0.5
   BoundaryWidth: 2
   AlphaTextures:
