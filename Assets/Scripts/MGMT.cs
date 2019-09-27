@@ -12,6 +12,7 @@ public class MGMT : MonoBehaviour
     public List<ColorSwatch> ColorSwatches;
     public List<ColorSwatch> BackgroundPalletes;
     public GameObject _LineSourceGO;
+    public GameObject _IntroCylinder;
     public Material CircleMat;
     public Material SquareMat;
     public List<Material> MatBank;
