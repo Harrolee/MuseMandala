@@ -19,7 +19,7 @@ public class MGMT : MonoBehaviour
     GameObject centerSection;
     public GameObject _CenterSectionSource;
     public Material _CenterPieceMat;
-    GameObject fog;
+    public GameObject _Fog;
     //390secs is 6.6mins
     public float TotalSeconds = 390;
     [HideInInspector]
@@ -39,9 +39,6 @@ public class MGMT : MonoBehaviour
     {
         TimeBreakdown();
 
-        //set fog var:
-        fog = GameObject.FindGameObjectWithTag("Fog");
-
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
@@ -59,8 +56,9 @@ public class MGMT : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
             sectionRoots[currSectionRoot].CallRender();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.B))
         {
+            StartCoroutine(BeginSequence());
             //wake up centerfigure
             //centerSection = Instantiate(_CenterSectionSource);
             //pick a texture from a pool to use for it.
@@ -73,12 +71,17 @@ public class MGMT : MonoBehaviour
 
     }
 
+    void OnDisable()
+    {
+        _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
+    }
+
     public IEnumerator BeginSequence()
     {
         float fadeTime = 3;
-        Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().material, "_Alpha", 1, 0, fadeTime);
+        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", 1, 0, fadeTime));
         yield return new WaitForSeconds(fadeTime * .3f);
-        fog.SetActive(true);
+        _Fog.SetActive(true);
         //when muse finishes calibrating, start the below
         StartCoroutine(MoveCamera(_mainCamera.transform.position.z, _mainCamera.transform.position.z - 3f, IntroSeconds, SectionSeconds));
         sectionRoots[currSectionRoot].GenerateSection();
