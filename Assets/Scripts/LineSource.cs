@@ -196,7 +196,7 @@ public class LineSource : MonoBehaviour
         Material[] boundaryMats = OrderBoundaries(circles, squares);
 
         //Reveal the Boundaries
-        StartCoroutine(MGMT.CentralLoop(boundaryMats, MGMT._CenterPiece, MGMT.SectionSeconds, lineParams.Sections, squares, circles));
+        StartCoroutine(MGMT.CentralLoop(boundaryMats, MGMT._CenterPieceMat, MGMT.SectionSeconds, lineParams.Sections, squares, circles));
         //Reveal the Background triangles
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);
     }

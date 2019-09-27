@@ -13,6 +13,7 @@ public class EffectsMaster : MonoBehaviour
     public float FogSpeed = 1;
     public List<ParticleSystem> _Fog;
     public WindZone _WindZone;
+    public GameObject _Photosphere;
     #endregion
 
     #region Incoming Val Range
@@ -51,49 +52,14 @@ public class EffectsMaster : MonoBehaviour
         changeValue = (feedback - oldMin) / oldRange * newRange + newMin;
         Debug.Log("change val is: " + changeValue);
         StartCoroutine(AdjustWind(changeValue));
-
-        //the foreach provides support for modulating 
-        //multiple fog generators.
-        /*
-        foreach (var pSystem in _Fog)
-        {
-            StartCoroutine(AdjustFog(changeValue * 10, pSystem.main));
-        }
-        */
     }
 
     public void BlowAwayMandala()
     {
         //end of experience.
         Debug.Log("Thanks for playing!");
+        _Photosphere.SetActive(true);
     }
-/*
-    public IEnumerator AdjustFog(float endVal, ParticleSystem.MainModule fog)
-    {
-            float startLifeMult = fog.startLifetimeMultiplier;
-            float degree = 0;
-            if (startLifeMult < endVal)
-            {
-                while (fog.startLifetimeMultiplier < endVal)
-                {
-                    print("increasing: " + degree + " from " + startLifeMult + " toward " + endVal);
-                    degree += (FogSpeed * Time.deltaTime);
-                    fog.startLifetimeMultiplier = Mathf.Lerp(startLifeMult, endVal, degree);
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-            else
-            {
-                while (fog.startLifetimeMultiplier > endVal)
-                {
-                    print("decreasing: " + degree + " from "+ startLifeMult +" toward " + endVal);
-                    degree += (FogSpeed * Time.deltaTime);
-                    fog.startLifetimeMultiplier = Mathf.Lerp(startLifeMult, endVal, degree);
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-    }
-    */
 
     IEnumerator AdjustWind(float endVal)
     {

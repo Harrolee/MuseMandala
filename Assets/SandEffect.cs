@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mandala;
-public class BlowSand : MonoBehaviour
+public class SandEffect : MonoBehaviour
 {
     Material[] child_mats = new Material[2];
+
+    private void OnEnable()
+    {
+        //lerp sphere texture up
+
+    }
 
     void Update()
     {

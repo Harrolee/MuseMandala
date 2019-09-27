@@ -240,7 +240,10 @@ namespace extOSC.Examples
                 else if (numSamps == history_size)
                 {
                     Debug.Log("sampling finished!");
-
+                    GetComponent<MGMT>().BeginSequence();
+                    //lerp darken screen.
+                    //delete cylinder.
+                    //lerp fade in and start rest of sequence.
                     for (int i = 0; i < history_size; i++)
                     {
                         for (int j = 0; j < 4; j++)

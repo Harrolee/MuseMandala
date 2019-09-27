@@ -6,7 +6,7 @@ using Mandala;
 public class MGMT : MonoBehaviour
 {
     [SerializeField]
-    GameObject Camera;
+    GameObject _mainCamera;
     public PrefabsSO Prefabs;
     public LineParametersSO MandalaParams;
     public List<ColorSwatch> ColorSwatches;
@@ -16,7 +16,10 @@ public class MGMT : MonoBehaviour
     public Material CircleMat;
     public Material SquareMat;
     public List<Material> MatBank;
-    public Material _CenterPiece;
+    GameObject centerSection;
+    public GameObject _CenterSectionSource;
+    public Material _CenterPieceMat;
+    GameObject fog;
     //390secs is 6.6mins
     public float TotalSeconds = 390;
     [HideInInspector]
@@ -36,6 +39,9 @@ public class MGMT : MonoBehaviour
     {
         TimeBreakdown();
 
+        //set fog var:
+        fog = GameObject.FindGameObjectWithTag("Fog");
+
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
@@ -43,7 +49,7 @@ public class MGMT : MonoBehaviour
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
         //Randomly Set CenterFold
-        _CenterPiece.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
+        _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
     }
 
 
@@ -55,10 +61,27 @@ public class MGMT : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(MoveCamera(Camera.transform.position.z, Camera.transform.position.z - 3f, IntroSeconds, SectionSeconds));
-            sectionRoots[currSectionRoot].GenerateSection();
+            //wake up centerfigure
+            //centerSection = Instantiate(_CenterSectionSource);
+            //pick a texture from a pool to use for it.
+            //centerSection.GetComponent<MeshRenderer>().material = 
+
+            //first: be in a cylinder.
+            //be in a cylinder while muse calibrates.
+
         }
 
+    }
+
+    public IEnumerator BeginSequence()
+    {
+        float fadeTime = 3;
+        Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().material, "_Alpha", 1, 0, fadeTime);
+        yield return new WaitForSeconds(fadeTime * .3f);
+        fog.SetActive(true);
+        //when muse finishes calibrating, start the below
+        StartCoroutine(MoveCamera(_mainCamera.transform.position.z, _mainCamera.transform.position.z - 3f, IntroSeconds, SectionSeconds));
+        sectionRoots[currSectionRoot].GenerateSection();
     }
 
     void TimeBreakdown()
@@ -117,13 +140,13 @@ public class MGMT : MonoBehaviour
                 d = currTime / sectionSecs[i];
                 //Debug.Log("d is" + d);
                 currZ = Mathf.Lerp(startZ, endZ, d);
-                Camera.transform.position = new Vector3(0, 0, currZ);
+                _mainCamera.transform.position = new Vector3(0, 0, currZ);
                 yield return null;
             }
             yield return new WaitForSeconds(pauseLength * .75f);
             Debug.Log("done first pause");
             endZ -= retreatInc;
-            startZ = Camera.transform.position.z;
+            startZ = _mainCamera.transform.position.z;
         }
     }
 
