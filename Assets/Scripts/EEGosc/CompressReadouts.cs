@@ -9,6 +9,8 @@ namespace extOSC.Examples
 {
     public class CompressReadouts : MonoBehaviour
     {
+        MGMT MGMT;
+
         public int TransmitPort = 5010;
         public int ReceivePort = 5000;
 
@@ -65,8 +67,9 @@ namespace extOSC.Examples
 
         protected virtual void Start()
         {
+            //set MGMT
+            MGMT = GameObject.FindWithTag("MGMT").GetComponent<MGMT>();
 
-            //Debug.Log("in Start()!");
             // Creating a transmitter.
             _transmitter = gameObject.AddComponent<OSCTransmitter>();
 
@@ -137,7 +140,7 @@ namespace extOSC.Examples
             {
                 contents[ii] = preContents[ii].DoubleValue;
             }
-           //Debug.LogFormat("contents 0 are: {0}", contents[0]);
+          // Debug.LogFormat("contents 0 are: {0}", contents[0]);
             MuseTracker(contents);
         }
 
@@ -205,13 +208,15 @@ namespace extOSC.Examples
         {
             //Debug.Log("IN MUSETRACKER");
             //            double avg = 0;
-            if (v[1].ToString() == "NaN")
-            {
-                Debug.Log("NaN reset Something.");
-                Debug.Break();
-            }
+
+                //This doesn't catch anything:
+            //if (v[1].ToString() == "NaN")
+            //{
+            //    Debug.Log("NaN reset Something.");
+            //    Debug.Break();
+            //}
             // skip if any sensor is over 1
-            for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
+            //for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
 
 
             //Filling history with samples from the users. 
@@ -240,10 +245,9 @@ namespace extOSC.Examples
                 else if (numSamps == history_size)
                 {
                     Debug.Log("sampling finished!");
-                    GetComponent<MGMT>().BeginSequence();
-                    //lerp darken screen.
-                    //delete cylinder.
-                    //lerp fade in and start rest of sequence.
+                    MGMT.BeginSequence();
+                    //AvgArray runs in self-modulating increments
+                    StartCoroutine(TimeWindow());
                     for (int i = 0; i < history_size; i++)
                     {
                         for (int j = 0; j < 4; j++)
@@ -315,7 +319,7 @@ namespace extOSC.Examples
                     //Debug.Log("AugMerge: " + augmented_merge.ToString());
                     if(augmented_merge.ToString() == "NaN")
                     {
-                        Debug.Log("Restart Muse Direct");
+                        Debug.Log("Either Right adjust the circlet OR Restart Muse Direct");
                     }
                     //Debug.Log("fillratio: " + fillratio.ToString());
                     //message2.AddValue(OSCValue.Float((float)merge));
@@ -327,39 +331,82 @@ namespace extOSC.Examples
                     //_transmitter.Send(message2);
 
 
+                    mergedArray.Add(Convert.ToSingle(augmented_merge));
+                    mergedCount++;
+
+
                     //add augmerge to array of fifty
                     //get the average
                     //send the average to effects Master
-                    if (mergedCount < avgThreshold)
-                    {
-                        smoothedMerged[mergedCount] = Convert.ToSingle(augmented_merge);
-                        Debug.Log("Converted to single: " + Convert.ToSingle(augmented_merge));
-                        mergedCount++;
-                    }
-                    else
-                    {
-                        
-                        for (int i = 0; i < smoothedMerged.Length; i++)
-                        {
-                            avg_total += smoothedMerged[i];
-                        }
-                        avgFromArray = avg_total / avgThreshold;
+                    //if (mergedCount < avgThreshold)
+                    //{
+                    //    smoothedMerged[mergedCount] = Convert.ToSingle(augmented_merge);
+                    //    Debug.Log("Converted to single: " + Convert.ToSingle(augmented_merge));
+                    //    mergedCount++;
+                    //}
+                    //else
+                    //{
+                    //    for (int i = 0; i < smoothedMerged.Length; i++)
+                    //    {
+                    //        avg_total += smoothedMerged[i];
+                    //    }
+                    //    avgFromArray = avg_total / avgThreshold;
 
-                        //This gave low values. It's probably my data.
-                        ///\/^^\/\-->-->-->smoothedMerged.Average()
-                        //Debug.LogFormat("avg from array: {0} || avg from linq: {1}", avgFromArray, smoothedMerged.Average());
-                        ThrottleWind(avgFromArray);
-                        mergedCount = 0;
-                        avg_total = 0;
-                    }
+                    //    //This gave low values. It's probably my data.
+                    //    ///\/^^\/\-->-->-->smoothedMerged.Average()  
+                    //    //Debug.LogFormat("avg from array: {0} || avg from linq: {1}", avgFromArray, smoothedMerged.Average());
+                    //    ThrottleWind(avgFromArray);
+                    //    mergedCount = 0;
+                    //    avg_total = 0;
+                    
                 }
-
             }
+        }
+
+
+
+        List<float> mergedArray = new List<float>();
+        float windowLength = 5;
+        float windowSum;
+        float windowAverage;
+        float signalsPerSec;
+        int msgCount;
+        IEnumerator TimeWindow()
+        {
+            Debug.Log("Time Window Started");
+            yield return new WaitForSeconds(windowLength);
+            msgCount = mergedArray.Count();
+            List<float> slice = mergedArray;
+            foreach (float val in slice){
+                windowSum += val;
+            }
+            mergedArray.Clear();
+            windowAverage = windowSum / msgCount;
+            //signalsPerSec
+            //given the num of signals per second, 
+            //we can modulate the window length.
+            //Goal: allow the user to recognize how their
+            //focus affects the fog.
+
+            signalsPerSec = msgCount / windowLength;
+            
+            if (msgCount > windowLength * signalsPerSec)
+            {
+                Debug.LogFormat("reset windowLength to {0}", windowLength);
+                windowLength = msgCount / signalsPerSec;
+            }
+            Debug.LogFormat("windowSum: {0} \n windowAvg: {1} \n signalsPerSec: {2}", windowSum, windowAverage, signalsPerSec);
+            //send val to the fan
+            ThrottleWind(windowAverage);
+            //clear the variable. The others are set at each run.
+            windowSum = 0;
+            StartCoroutine(TimeWindow());
         }
 
         void ThrottleWind(float augMergeAvg)
         {
-            
+            //end by using StopCoroutine 
+            //set to end of timer.
             if (runtime < runcount)//change to the timer
             {
                 Debug.Log("Runtime reached, terminating visual.");

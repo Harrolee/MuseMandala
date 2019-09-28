@@ -24,10 +24,10 @@ public class EffectsMaster : MonoBehaviour
     //wind range is .01w-.8w
     //need .8w to be .3 and .01w to be .5
     //variables for linear conversion:
-    readonly float oldMax = .85f;
+    readonly float oldMax = .98f;
     readonly float oldMin = .5f;
     readonly float newMax = 3.5f;
-    readonly float newMin = .1f;
+    readonly float newMin = .01f;
     float oldRange;
     float newRange;
     float changeValue;
@@ -47,7 +47,6 @@ public class EffectsMaster : MonoBehaviour
     //feedback seems to range between .5 and .98
     public void GiveFeedback(float feedback)
     {
-        //this is what's wonky.
         Debug.Log("received val is: " + feedback);
         changeValue = (feedback - oldMin) / oldRange * newRange + newMin;
         Debug.Log("change val is: " + changeValue);

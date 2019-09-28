@@ -96,7 +96,7 @@ public class MGMT : MonoBehaviour
         {
             SectionSeconds.Add((TotalSeconds - IntroSeconds) / MandalaParams.Sections);
         }
-        print("sectionCOutn is " + SectionSeconds.Count);
+        print("sectionCount is " + SectionSeconds.Count);
         //Give the first section, the centerpiece, 1/5th of every other section's time.
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
@@ -238,21 +238,21 @@ public class MGMT : MonoBehaviour
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 5, 1, 4)); //if too fast, add to period val
+                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 5, 1, 4));
             }
             if (boundary == 8) //y offset
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f)); //too wide? lower last val
+                StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
             }
             if (boundary == 9) //x offset
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f)); //If I were a bettin' man...
+                StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
             }
         }
-        //Next is the finale: the closing ring dance.
+        //Next is the finale: the blowy outy sand effect!
     }
 }
