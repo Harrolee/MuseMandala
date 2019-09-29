@@ -9,9 +9,6 @@ public class EffectsMaster : MonoBehaviour
     #region Public Vars
     [Range(0, 10.0f)]
     public float WindSpeed = 1;
-    [Range(0,10.0f)]
-    public float FogSpeed = 1;
-    public List<ParticleSystem> _Fog;
     public WindZone _WindZone;
     public GameObject _Photosphere;
     #endregion

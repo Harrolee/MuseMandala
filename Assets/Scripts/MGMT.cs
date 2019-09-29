@@ -20,6 +20,8 @@ public class MGMT : MonoBehaviour
     public GameObject _CenterSectionSource;
     public Material _CenterPieceMat;
     public GameObject _Fog;
+    [SerializeField]
+    GameObject effectsMGMT;
     //390secs is 6.6mins
     public float TotalSeconds = 390;
     [HideInInspector]
@@ -227,30 +229,38 @@ public class MGMT : MonoBehaviour
                 sectionCounter++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
             }
-            if (boundary == 5) //rotate squares
+            else if (boundary == 5) //rotate squares
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.RotateOverTime(squares[3].transform, 0, 45, 5));
                 StartCoroutine(Effects.RotateOverTime(squares[4].transform, 0, 45, 5, 3));
             }
-            if (boundary == 7)//x tiling
+            else if (boundary == 7)//x tiling
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 5, 1, 4));
             }
-            if (boundary == 8) //y offset
+            else if (boundary == 8) //y offset
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
             }
-            if (boundary == 9) //x offset
+            else if (boundary == 9) //x offset
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
+            }
+            else if (boundary > 9)
+            {
+                yield return new WaitForSeconds(5);
+                print("calling sand sequence");
+                effectsMGMT.GetComponent<SandEffect>().CueSandSequence();
+                //end game
+
             }
         }
         //Next is the finale: the blowy outy sand effect!

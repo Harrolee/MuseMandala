@@ -252,6 +252,7 @@ MonoBehaviour:
   _CenterSectionSource: {fileID: 1352263679}
   _CenterPieceMat: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
   _Fog: {fileID: 193757476}
+  effectsMGMT: {fileID: 0}
   TotalSeconds: 80
   IntroSeconds: 60
   SectionSeconds: []
@@ -5356,6 +5357,7 @@ GameObject:
   - component: {fileID: 1517841049}
   - component: {fileID: 1517841045}
   - component: {fileID: 1517841047}
+  - component: {fileID: 1517841048}
   m_Layer: 8
   m_Name: EffectMGMT
   m_TagString: Untagged
@@ -5414,6 +5416,18 @@ MonoBehaviour:
   - {fileID: 1774461563}
   - {fileID: 2065884189}
   _WindZone: {fileID: 974407429}
+--- !u!114 &1517841048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517841044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84407fd9c10be03478a957cd3513ec31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1517841049
 MonoBehaviour:
   m_ObjectHideFlags: 0

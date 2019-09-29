@@ -20,12 +20,13 @@ public class SandEffect : MonoBehaviour
             {
                 child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;
             }
-            Sequence();
+            CueSandSequence();
         }
     }
 
-    void Sequence()
+    public void CueSandSequence()
     {
+        print("called sand sequence");
         float fadeTime = 4;
         float brushTime = 1f;
         StartCoroutine(Disappear_Sand(fadeTime, brushTime));

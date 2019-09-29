@@ -206,15 +206,6 @@ namespace extOSC.Examples
         //and put the second into a coroutine
         protected void MuseTracker(double[] v)
         {
-            //Debug.Log("IN MUSETRACKER");
-            //            double avg = 0;
-
-                //This doesn't catch anything:
-            //if (v[1].ToString() == "NaN")
-            //{
-            //    Debug.Log("NaN reset Something.");
-            //    Debug.Break();
-            //}
             // skip if any sensor is over 1
             //for (int i = 0; i < 4; i++) { if (v[i] > 1 || v[i] < 0) { return; } }
 
@@ -321,44 +312,9 @@ namespace extOSC.Examples
                     {
                         Debug.Log("Either Right adjust the circlet OR Restart Muse Direct");
                     }
-                    //Debug.Log("fillratio: " + fillratio.ToString());
-                    //message2.AddValue(OSCValue.Float((float)merge));
-
-                    //If I want to transmit in the future,
-                    //perhaps to save a recording while running,
-                    //I'll have to uncomment this.
-
-                    //_transmitter.Send(message2);
-
-
-                    mergedArray.Add(Convert.ToSingle(augmented_merge));
-                    mergedCount++;
-
-
-                    //add augmerge to array of fifty
-                    //get the average
-                    //send the average to effects Master
-                    //if (mergedCount < avgThreshold)
-                    //{
-                    //    smoothedMerged[mergedCount] = Convert.ToSingle(augmented_merge);
-                    //    Debug.Log("Converted to single: " + Convert.ToSingle(augmented_merge));
-                    //    mergedCount++;
-                    //}
-                    //else
-                    //{
-                    //    for (int i = 0; i < smoothedMerged.Length; i++)
-                    //    {
-                    //        avg_total += smoothedMerged[i];
-                    //    }
-                    //    avgFromArray = avg_total / avgThreshold;
-
-                    //    //This gave low values. It's probably my data.
-                    //    ///\/^^\/\-->-->-->smoothedMerged.Average()  
-                    //    //Debug.LogFormat("avg from array: {0} || avg from linq: {1}", avgFromArray, smoothedMerged.Average());
-                    //    ThrottleWind(avgFromArray);
-                    //    mergedCount = 0;
-                    //    avg_total = 0;
                     
+                    mergedArray.Add(Convert.ToSingle(augmented_merge));
+                    mergedCount++;                    
                 }
             }
         }
