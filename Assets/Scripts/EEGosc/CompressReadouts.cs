@@ -20,11 +20,6 @@ namespace extOSC.Examples
 
         private OSCReceiver _receiver;
 
-        //Connect to timer
-        public int runtime = 15000;
-        private int runcount = 0;
-
-
         //networking
 
         private const string _oscAddress = "muse/elements/alpha_absolute"; 
@@ -188,8 +183,6 @@ namespace extOSC.Examples
             return 0.5 * (1 + Erf(x / Math.Sqrt(2)));
         }
 
-
-
         private void Store(double[] v)
         {
             string t = "";
@@ -202,8 +195,6 @@ namespace extOSC.Examples
             }
         }
 
-        //I think I could break this into 2 sections 
-        //and put the second into a coroutine
         protected void MuseTracker(double[] v)
         {
             // skip if any sensor is over 1
@@ -291,16 +282,7 @@ namespace extOSC.Examples
                 {
                     double[] AFweighted = Smoothprocess(AFvals);
                     double[] Tweighted = Smoothprocess(Tvals);
-                    /*
-                    var message = new OSCMessage(_transmitAddress);
-                    message.AddValue(OSCValue.Double(Tweighted[0]));
-                    message.AddValue(OSCValue.Double(AFweighted[0]));
-                    message.AddValue(OSCValue.Double(AFweighted[1]));
-                    message.AddValue(OSCValue.Double(Tweighted[1]));
-                    _transmitter.Send(message);
-                    //If avg of 50 doesn't work, consider using transmitter to set up a messaging system
-                    */
-                    //var message2 = new OSCMessage(_transmitAddressErf);
+
                     double left = (v[1] - means[1]) / std_devs[1];
                     double right = (v[2] - means[2]) / std_devs[2];
                     //Debug.Log("std_devs[1]: " + std_devs[1] + "std_devs[2]: " +std_devs[2]);
@@ -318,8 +300,6 @@ namespace extOSC.Examples
                 }
             }
         }
-
-
 
         List<float> mergedArray = new List<float>();
         float windowLength = 5;
@@ -348,31 +328,18 @@ namespace extOSC.Examples
             
             if (msgCount > windowLength * signalsPerSec)
             {
-                Debug.LogFormat("reset windowLength to {0}", windowLength);
+                //Debug.LogFormat("reset windowLength to {0}", windowLength);
                 windowLength = msgCount / signalsPerSec;
             }
-            Debug.LogFormat("windowSum: {0} \n windowAvg: {1} \n signalsPerSec: {2}", windowSum, windowAverage, signalsPerSec);
+            //Debug.LogFormat("windowSum: {0} \n windowAvg: {1} \n signalsPerSec: {2}", windowSum, windowAverage, signalsPerSec);
             //send val to the fan
-            ThrottleWind(windowAverage);
+            effectsMaster.GiveFeedback(Convert.ToSingle(windowAverage));
             //clear the variable. The others are set at each run.
             windowSum = 0;
             StartCoroutine(TimeWindow());
         }
 
-        void ThrottleWind(float augMergeAvg)
-        {
-            //end by using StopCoroutine 
-            //set to end of timer.
-            if (runtime < runcount)//change to the timer
-            {
-                Debug.Log("Runtime reached, terminating visual.");
-                effectsMaster.BlowAwayMandala();
-            }
-            else
-            {
-                effectsMaster.GiveFeedback(Convert.ToSingle(augMergeAvg));
-            }
-        }
+        public void StopCoro() { print("stopped coroutine");  StopAllCoroutines(); }
 
         #endregion
     }

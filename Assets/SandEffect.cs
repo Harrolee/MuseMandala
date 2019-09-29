@@ -5,24 +5,31 @@ using Mandala;
 public class SandEffect : MonoBehaviour
 {
     Material[] child_mats = new Material[2];
-
+    float sphereFadeInTime = 3;
     private void OnEnable()
     {
-        //lerp sphere texture up
-
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
+        for (int i = 0; i < child_mats.Length; i++)
         {
-            for (int i = 0; i < child_mats.Length; i++)
-            {
-                child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;
-            }
-            CueSandSequence();
+            child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;
+            //lerp spheres into existence
+            StartCoroutine(Effects.LerpMatOverTime(child_mats[i], "_Alpha", 1, 0, sphereFadeInTime));
         }
+        CueSandSequence();
     }
+
+
+
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.B))
+    //    {
+    //        for (int i = 0; i < child_mats.Length; i++)
+    //        {
+    //            child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;
+    //        }
+    //        CueSandSequence();
+    //    }
+    //}
 
     public void CueSandSequence()
     {
@@ -34,6 +41,8 @@ public class SandEffect : MonoBehaviour
 
     IEnumerator Disappear_Sand(float fadeTime, float brushTime)
     {
+        yield return new WaitForSeconds(sphereFadeInTime);
+
         for (int i = 0; i < child_mats.Length; i++)
         {
             StartCoroutine(Effects.LerpMatOverTime(child_mats[i], "_ACT", 0, 1, fadeTime));

@@ -258,7 +258,12 @@ public class MGMT : MonoBehaviour
             {
                 yield return new WaitForSeconds(5);
                 print("calling sand sequence");
-                effectsMGMT.GetComponent<SandEffect>().CueSandSequence();
+
+                //stop signal processing
+                effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
+
+                //begin sand thing
+                effectsMGMT.GetComponent<EffectsMaster>().BlowAwayMandala();
                 //end game
 
             }

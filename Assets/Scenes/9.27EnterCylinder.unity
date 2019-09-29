@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -253,7 +253,7 @@ MonoBehaviour:
   _CenterSectionSource: {fileID: 1352263679}
   _CenterPieceMat: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
   _Fog: {fileID: 193757476}
-  effectsMGMT: {fileID: 0}
+  effectsMGMT: {fileID: 1517841044}
   TotalSeconds: 80
   IntroSeconds: 60
   SectionSeconds: []
@@ -5283,7 +5283,6 @@ GameObject:
   - component: {fileID: 1517841046}
   - component: {fileID: 1517841049}
   - component: {fileID: 1517841045}
-  - component: {fileID: 1517841048}
   m_Layer: 8
   m_Name: EffectMGMT
   m_TagString: Untagged
@@ -5305,7 +5304,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WindSpeed: 1
   _WindZone: {fileID: 974407429}
-  _Photosphere: {fileID: 0}
+  _Photosphere: {fileID: 4986170974264413399, guid: 346ef098c6b141141acf496ba3679e43,
+    type: 3}
 --- !u!4 &1517841046
 Transform:
   m_ObjectHideFlags: 0
@@ -5320,18 +5320,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1517841048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517841044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84407fd9c10be03478a957cd3513ec31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1517841049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5346,7 +5334,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransmitPort: 5010
   ReceivePort: 5000
-  runtime: 15000
   memory: 10
   weightRatio: 0.5
   history_size: 300
