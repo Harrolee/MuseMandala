@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2880962901200001225}
   m_Layer: 0
   m_Name: Centerpiece
-  m_TagString: Untagged
+  m_TagString: mandalaBit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

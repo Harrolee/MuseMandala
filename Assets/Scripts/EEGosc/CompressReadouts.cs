@@ -227,7 +227,7 @@ namespace extOSC.Examples
                 else if (numSamps == history_size)
                 {
                     Debug.Log("sampling finished!");
-                    MGMT.BeginSequence();
+                    StartCoroutine(MGMT.BeginSequence());
                     //AvgArray runs in self-modulating increments
                     StartCoroutine(TimeWindow());
                     for (int i = 0; i < history_size; i++)

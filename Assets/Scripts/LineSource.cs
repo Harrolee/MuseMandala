@@ -54,8 +54,6 @@ public class LineSource : MonoBehaviour
     {       //center by force. For later, consider whether there is anything preventing this from working when not at origin.
         gameObject.transform.position = Vector3.zero;
 
-
-
         //set reference to singleton.
         MGMT = GameObject.FindGameObjectWithTag("MGMT").GetComponent<MGMT>();
 
@@ -328,6 +326,7 @@ public class LineSource : MonoBehaviour
             lrArray[ii].SetPosition(0, new Vector3(0,0,zStartPoint));
             lrArray[ii].SetPosition(1, avg[ii]);
             lrArray[ii].endWidth = Vector3.Distance(endPoints[0], endPoints[1]);
+            lrArray[ii].gameObject.tag = "mandalaBit";
 
             //lerp material in for each
             lrArray[ii].material.SetColor("_Color", MGMT.BackgroundPalletes[Random.Range(0, MGMT.BackgroundPalletes.Count)].colors[ii].color);

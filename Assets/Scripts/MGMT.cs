@@ -35,12 +35,15 @@ public class MGMT : MonoBehaviour
     [HideInInspector]
     public LineRenderer[] BackgroundTriangles;
 
+    List<GameObject> mandala = new List<GameObject>();
+    GameObject mandalaMother;
+
     int currSectionRoot = 0;
     //make section sources
     void Start()
     {
         TimeBreakdown();
-
+        mandalaMother = new GameObject();
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
@@ -51,28 +54,6 @@ public class MGMT : MonoBehaviour
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
     }
 
-
-    void Update()
-    {
-        //we'll want to generate additional child line renderers for each section.
-        if (Input.GetKeyDown(KeyCode.A))
-            sectionRoots[currSectionRoot].CallRender();
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            StartCoroutine(BeginSequence());
-            //wake up centerfigure
-            //centerSection = Instantiate(_CenterSectionSource);
-            //pick a texture from a pool to use for it.
-            //centerSection.GetComponent<MeshRenderer>().material = 
-
-            //first: be in a cylinder.
-            //be in a cylinder while muse calibrates.
-
-        }
-
-    }
-
     void OnDisable()
     {
         _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
@@ -80,14 +61,39 @@ public class MGMT : MonoBehaviour
 
     public IEnumerator BeginSequence()
     {
-        float fadeTime = 3;
-        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", 1, 0, fadeTime));
+        float fadeTime = 4;
+        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
         yield return new WaitForSeconds(fadeTime * .3f);
         _Fog.SetActive(true);
-        //when muse finishes calibrating, start the below
-        StartCoroutine(MoveCamera(_mainCamera.transform.position.z, _mainCamera.transform.position.z - 3f, IntroSeconds, SectionSeconds));
+
+
         sectionRoots[currSectionRoot].GenerateSection();
+
+        //wake up centerfigure
+        //centerSection = Instantiate(_CenterSectionSource);
+        //pick a texture from a pool to use for it.
+        //centerSection.GetComponent<MeshRenderer>().material = 
+
+
+
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("circle"))
+        {
+            go.transform.parent = mandalaMother.transform;
+        }
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("square"))
+        {
+            go.transform.parent = mandalaMother.transform;
+        }
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("mandalaBit"))
+        {
+            go.transform.parent = mandalaMother.transform;
+        }
+
+        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 3f, IntroSeconds, SectionSeconds));
     }
+
+
 
     void TimeBreakdown()
     {
@@ -109,50 +115,6 @@ public class MGMT : MonoBehaviour
             SectionSeconds[i] -= SectionSeconds[i] * .2f;
         }
         //Do more time stuff here.
-    }
-
-    IEnumerator MoveCamera(float startZ, float endZ, float introSecs, List<float> sectionSecs)
-    {
-        float retreatInc = 6f;
-        float pauseLength = 4f;
-        float currZ;
-        float startTime;
-        float currTime;
-        float d;
-
-        //remove pause time from section time
-        for (int ii = 0; ii < sectionSecs.Count; ii++)
-        {
-            sectionSecs[ii] -= pauseLength / sectionSecs.Count;
-        }
-
-        //intro
-        //no movement for introsecs
-        print("set camerawork for intro" + introSecs);
-
-        //main event
-
-        for (int i = 0; i < 7; i++)
-        {
-            Debug.Log("round" + (i + 1));
-            yield return new WaitForSeconds(pauseLength * .25f);
-            startTime = Time.time;
-            currTime = Time.time - startTime;
-            print(sectionSecs[i]);
-            while (currTime < (sectionSecs[i]))
-            {
-                currTime = Time.time - startTime;
-                d = currTime / sectionSecs[i];
-                //Debug.Log("d is" + d);
-                currZ = Mathf.Lerp(startZ, endZ, d);
-                _mainCamera.transform.position = new Vector3(0, 0, currZ);
-                yield return null;
-            }
-            yield return new WaitForSeconds(pauseLength * .75f);
-            Debug.Log("done first pause");
-            endZ -= retreatInc;
-            startZ = _mainCamera.transform.position.z;
-        }
     }
 
     void MakeSectionSource()
@@ -250,24 +212,37 @@ public class MGMT : MonoBehaviour
             }
             else if (boundary == 9) //x offset
             {
+                print("called boundary 9");
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
-            }
-            else if (boundary > 9)
-            {
-                yield return new WaitForSeconds(5);
-                print("calling sand sequence");
-
-                //stop signal processing
-                effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
-
-                //begin sand thing
-                effectsMGMT.GetComponent<EffectsMaster>().BlowAwayMandala();
-                //end game
-
+                //this is getting called WAYAAYAYAY too early
+                StartCoroutine(EndMandala());
             }
         }
         //Next is the finale: the blowy outy sand effect!
+    }
+
+    IEnumerator EndMandala()
+    {
+        //see how long this has to be.
+        yield return new WaitForSeconds(TotalSeconds * .13f);
+        print("calling sand sequence");
+
+        //stop signal processing
+        effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
+        //test
+        StopAllCoroutines();
+        //begin sand thing
+        effectsMGMT.GetComponent<EffectsMaster>().BlowAwayMandala();
+
+        mandalaMother.SetActive(false);
+        
+        //add the background thing and the center
+
+
+        //cull mandala layer from sight.
+
+        //end game
     }
 }

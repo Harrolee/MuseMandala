@@ -20,6 +20,41 @@ namespace Mandala
                 }
             return lrArray;
         }
+
+        public static IEnumerator MoveMandala(GameObject mandalaBit, float startZ, float endZ, float introSecs, List<float> sectionSecs)
+        {
+            //total retreat length is retreatIncrement * sectionCount |OR| 6 * 7
+            float retreatInc = 6f;
+            float pauseLength = 4f;
+            float currZ;
+            float startTime;
+            float currTime;
+            float d;
+
+            //remove pause time from section time
+            for (int ii = 0; ii < sectionSecs.Count; ii++)
+            {
+                sectionSecs[ii] -= pauseLength / sectionSecs.Count;
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                yield return new WaitForSeconds(pauseLength * .25f);
+                startTime = Time.time;
+                currTime = Time.time - startTime;
+                while (currTime < (sectionSecs[i]))
+                {
+                    currTime = Time.time - startTime;
+                    d = currTime / sectionSecs[i];
+                    currZ = Mathf.Lerp(startZ, endZ, d);
+                    mandalaBit.transform.position = new Vector3(0, 0, currZ);
+                    yield return null;
+                }
+                yield return new WaitForSeconds(pauseLength * .75f);
+                endZ += retreatInc;
+                startZ = mandalaBit.transform.position.z;
+            }
+        }
     }
 
     public class Effects
@@ -118,6 +153,7 @@ namespace Mandala
             
         }
     }
+
     public class Patterns
     {
         public static Vector3[] Diagonal(int numPoints)

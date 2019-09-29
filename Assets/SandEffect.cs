@@ -8,6 +8,7 @@ public class SandEffect : MonoBehaviour
     float sphereFadeInTime = 3;
     private void OnEnable()
     {
+        print("Photosphere enabled");
         for (int i = 0; i < child_mats.Length; i++)
         {
             child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;

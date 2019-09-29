@@ -49,12 +49,12 @@ public class EffectsMaster : MonoBehaviour
         Debug.Log("change val is: " + changeValue);
         StartCoroutine(AdjustWind(changeValue));
     }
-
+    GameObject photosphere;
     public void BlowAwayMandala()
     {
         //end of experience.
         Debug.Log("Thanks for playing!");
-        _Photosphere.SetActive(true);
+        photosphere = Instantiate(_Photosphere, GameObject.FindWithTag("MainCamera").transform);
     }
 
     IEnumerator AdjustWind(float endVal)
