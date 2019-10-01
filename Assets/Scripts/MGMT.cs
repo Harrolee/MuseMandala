@@ -38,6 +38,8 @@ public class MGMT : MonoBehaviour
     List<GameObject> mandala = new List<GameObject>();
     GameObject mandalaMother;
 
+    public LayerMask noMandala;
+
     int currSectionRoot = 0;
     //make section sources
     void Start()
@@ -50,15 +52,18 @@ public class MGMT : MonoBehaviour
         MakeSectionSource();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
-        //Randomly Set CenterFold
-        _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[3]);//Random.Range(0, MandalaParams.AlphaTextures.Count)]);
+        //select one of 5 center textures
+        int textureIndex = Random.Range(0, 6);
+        _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);//
     }
 
     void OnDisable()
     {
         _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
+        _CenterSectionSource.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", 0);
     }
 
+    //Called when CompressReadouts.cs has collected 300 samples
     public IEnumerator BeginSequence()
     {
         float fadeTime = 4;
@@ -216,11 +221,11 @@ public class MGMT : MonoBehaviour
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
-                //this is getting called WAYAAYAYAY too early
+
+                //Next is the finale: the blowy outy sand effect!
                 StartCoroutine(EndMandala());
             }
         }
-        //Next is the finale: the blowy outy sand effect!
     }
 
     IEnumerator EndMandala()
@@ -231,18 +236,14 @@ public class MGMT : MonoBehaviour
 
         //stop signal processing
         effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
-        //test
-        StopAllCoroutines();
-        //begin sand thing
-        effectsMGMT.GetComponent<EffectsMaster>().BlowAwayMandala();
 
-        mandalaMother.SetActive(false);
-        
-        //add the background thing and the center
-
-
-        //cull mandala layer from sight.
+        //begin sand effect
+        Debug.Log("Thanks for playing!");
+        _mainCamera.GetComponent<SetFrustrumDimensions>().TurnOnScreen();
+        //change the layer that the main camera can see. Cull the MandalaBits Layer.
+        _mainCamera.GetComponent<Camera>().cullingMask = noMandala;
 
         //end game
+        StopAllCoroutines();
     }
 }

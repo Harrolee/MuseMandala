@@ -10,7 +10,7 @@ public class EffectsMaster : MonoBehaviour
     [Range(0, 10.0f)]
     public float WindSpeed = 1;
     public WindZone _WindZone;
-    public GameObject _Photosphere;
+    public GameObject MainCam;
     #endregion
 
     #region Incoming Val Range
@@ -48,13 +48,6 @@ public class EffectsMaster : MonoBehaviour
         changeValue = (feedback - oldMin) / oldRange * newRange + newMin;
         Debug.Log("change val is: " + changeValue);
         StartCoroutine(AdjustWind(changeValue));
-    }
-    GameObject photosphere;
-    public void BlowAwayMandala()
-    {
-        //end of experience.
-        Debug.Log("Thanks for playing!");
-        photosphere = Instantiate(_Photosphere, GameObject.FindWithTag("MainCamera").transform);
     }
 
     IEnumerator AdjustWind(float endVal)

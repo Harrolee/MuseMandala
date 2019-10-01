@@ -5,32 +5,19 @@ using Mandala;
 public class SandEffect : MonoBehaviour
 {
     Material[] child_mats = new Material[2];
-    float sphereFadeInTime = 3;
+    float planeFadeInTime = 3;
     private void OnEnable()
     {
-        print("Photosphere enabled");
-        for (int i = 0; i < child_mats.Length; i++)
+        //There are 2 planes childed to this gameObject.
+        //We want to get the materials from each.
+        for (int i = 0; i < 2; i++)
         {
             child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;
-            //lerp spheres into existence
-            StartCoroutine(Effects.LerpMatOverTime(child_mats[i], "_Alpha", 1, 0, sphereFadeInTime));
+            //lerp planes into existence
+            //StartCoroutine(Effects.LerpMatOverTime(child_mats[i], "_Alpha", 1, 0, planeFadeInTime));
         }
         CueSandSequence();
     }
-
-
-
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.B))
-    //    {
-    //        for (int i = 0; i < child_mats.Length; i++)
-    //        {
-    //            child_mats[i] = transform.GetChild(i).GetComponent<MeshRenderer>().material;
-    //        }
-    //        CueSandSequence();
-    //    }
-    //}
 
     public void CueSandSequence()
     {
@@ -42,7 +29,7 @@ public class SandEffect : MonoBehaviour
 
     IEnumerator Disappear_Sand(float fadeTime, float brushTime)
     {
-        yield return new WaitForSeconds(sphereFadeInTime);
+        yield return new WaitForSeconds(planeFadeInTime);
 
         for (int i = 0; i < child_mats.Length; i++)
         {
