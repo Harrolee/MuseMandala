@@ -46,6 +46,9 @@ public class MGMT : MonoBehaviour
     {
         TimeBreakdown();
         mandalaMother = new GameObject();
+        mandalaMother.layer = LayerMask.NameToLayer("mandala");
+        centerSection = Instantiate(_CenterSectionSource, mandalaMother.transform);
+
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
@@ -54,13 +57,14 @@ public class MGMT : MonoBehaviour
 
         //select one of 5 center textures
         int textureIndex = Random.Range(0, 6);
-        _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);//
+        _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
+        _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
     }
 
     void OnDisable()
     {
         _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
-        _CenterSectionSource.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", 0);
+        _CenterPieceMat.SetFloat("_Alpha", 0);
     }
 
     //Called when CompressReadouts.cs has collected 300 samples

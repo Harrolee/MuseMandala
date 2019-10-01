@@ -23,7 +23,7 @@ public class SetFrustrumDimensions : MonoBehaviour
         h = .1f * Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad * .5f) * distance * 2f;
 
         //trust me on this
-        w = .805f;//h * cam.aspect
+        w = h * cam.aspect;  // .805f;
 
         //set dimensions of planes:
         foreach (GameObject screen in screens)

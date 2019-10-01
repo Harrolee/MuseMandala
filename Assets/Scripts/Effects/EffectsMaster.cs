@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using extOSC;
+using Mandala;
 
 public class EffectsMaster : MonoBehaviour
 {
@@ -39,8 +40,15 @@ public class EffectsMaster : MonoBehaviour
         //prepare linear conversion variables.
         oldRange = oldMax - oldMin;
         newRange = newMax - oldMin;
+        StartCoroutine(FadeIn());
     }
 
+    IEnumerator FadeIn()
+    {
+        print("called");
+        yield return new WaitForSeconds(5);
+        StartCoroutine(Effects.LerpClipPlaneOverTime(MainCam.GetComponent<Camera>(), 30, .3f, 15));
+    }
     //feedback seems to range between .5 and .98
     public void GiveFeedback(float feedback)
     {

@@ -59,9 +59,6 @@ namespace Mandala
 
     public class Effects
     {
-
-        //we want this to advance at ten hertz or ten times a second.
-        //Every 1/10th second, the background changes.
         public static IEnumerator PingPongLerp(Material mat, string floatToPing, float periodLength, float startVal = -1, float endVal = 1)
         {
             float startTime;
@@ -80,7 +77,7 @@ namespace Mandala
                     x = currTime / (periodLength * .5f);
                     newVal = Mathf.Lerp(startVal, endVal, x);
                     mat.SetFloat(floatToPing, newVal);
-                    yield return new WaitForSeconds(.1f);
+                    yield return null;
                 }
 
                 startTime = Time.time;
@@ -92,7 +89,7 @@ namespace Mandala
                     x = currTime / (periodLength * .5f);
                     newVal = Mathf.Lerp(endVal, startVal, x);
                     mat.SetFloat(floatToPing, newVal);
-                    yield return new WaitForSeconds(.1f);
+                    yield return null;
                 }
                 counter++;
             }
@@ -110,6 +107,20 @@ namespace Mandala
                 x = currTime / totalSecs;
                 alphaVal = Mathf.Lerp(startVal, endVal, x);
                 mat.SetFloat(floatToLerp, alphaVal);
+                yield return null;
+            }
+        }
+
+        public static IEnumerator LerpClipPlaneOverTime(Camera cam, float startVal, float endVal, float totalSecs)
+        {
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                cam.nearClipPlane = Mathf.Lerp(startVal, endVal, x);
                 yield return null;
             }
         }
