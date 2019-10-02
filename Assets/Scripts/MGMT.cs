@@ -58,6 +58,7 @@ public class MGMT : MonoBehaviour
         print(textureIndex + " was selected");
         float distFromCam = -3f;
         centerSection = Instantiate(_CenterSectionSource, new Vector3(0,0,distFromCam), Quaternion.identity, mandalaMother.transform);
+        centerSection.transform.eulerAngles = new Vector3(0, -90, 90);
         _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
     }
@@ -67,11 +68,12 @@ public class MGMT : MonoBehaviour
     //Called when CompressReadouts.cs has collected 300 samples
     public IEnumerator BeginSequence()
     {
+        yield return new WaitForSeconds(15f);
+
         float fadeTime = 4;
         StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
         yield return new WaitForSeconds(fadeTime * .3f);
         _Fog.SetActive(true);
-
 
         sectionRoots[currSectionRoot].GenerateSection();
 
@@ -205,7 +207,7 @@ public class MGMT : MonoBehaviour
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 5, 1, 8));
+                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 2, 1, 8));
             }
             else if (boundary == 8) //y offset
             {
@@ -229,8 +231,7 @@ public class MGMT : MonoBehaviour
     IEnumerator EndMandala()
     {
         //see how long this has to be.
-        yield return new WaitForSeconds(TotalSeconds * .13f);
-        print("calling sand sequence");
+        yield return new WaitForSeconds(8f);
 
         //stop signal processing
         effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
@@ -240,11 +241,12 @@ public class MGMT : MonoBehaviour
         //to keep this from flashing blue, we can change its layer.
         _mainCamera.GetComponent<SetFrustrumDimensions>().TurnOnScreen();
 
-        foreach (GameObject child in mandala)
+        for (int i = 0; i < mandalaMother.transform.childCount; i++)
         {
-            child.layer = LayerMask.NameToLayer("mandala");
+           mandalaMother.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("mandala");
         }
-        yield return new WaitForSeconds(1);
+
+        yield return new WaitForSeconds(3);
         //change the layer that the main camera can see. Cull the mandala layer and activate the maskingPlane.
         _mainCamera.GetComponent<Camera>().cullingMask = noMandala;
 
