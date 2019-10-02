@@ -56,7 +56,7 @@ public class MGMT : MonoBehaviour
         //select one of 5 center textures
         int textureIndex = Random.Range(0, 6);
         print(textureIndex + " was selected");
-        float distFromCam = 4f;
+        float distFromCam = 2f;
         centerSection = Instantiate(_CenterSectionSource, new Vector3(0,0,distFromCam), Quaternion.identity, mandalaMother.transform);
         centerSection.transform.eulerAngles = new Vector3(0, -90, 90);
         _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
@@ -68,7 +68,7 @@ public class MGMT : MonoBehaviour
     //Called when CompressReadouts.cs has collected "history_count" samples
     public IEnumerator BeginSequence()
     {
-        yield return new WaitForSeconds(25f);
+        yield return new WaitForSeconds(30f);
 
         float fadeTime = 4;
         StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
