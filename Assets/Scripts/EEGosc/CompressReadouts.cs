@@ -31,7 +31,7 @@ namespace extOSC.Examples
         public int memory = 10;
         public double weightRatio = 0.5;
         private double weightsum = 0;
-        public int history_size = 300;
+        public int history_size = 480;
 
         private double[] weightVals;
         private double[][] AFvals;

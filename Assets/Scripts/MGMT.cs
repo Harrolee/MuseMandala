@@ -25,7 +25,7 @@ public class MGMT : MonoBehaviour
     //390secs is 6.6mins
     public float TotalSeconds = 390;
     [HideInInspector]
-    public float IntroSeconds = 60; //what is this doing?
+    public float IntroSeconds = 35; //what is this doing?
     [HideInInspector]
     public List<float> SectionSeconds;
     List<LineSource> sectionRoots = new List<LineSource>();
@@ -45,9 +45,6 @@ public class MGMT : MonoBehaviour
     void Start()
     {
         TimeBreakdown();
-        mandalaMother = new GameObject();
-        mandalaMother.layer = LayerMask.NameToLayer("mandala");
-        centerSection = Instantiate(_CenterSectionSource, mandalaMother.transform);
 
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
@@ -55,8 +52,12 @@ public class MGMT : MonoBehaviour
         MakeSectionSource();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
+        mandalaMother = new GameObject();
         //select one of 5 center textures
         int textureIndex = Random.Range(0, 6);
+        print(textureIndex + " was selected");
+        float distFromCam = -3f;
+        centerSection = Instantiate(_CenterSectionSource, new Vector3(0,0,distFromCam), Quaternion.identity, mandalaMother.transform);
         _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
     }
@@ -107,15 +108,14 @@ public class MGMT : MonoBehaviour
         {
             SectionSeconds.Add((TotalSeconds - IntroSeconds) / MandalaParams.Sections);
         }
-        print("sectionCount is " + SectionSeconds.Count);
         //Give the first section, the centerpiece, 1/5th of every other section's time.
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
-            SectionSeconds[0] += SectionSeconds[i] * .2f;
+            SectionSeconds[0] += SectionSeconds[i] * .5f;
         }
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
-            SectionSeconds[i] -= SectionSeconds[i] * .2f;
+            SectionSeconds[i] -= SectionSeconds[i] * .5f;
         }
         //Do more time stuff here.
     }
@@ -205,7 +205,7 @@ public class MGMT : MonoBehaviour
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 5, 1, 4));
+                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 5, 1, 8));
             }
             else if (boundary == 8) //y offset
             {
@@ -240,6 +240,10 @@ public class MGMT : MonoBehaviour
         //to keep this from flashing blue, we can change its layer.
         _mainCamera.GetComponent<SetFrustrumDimensions>().TurnOnScreen();
 
+        foreach (GameObject child in mandala)
+        {
+            child.layer = LayerMask.NameToLayer("mandala");
+        }
         yield return new WaitForSeconds(1);
         //change the layer that the main camera can see. Cull the mandala layer and activate the maskingPlane.
         _mainCamera.GetComponent<Camera>().cullingMask = noMandala;

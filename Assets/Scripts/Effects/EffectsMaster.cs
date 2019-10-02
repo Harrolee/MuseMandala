@@ -45,7 +45,6 @@ public class EffectsMaster : MonoBehaviour
 
     IEnumerator FadeIn()
     {
-        print("called");
         yield return new WaitForSeconds(5);
         StartCoroutine(Effects.LerpClipPlaneOverTime(MainCam.GetComponent<Camera>(), 30, .3f, 15));
     }
