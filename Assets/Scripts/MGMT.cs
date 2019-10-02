@@ -25,7 +25,7 @@ public class MGMT : MonoBehaviour
     //390secs is 6.6mins
     public float TotalSeconds = 390;
     [HideInInspector]
-    public float IntroSeconds = 60;
+    public float IntroSeconds = 60; //what is this doing?
     [HideInInspector]
     public List<float> SectionSeconds;
     List<LineSource> sectionRoots = new List<LineSource>();
@@ -61,11 +61,7 @@ public class MGMT : MonoBehaviour
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
     }
 
-    void OnDisable()
-    {
-        _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
-        _CenterPieceMat.SetFloat("_Alpha", 0);
-    }
+
 
     //Called when CompressReadouts.cs has collected 300 samples
     public IEnumerator BeginSequence()
@@ -99,10 +95,8 @@ public class MGMT : MonoBehaviour
             go.transform.parent = mandalaMother.transform;
         }
 
-        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 3f, IntroSeconds, SectionSeconds));
+        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 3f, SectionSeconds));
     }
-
-
 
     void TimeBreakdown()
     {
@@ -243,11 +237,21 @@ public class MGMT : MonoBehaviour
 
         //begin sand effect
         Debug.Log("Thanks for playing!");
+        //to keep this from flashing blue, we can change its layer.
         _mainCamera.GetComponent<SetFrustrumDimensions>().TurnOnScreen();
-        //change the layer that the main camera can see. Cull the MandalaBits Layer.
+
+        yield return new WaitForSeconds(1);
+        //change the layer that the main camera can see. Cull the mandala layer and activate the maskingPlane.
         _mainCamera.GetComponent<Camera>().cullingMask = noMandala;
 
         //end game
         StopAllCoroutines();
     }
+
+    void OnDisable()
+    {
+        _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
+        _CenterPieceMat.SetFloat("_Alpha", 0);
+    }
+
 }

@@ -21,7 +21,7 @@ namespace Mandala
             return lrArray;
         }
 
-        public static IEnumerator MoveMandala(GameObject mandalaBit, float startZ, float endZ, float introSecs, List<float> sectionSecs)
+        public static IEnumerator MoveMandala(GameObject mandalaBit, float startZ, float endZ, List<float> sectionSecs)
         {
             //total retreat length is retreatIncrement * sectionCount |OR| 6 * 7
             float retreatInc = 6f;

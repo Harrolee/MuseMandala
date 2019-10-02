@@ -49,6 +49,7 @@ public class EffectsMaster : MonoBehaviour
         yield return new WaitForSeconds(5);
         StartCoroutine(Effects.LerpClipPlaneOverTime(MainCam.GetComponent<Camera>(), 30, .3f, 15));
     }
+
     //feedback seems to range between .5 and .98
     public void GiveFeedback(float feedback)
     {

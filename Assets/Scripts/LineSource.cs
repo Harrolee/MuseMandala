@@ -81,11 +81,6 @@ public class LineSource : MonoBehaviour
         colorSwatch = MGMT.ColorSwatches[Random.Range(0, MGMT.ColorSwatches.Count)];
     }
 
-    void GenerateSecondSection()
-    {
-        Vector3[] newLine = Patterns.Sin(numPointsPerLine);
-    }
-
     public void GenerateSection()
     {
         //Create a source line for each section.
@@ -203,7 +198,8 @@ public class LineSource : MonoBehaviour
     void ConfigureBoundaryCostumes(GameObject[] circles, GameObject[] squares)
     {
         //squares[0]
-        squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];//thunder
+        squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];
+        squares[0].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[2].color);
         squares[0].GetComponent<LineRenderer>().startWidth = 2f;
         squares[0].GetComponent<LineRenderer>().endWidth = 2f;
         squares[0].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.249f);
@@ -218,6 +214,7 @@ public class LineSource : MonoBehaviour
 
         //portraits
         squares[2].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[1];//opaque ribbon
+        squares[2].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[4].color);
         squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
         squares[2].GetComponent<LineRenderer>().startWidth = 3;
         squares[2].GetComponent<LineRenderer>().endWidth = 3;
