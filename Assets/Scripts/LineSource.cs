@@ -148,12 +148,13 @@ public class LineSource : MonoBehaviour
         //Three concentric squares:
         //one will be a gate, eventually.
         int col = 4;
+        float offset = 1.5f;
         for (int z = 1; z < 4; z++)
         {
             for (int ii = 0; ii < 4; ii++)
             {
                 squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - col];
-                squarePoints[ii].z -= z;
+                squarePoints[ii].z -= z * offset;
             }
             Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             col--;
@@ -163,19 +164,23 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = endPoints[ii];
-            squarePoints[ii].z -= 4;
+            squarePoints[ii].z -= 4 * offset;
         }
         Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
         //four outermost concentric circles:
         //4 is the offset at which the squares left off.
         //int z = -4;
+        float coeff = 1.5f;
+        float final;
         for (int XYoffset = 0; XYoffset < 4; XYoffset++)
         {
-            Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+            final = XYoffset * coeff;
+            Boundaries.PlaceCircle(endPoints[0] - new Vector3(final, final, 0), endPoints[2] + new Vector3(final, final, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+            //Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             //z--;
         }
-        
+
         //At this point, the boundaries have been placed.
         //give Materials and set color for Circles and squares:
         GameObject[] circles = GameObject.FindGameObjectsWithTag("circle");

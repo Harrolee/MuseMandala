@@ -56,7 +56,7 @@ public class MGMT : MonoBehaviour
         //select one of 5 center textures
         int textureIndex = Random.Range(0, 6);
         print(textureIndex + " was selected");
-        float distFromCam = -3f;
+        float distFromCam = 4f;
         centerSection = Instantiate(_CenterSectionSource, new Vector3(0,0,distFromCam), Quaternion.identity, mandalaMother.transform);
         centerSection.transform.eulerAngles = new Vector3(0, -90, 90);
         _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
@@ -65,10 +65,10 @@ public class MGMT : MonoBehaviour
 
 
 
-    //Called when CompressReadouts.cs has collected 300 samples
+    //Called when CompressReadouts.cs has collected "history_count" samples
     public IEnumerator BeginSequence()
     {
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(25f);
 
         float fadeTime = 4;
         StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
@@ -113,11 +113,11 @@ public class MGMT : MonoBehaviour
         //Give the first section, the centerpiece, 1/5th of every other section's time.
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
-            SectionSeconds[0] += SectionSeconds[i] * .5f;
+            SectionSeconds[0] += SectionSeconds[i] * .05f;
         }
         for (int i = 0; i < MandalaParams.Sections; i++)
         {
-            SectionSeconds[i] -= SectionSeconds[i] * .5f;
+            SectionSeconds[i] -= SectionSeconds[i] * .05f;
         }
         //Do more time stuff here.
     }
@@ -207,7 +207,7 @@ public class MGMT : MonoBehaviour
             {
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
-                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 2, 1, 8));
+                StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 14, 1, 8));
             }
             else if (boundary == 8) //y offset
             {
@@ -217,7 +217,6 @@ public class MGMT : MonoBehaviour
             }
             else if (boundary == 9) //x offset
             {
-                print("called boundary 9");
                 sectionCount++;
                 boundarySecs = sectionSeconds[sectionCounter];//totalSecs / boundaryMats.Length;
                 StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
@@ -246,7 +245,7 @@ public class MGMT : MonoBehaviour
            mandalaMother.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("mandala");
         }
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
         //change the layer that the main camera can see. Cull the mandala layer and activate the maskingPlane.
         _mainCamera.GetComponent<Camera>().cullingMask = noMandala;
 

@@ -22,8 +22,8 @@ public class SandEffect : MonoBehaviour
     public void CueSandSequence()
     {
         print("called sand sequence");
-        float fadeTime = 4;
-        float brushTime = 1f;
+        float fadeTime = 8;
+        float brushTime = 2f;
         StartCoroutine(Disappear_Sand(fadeTime, brushTime));
     }
 
