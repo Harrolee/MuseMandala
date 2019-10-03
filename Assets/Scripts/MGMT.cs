@@ -73,7 +73,13 @@ public class MGMT : MonoBehaviour
     {
         yield return new WaitForSeconds(IntroSeconds);
         print("introsecs: " + IntroSeconds);
+
+        float fadeTime = 3;
+        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
         _Fog.SetActive(true);
+        yield return new WaitForSeconds(fadeTime);
+
+
 
         //CentralLoop is cued through this call
         sectionRoots[currSectionRoot].GenerateSection();
@@ -136,17 +142,6 @@ public class MGMT : MonoBehaviour
 
     public IEnumerator CentralLoop(Material[] boundaryMats, Material centerpieceMat, GameObject[] squares, GameObject[] circles)
     {
-        //if alpha is fucked, uncomment this
-        ////set alpha of all boundaries to 1;
-        //alphaVal = 1;
-        //int count = 0;
-        //foreach (Material mat in boundaryMats)
-        //{
-        //    mat.SetFloat("_Alpha", alphaVal);
-        //    count++;
-        //}
-
-
 
         //first section is the centerpiece generation
         float start = 0;
@@ -178,48 +173,48 @@ public class MGMT : MonoBehaviour
         for(int ii = 1; ii < 6; ii++)
         {
             StartCoroutine(Effects.LerpMatOverTime(boundaryMats[ii], "_Alpha", start, end, sectionSeconds[2]));
+            yield return new WaitForSeconds(sectionSeconds[2] / 5);
         }
-        yield return new WaitForSeconds(sectionSeconds[2] + transLength);
+        yield return new WaitForSeconds(transLength);
         sectionCounter++;
 
         //fourth section: rotate squares
         StartCoroutine(Effects.RotateOverTime(squares[3].transform, 0, 45, 5));
+        yield return new WaitForSeconds(2);
         StartCoroutine(Effects.RotateOverTime(squares[4].transform, 0, 45, 5, 3));
-        yield return new WaitForSeconds(sectionSeconds[3] + transLength);
+        yield return new WaitForSeconds(sectionSeconds[3] + transLength - 2);
         sectionCounter++;
 
         //fifth section: first circle
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[6], "_Alpha", start, end, sectionSeconds[4]));
         yield return new WaitForSeconds(sectionSeconds[4] + transLength);
-        StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 14, 1, 8));
         sectionCounter++;
 
         //sixth section: 
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, sectionSeconds[5]));
         yield return new WaitForSeconds(sectionSeconds[5] + transLength);
-        StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
+        StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 14, 1, 8));
         sectionCounter++;
 
         //seventh section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, sectionSeconds[6]));
         yield return new WaitForSeconds(sectionSeconds[6] + transLength);
-        StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
+        StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
         sectionCounter++;
 
         //eighth section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[9], "_Alpha", start, end, sectionSeconds[7]));
         yield return new WaitForSeconds(sectionSeconds[7] + transLength);
+        StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
         sectionCounter++;
 
-        yield return new WaitForSeconds(sectionSeconds[8] + transLength);
+
         StartCoroutine(EndMandala());
     }
 
     IEnumerator EndMandala()
     {
-        //see how long this has to be.
-        yield return new WaitForSeconds(8f);
-
+        yield return new WaitForSeconds(10);
         //stop signal processing
         effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
 
