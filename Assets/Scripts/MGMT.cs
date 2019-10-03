@@ -108,22 +108,23 @@ public class MGMT : MonoBehaviour
     {
         //calculate # of seconds reserved for the intro.
         //Deduct that from TotalSeconds.
-        float intro = 3 / 14;       //90seconds
+        float intro = 3f / 14f;       //90seconds
         IntroSeconds = TotalSeconds * intro;
         TotalSeconds -= IntroSeconds;
 
+
         sectionSeconds = new float[8]
         {
-            3 / 22,  //45seconds
-            5 / 33,  //50s
-            1 / 6,   //55s
+            3f / 22f,  //45seconds
+            5f / 33f,  //50s
+            1f / 6f,   //55s
             .1f,     //35s
-            4 / 33,  //40s
+            4f / 33f,  //40s
             .1f,     //30s
             .1f,     //30s
-            4 / 33   //40s
+            4f / 33f   //40s
         };
-
+        print(sectionSeconds[0]);
         for (int i = 0; i < sectionSeconds.Length; i++)
         {
             sectionSeconds[i] *= TotalSeconds;
