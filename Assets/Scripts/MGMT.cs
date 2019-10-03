@@ -28,7 +28,7 @@ public class MGMT : MonoBehaviour
     [HideInInspector]
     public float IntroSeconds;
     [HideInInspector]
-    public float[] SectionSeconds = new float[8];
+    public float[] sectionSeconds;
 
     List<LineSource> sectionRoots = new List<LineSource>();
 
@@ -46,7 +46,7 @@ public class MGMT : MonoBehaviour
     //make section sources
     void Start()
     {
-        TimeBreakdown();
+        sectionSeconds = TimeBreakdown();
 
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
@@ -101,26 +101,37 @@ public class MGMT : MonoBehaviour
             go.transform.parent = mandalaMother.transform;
         }
 
-        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 3f, SectionSeconds, transLength));
+        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 3f, sectionSeconds, transLength));
     }
 
-    void TimeBreakdown()
+    float[] TimeBreakdown()
     {
-        //we're leaving out the last 30 secs of wind.
-        //The wind effect will have to be added manually.
-
+        //calculate # of seconds reserved for the intro.
+        //Deduct that from TotalSeconds.
         float intro = 3 / 14;       //90seconds
         IntroSeconds = TotalSeconds * intro;
+        TotalSeconds -= IntroSeconds;
 
-        //Set section ratios
-        SectionSeconds[1] =  3 / 22;  //45seconds
-        SectionSeconds[2] = 5 / 33;  //50s
-        SectionSeconds[3] = 1 / 6;   //55s
-        SectionSeconds[4] = .1f;     //35s
-        SectionSeconds[5] = 4 / 33;  //40s
-        SectionSeconds[6] = .1f;     //30s
-        SectionSeconds[7] = .1f;     //30s
-        SectionSeconds[8] = 4 / 33;  //40s
+        sectionSeconds = new float[8]
+        {
+            3 / 22,  //45seconds
+            5 / 33,  //50s
+            1 / 6,   //55s
+            .1f,     //35s
+            4 / 33,  //40s
+            .1f,     //30s
+            .1f,     //30s
+            4 / 33   //40s
+        };
+
+        for (int i = 0; i < sectionSeconds.Length; i++)
+        {
+            sectionSeconds[i] *= TotalSeconds;
+        }
+
+        //we're leaving out the last 30 secs of wind.
+        //The wind effect will have to be added manually.
+        return sectionSeconds;
     }
 
     void MakeSectionSource()
@@ -152,17 +163,17 @@ public class MGMT : MonoBehaviour
 
         //first section:
 
-        Effects.LerpMatOverTime(centerpieceMat, "_Alpha", start, end, SectionSeconds[0]);
+        StartCoroutine(Effects.LerpMatOverTime(centerpieceMat, "_Alpha", start, end, sectionSeconds[0])_;
         sectionCounter++;
-        yield return new WaitForSeconds(SectionSeconds[0] + transLength);
+        yield return new WaitForSeconds(sectionSeconds[0] + transLength);
 
 
         start = 1;
         end = 0;
 
         //second section:
-        Effects.LerpMatOverTime(boundaryMats[0], "_Alpha", start, end, SectionSeconds[1]);
-        yield return new WaitForSeconds(SectionSeconds[1] + transLength);
+        StartCoroutine(Effects.LerpMatOverTime(boundaryMats[0], "_Alpha", start, end, sectionSeconds[1]));
+        yield return new WaitForSeconds(sectionSeconds[1] + transLength);
         //add some shit
         //first ring is quick.
         //After it's appearance, it should perform. 
@@ -172,41 +183,41 @@ public class MGMT : MonoBehaviour
         //third section: create squares
         for(int ii = 1; ii < 6; ii++)
         {
-            Effects.LerpMatOverTime(boundaryMats[ii], "_Alpha", start, end, SectionSeconds[2]);
+            StartCoroutine(Effects.LerpMatOverTime(boundaryMats[ii], "_Alpha", start, end, sectionSeconds[2]));
         }
-        yield return new WaitForSeconds(SectionSeconds[2] + transLength);
+        yield return new WaitForSeconds(sectionSeconds[2] + transLength);
         sectionCounter++;
 
         //fourth section: rotate squares
         StartCoroutine(Effects.RotateOverTime(squares[3].transform, 0, 45, 5));
         StartCoroutine(Effects.RotateOverTime(squares[4].transform, 0, 45, 5, 3));
-        yield return new WaitForSeconds(SectionSeconds[3] + transLength);
+        yield return new WaitForSeconds(sectionSeconds[3] + transLength);
         sectionCounter++;
 
         //fifth section: first circle
-        Effects.LerpMatOverTime(boundaryMats[6], "_Alpha", start, end, SectionSeconds[4]);
-        yield return new WaitForSeconds(SectionSeconds[4] + transLength);
+        StartCoroutine(Effects.LerpMatOverTime(boundaryMats[6], "_Alpha", start, end, sectionSeconds[4]));
+        yield return new WaitForSeconds(sectionSeconds[4] + transLength);
         StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 14, 1, 8));
         sectionCounter++;
 
         //sixth section: 
-        Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, SectionSeconds[5]);
-        yield return new WaitForSeconds(SectionSeconds[5] + transLength);
+        StartCoroutine(Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, sectionSeconds[5]));
+        yield return new WaitForSeconds(sectionSeconds[5] + transLength);
         StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
         sectionCounter++;
 
         //seventh section:
-        Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, SectionSeconds[6]);
-        yield return new WaitForSeconds(SectionSeconds[6] + transLength);
+        StartCoroutine(Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, sectionSeconds[6]));
+        yield return new WaitForSeconds(sectionSeconds[6] + transLength);
         StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
         sectionCounter++;
 
         //eighth section:
-        Effects.LerpMatOverTime(boundaryMats[9], "_Alpha", start, end, SectionSeconds[7]);
-        yield return new WaitForSeconds(SectionSeconds[7] + transLength);
+        StartCoroutine(Effects.LerpMatOverTime(boundaryMats[9], "_Alpha", start, end, sectionSeconds[7]));
+        yield return new WaitForSeconds(sectionSeconds[7] + transLength);
         sectionCounter++;
 
-        yield return new WaitForSeconds(SectionSeconds[8] + transLength);
+        yield return new WaitForSeconds(sectionSeconds[8] + transLength);
         StartCoroutine(EndMandala());
     }
 
