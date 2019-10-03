@@ -32,7 +32,7 @@ public class MGMT : MonoBehaviour
 
     List<LineSource> sectionRoots = new List<LineSource>();
 
-    public Material _BackPlaneMat;
+    public Material _BackgroundMat;
 
     [HideInInspector]
     public LineRenderer[] BackgroundTriangles;
@@ -47,14 +47,18 @@ public class MGMT : MonoBehaviour
     void Start()
     {
         sectionSeconds = TimeBreakdown();
-        Debug.LogFormat("TimeBreakdown returned {0} for the first val", sectionSeconds[0]);
+        StartCoroutine(BeginSequence());
         //start background pulse
-        StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
+        StartCoroutine(Effects.PingPongLerp(_BackgroundMat, "_Float", 10));
 
         MakeSectionSource();
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
         mandalaMother = new GameObject();
+
+
+        //the texture placed below is overidden somewhere
+
         //select one of 5 center textures
         int textureIndex = Random.Range(0, 6);
         print(textureIndex + " was selected");
@@ -65,27 +69,14 @@ public class MGMT : MonoBehaviour
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
     }
 
-
-
-    //Called when CompressReadouts.cs has collected "history_count" samples
     public IEnumerator BeginSequence()
     {
-        
-        yield return new WaitForSeconds(30f);
-
-        float fadeTime = 4;
-        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
-        yield return new WaitForSeconds(fadeTime * .3f);
+        yield return new WaitForSeconds(IntroSeconds);
+        print("introsecs: " + IntroSeconds);
         _Fog.SetActive(true);
 
+        //CentralLoop is cued through this call
         sectionRoots[currSectionRoot].GenerateSection();
-
-        //wake up centerfigure
-        //centerSection = Instantiate(_CenterSectionSource);
-        //pick a texture from a pool to use for it.
-        //centerSection.GetComponent<MeshRenderer>().material = 
-
-
 
 
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("circle"))
