@@ -21,38 +21,31 @@ namespace Mandala
             return lrArray;
         }
 
-        public static IEnumerator MoveMandala(GameObject mandalaBit, float startZ, float endZ, List<float> sectionSecs)
+        public static IEnumerator MoveMandala(GameObject mandala, float startZ, float endZ, float[] sectionSecs, float transLength)
         {
-            //total retreat length is retreatIncrement * sectionCount |OR| 6 * 7
+            //total retreat length is retreatIncrement * (sectionCount - 1)
             float retreatInc = 4f;
-            float pauseLength = 4f;
             float currZ;
             float startTime;
             float currTime;
             float d;
 
-            //remove pause time from section time
-            for (int ii = 0; ii < sectionSecs.Count; ii++)
+            //We want 7 passes. Each pass is a transition.
+            for (int i = 0; i < 8; i++)
             {
-                sectionSecs[ii] -= pauseLength / sectionSecs.Count;
-            }
-
-            for (int i = 0; i < 7; i++)
-            {
-                yield return new WaitForSeconds(pauseLength * .25f);
+                yield return new WaitForSeconds(sectionSecs[i]);
                 startTime = Time.time;
                 currTime = Time.time - startTime;
-                while (currTime < (sectionSecs[i]))
+                while (currTime < transLength)
                 {
                     currTime = Time.time - startTime;
-                    d = currTime / sectionSecs[i];
+                    d = currTime / transLength;
                     currZ = Mathf.Lerp(startZ, endZ, d);
-                    mandalaBit.transform.position = new Vector3(0, 0, currZ);
+                    mandala.transform.position = new Vector3(0, 0, currZ);
                     yield return null;
                 }
-                yield return new WaitForSeconds(pauseLength * .75f);
                 endZ += retreatInc;
-                startZ = mandalaBit.transform.position.z;
+                startZ = mandala.transform.position.z;
             }
         }
     }

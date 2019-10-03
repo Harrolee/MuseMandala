@@ -170,7 +170,7 @@ public class LineSource : MonoBehaviour
 
         //four outermost concentric circles:
         //4 is the offset at which the squares left off.
-        //int z = -4;
+        int circleZ = -4;
         float coeff = 1.5f;
         float final;
         for (int XYoffset = 0; XYoffset < 4; XYoffset++)
@@ -178,7 +178,7 @@ public class LineSource : MonoBehaviour
             final = XYoffset * coeff;
             Boundaries.PlaceCircle(endPoints[0] - new Vector3(final, final, 0), endPoints[2] + new Vector3(final, final, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             //Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
-            //z--;
+            circleZ--;
         }
 
         //At this point, the boundaries have been placed.
@@ -194,7 +194,7 @@ public class LineSource : MonoBehaviour
         Material[] boundaryMats = OrderBoundaries(circles, squares);
 
         //Reveal the Boundaries
-        StartCoroutine(MGMT.CentralLoop(boundaryMats, MGMT._CenterPieceMat, MGMT.SectionSeconds, lineParams.Sections, squares, circles));
+        StartCoroutine(MGMT.CentralLoop(boundaryMats, MGMT._CenterPieceMat, squares, circles));
         //Reveal the Background triangles
         SetBackgroundTriangles(MGMT.BackgroundTriangles, endPoints);
     }
