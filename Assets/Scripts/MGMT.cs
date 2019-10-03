@@ -47,7 +47,7 @@ public class MGMT : MonoBehaviour
     void Start()
     {
         sectionSeconds = TimeBreakdown();
-
+        Debug.LogFormat("TimeBreakdown returned {0} for the first val", sectionSeconds[0]);
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackPlaneMat, "_Float", 10));
 
@@ -163,8 +163,9 @@ public class MGMT : MonoBehaviour
 
         //first section:
 
-        StartCoroutine(Effects.LerpMatOverTime(centerpieceMat, "_Alpha", start, end, sectionSeconds[0])_;
+        StartCoroutine(Effects.LerpMatOverTime(centerpieceMat, "_Alpha", start, end, sectionSeconds[0]));
         sectionCounter++;
+        Debug.LogFormat("first section at {0}", sectionSeconds[0]);
         yield return new WaitForSeconds(sectionSeconds[0] + transLength);
 
 
@@ -173,6 +174,7 @@ public class MGMT : MonoBehaviour
 
         //second section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[0], "_Alpha", start, end, sectionSeconds[1]));
+        Debug.LogFormat("first section at {0}", sectionSeconds[1]);
         yield return new WaitForSeconds(sectionSeconds[1] + transLength);
         //add some shit
         //first ring is quick.
