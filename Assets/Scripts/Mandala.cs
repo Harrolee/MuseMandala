@@ -104,7 +104,7 @@ namespace Mandala
             }
         }
 
-        public static IEnumerator LerpClipPlaneOverTime(Camera cam, float startVal, float endVal, float totalSecs)
+        public static IEnumerator LerpNearPlaneOverTime(Camera cam, float startVal, float endVal, float totalSecs)
         {
             float startTime = Time.time;
             float currTime = Time.time - startTime;
@@ -114,6 +114,20 @@ namespace Mandala
                 currTime = Time.time - startTime;
                 x = currTime / totalSecs;
                 cam.nearClipPlane = Mathf.Lerp(startVal, endVal, x);
+                yield return null;
+            }
+        }
+
+        public static IEnumerator LerpFarPlaneOverTime(Camera cam, float startVal, float endVal, float totalSecs)
+        {
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                cam.farClipPlane = Mathf.Lerp(startVal, endVal, x);
                 yield return null;
             }
         }
@@ -151,7 +165,6 @@ namespace Mandala
                 x = currTime / totalSecs;
                 rotateVal = Mathf.Lerp(startVal, endVal, x);
                 go.transform.localEulerAngles = new Vector3(0, 0, rotateVal);
-                Debug.LogFormat("rotateVal is: {0} and go's z is: {1}", rotateVal, go.transform.rotation.eulerAngles.z);
                 yield return null;
             }
             

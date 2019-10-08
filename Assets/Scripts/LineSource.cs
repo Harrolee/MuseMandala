@@ -6,7 +6,7 @@ public class LineSource : MonoBehaviour
 {
     LineParametersSO lineParams;
     MGMT MGMT;
-
+    float zOffset = 2;
     Vector3[] squarePoints = new Vector3[4];
 
     #region Import Vars from LineParameters SO
@@ -148,13 +148,12 @@ public class LineSource : MonoBehaviour
         //Three concentric squares:
         //one will be a gate, eventually.
         int col = 4;
-        float offset = 1.5f;
         for (int z = 1; z < 4; z++)
         {
             for (int ii = 0; ii < 4; ii++)
             {
                 squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - col];
-                squarePoints[ii].z -= z * offset;
+                squarePoints[ii].z -= z * zOffset;
             }
             Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             col--;
@@ -164,7 +163,7 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < 4; ii++)
         {
             squarePoints[ii] = endPoints[ii];
-            squarePoints[ii].z -= 4 * offset;
+            squarePoints[ii].z -= 4 * zOffset;
         }
         Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
@@ -226,7 +225,6 @@ public class LineSource : MonoBehaviour
         squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.22f);
 
         //squares 3 and 4:
-        //make ginormous and animate!
         squares[3].GetComponent<LineRenderer>().startWidth = 7;
         squares[3].GetComponent<LineRenderer>().endWidth = 7;
         squares[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
@@ -251,19 +249,19 @@ public class LineSource : MonoBehaviour
         circles[1].GetComponent<LineRenderer>().endWidth = 2;
         circles[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .1f);
 
-        circles[2].transform.position += new Vector3(0, 0, -8);
+        circles[2].transform.position += new Vector3(0, 0, -10 - (zOffset));
         circles[2].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);//
         circles[2].GetComponent<LineRenderer>().startWidth = 12;
         circles[2].GetComponent<LineRenderer>().endWidth = 12;
         circles[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .09f);
 
-        circles[3].transform.position += new Vector3(0, 0, -11);
+        circles[3].transform.position += new Vector3(0, 0, -10 - (3 * zOffset));
         circles[3].transform.localScale = new Vector3(1.49f, 1.49f, 1.49f);//
         circles[3].GetComponent<LineRenderer>().startWidth = 12f;
         circles[3].GetComponent<LineRenderer>().endWidth = 12f;
         circles[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .09f);
 
-        circles[4].transform.position += new Vector3(0, 0, -15);
+        circles[4].transform.position += new Vector3(0, 0, -10 - (5 * zOffset));
         circles[4].transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);//
         circles[4].GetComponent<LineRenderer>().startWidth = 13;
         circles[4].GetComponent<LineRenderer>().endWidth = 13;

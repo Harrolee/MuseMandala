@@ -40,13 +40,13 @@ public class EffectsMaster : MonoBehaviour
         //prepare linear conversion variables.
         oldRange = oldMax - oldMin;
         newRange = newMax - oldMin;
-        StartCoroutine(FadeIn());
+        //StartCoroutine(FadeIn());
     }
 
     IEnumerator FadeIn()
     {
         yield return new WaitForSeconds(5);
-        StartCoroutine(Effects.LerpClipPlaneOverTime(MainCam.GetComponent<Camera>(), 30, .3f, 15));
+        StartCoroutine(Effects.LerpNearPlaneOverTime(MainCam.GetComponent<Camera>(), 30, .05f, 15));
     }
 
     //feedback seems to range between .5 and .98

@@ -63,7 +63,7 @@ public class MGMT : MonoBehaviour
         int textureIndex = Random.Range(0, 6);
         print(textureIndex + " was selected");
         float distFromCam = 2f; //why does the centerpiece disappear?
-        centerSection = Instantiate(_CenterSectionSource, new Vector3(0,0,distFromCam), Quaternion.identity, mandalaMother.transform);
+        centerSection = Instantiate(_CenterSectionSource, new Vector3(0, 0, distFromCam), Quaternion.identity, mandalaMother.transform);
         centerSection.transform.eulerAngles = new Vector3(0, -90, 90);
         _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
@@ -170,10 +170,12 @@ public class MGMT : MonoBehaviour
         sectionCounter++;
 
         //third section: create squares
-        for(int ii = 1; ii < 6; ii++)
+        float lerpTime = sectionSeconds[2] / 5;
+        for (int ii = 1; ii < 6; ii++)
         {
-            StartCoroutine(Effects.LerpMatOverTime(boundaryMats[ii], "_Alpha", start, end, sectionSeconds[2]));
-            yield return new WaitForSeconds(sectionSeconds[2] / 5);
+            StartCoroutine(Effects.LerpMatOverTime(boundaryMats[ii], "_Alpha", start, end, lerpTime));
+            Debug.Log("start weight " + ii);
+            yield return new WaitForSeconds(lerpTime);
         }
         yield return new WaitForSeconds(transLength);
         sectionCounter++;
@@ -219,18 +221,29 @@ public class MGMT : MonoBehaviour
         effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().StopCoro();
 
         //begin sand effect
-        Debug.Log("Thanks for playing!");
+
         //to keep this from flashing blue, we can change its layer.
         _mainCamera.GetComponent<SetFrustrumDimensions>().TurnOnScreen();
 
         for (int i = 0; i < mandalaMother.transform.childCount; i++)
         {
-           mandalaMother.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("mandala");
+            mandalaMother.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("mandala");
         }
-
+        //remove fog.
+        _Fog.SetActive(false);
         yield return new WaitForSeconds(5);
         //change the layer that the main camera can see. Cull the mandala layer and activate the maskingPlane.
         _mainCamera.GetComponent<Camera>().cullingMask = noMandala;
+
+        yield return new WaitForSeconds(8);
+        //show words,
+        TextMesh text = GetComponent<TextMesh>();
+        text.text = "Welcome back.";
+        yield return new WaitForSeconds(4);
+
+        StartCoroutine(Effects.LerpFarPlaneOverTime(_mainCamera.GetComponent<Camera>(), 1000, 200, 10));
+        StartCoroutine(Effects.LerpNearPlaneOverTime(_mainCamera.GetComponent<Camera>(), .05f, 10, 10));
+        yield return new WaitForSeconds(10);
 
         //end game
         StopAllCoroutines();
