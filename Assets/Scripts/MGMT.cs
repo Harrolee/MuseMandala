@@ -13,6 +13,7 @@ public class MGMT : MonoBehaviour
     public List<ColorSwatch> BackgroundPalletes;
     public GameObject _LineSourceGO;
     public GameObject _IntroCylinder;
+    public GameObject _Frame;
     public Material CircleMat;
     public Material SquareMat;
     public List<Material> MatBank;
@@ -161,7 +162,7 @@ public class MGMT : MonoBehaviour
 
         //second section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[0], "_Alpha", start, end, sectionSeconds[1]));
-        Debug.LogFormat("first section at {0}", sectionSeconds[1]);
+        Debug.LogFormat("second section at {0}", sectionSeconds[1]);
         yield return new WaitForSeconds(sectionSeconds[1] + transLength);
         //add some shit
         //first ring is quick.
@@ -174,7 +175,6 @@ public class MGMT : MonoBehaviour
         for (int ii = 1; ii < 6; ii++)
         {
             StartCoroutine(Effects.LerpMatOverTime(boundaryMats[ii], "_Alpha", start, end, lerpTime));
-            Debug.Log("start weight " + ii);
             yield return new WaitForSeconds(lerpTime);
         }
         yield return new WaitForSeconds(transLength);

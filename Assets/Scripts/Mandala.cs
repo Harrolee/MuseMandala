@@ -144,7 +144,7 @@ namespace Mandala
                 currTime = Time.time - startTime;
                 x = currTime / totalSecs;
                 rotateVal = Mathf.Lerp(startVal, endVal, x);
-                go.localEulerAngles = new Vector3(0, 0, rotateVal);
+                go.localEulerAngles = new Vector3(rotateVal, 90, -90);
                 yield return null;
             }
         }
@@ -164,7 +164,7 @@ namespace Mandala
                 currTime = Time.time - startTime;
                 x = currTime / totalSecs;
                 rotateVal = Mathf.Lerp(startVal, endVal, x);
-                go.transform.localEulerAngles = new Vector3(0, 0, rotateVal);
+                go.transform.localEulerAngles = new Vector3(rotateVal, 90, -90);
                 yield return null;
             }
             

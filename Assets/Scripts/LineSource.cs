@@ -138,34 +138,50 @@ public class LineSource : MonoBehaviour
         //innermost circle
         Boundaries.PlaceCircle(sectionReflections[0, 7], sectionReflections[2, 7], lineParams.BoundaryWidth, lineParams.BoundaryWidth);
 
-        //innermost square
-        for (int ii = 0; ii < 4; ii++)
-        {
-            squarePoints[ii] = sectionReflections[ii, 7];
-        }
-        Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+        GameObject square = Instantiate(MGMT._Frame, Vector3.zero, Quaternion.Euler(-90,0,0));
+        square.tag = "square";
+        square.transform.localScale *= 1.2f;
+
+        ////innermost square
+        //for (int ii = 0; ii < 4; ii++)
+        //{
+        //    squarePoints[ii] = sectionReflections[ii, 7];
+        //}
+        //Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+
+
 
         //Three concentric squares:
         //one will be a gate, eventually.
         int col = 4;
         for (int z = 1; z < 4; z++)
         {
-            for (int ii = 0; ii < 4; ii++)
-            {
-                squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - col];
-                squarePoints[ii].z -= z * zOffset;
-            }
-            Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+            //for (int ii = 0; ii < 4; ii++)
+            //{
+            //    squarePoints[ii] = sectionReflections[ii, sectionReflections.GetLength(1) - col];
+            //    squarePoints[ii].z -= z * zOffset;
+            //}
+            //Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             col--;
+
+            GameObject squareLoop = Instantiate(MGMT._Frame, Vector3.zero, Quaternion.Euler(-90, 0, 0));
+            squareLoop.tag = "square";
+            squareLoop.transform.position -= new Vector3(0,0, z * zOffset);
+            squareLoop.transform.localScale *= 1.5f + z * .6f;
         }
         //outermost square. Use endpoints rather than sectionReflections.
         //note that endPoints lie within sectionReflections.
-        for (int ii = 0; ii < 4; ii++)
-        {
-            squarePoints[ii] = endPoints[ii];
-            squarePoints[ii].z -= 4 * zOffset;
-        }
-        Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+        //for (int ii = 0; ii < 4; ii++)
+        //{
+        //    squarePoints[ii] = endPoints[ii];
+        //    squarePoints[ii].z -= 4 * zOffset;
+        //}
+        //Boundaries.PlaceSquare(squarePoints, lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+        GameObject squareLast = Instantiate(MGMT._Frame, Vector3.zero, Quaternion.Euler(-90,0,0));
+        squareLast.tag = "square";
+        squareLast.transform.position -= new Vector3(0, 0, 5 * zOffset);
+        squareLast.transform.localScale *= 4;
+
 
         //four outermost concentric circles:
         //4 is the offset at which the squares left off.
@@ -202,39 +218,39 @@ public class LineSource : MonoBehaviour
     void ConfigureBoundaryCostumes(GameObject[] circles, GameObject[] squares)
     {
         //squares[0]
-        squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];
-        squares[0].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[2].color);
-        squares[0].GetComponent<LineRenderer>().startWidth = 2f;
-        squares[0].GetComponent<LineRenderer>().endWidth = 2f;
-        squares[0].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.249f);
-        squares[0].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .39f);
+        //squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];
+        //squares[0].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[2].color);
+        //squares[0].GetComponent<LineRenderer>().startWidth = 2f;
+        //squares[0].GetComponent<LineRenderer>().endWidth = 2f;
+        //squares[0].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.249f);
+        //squares[0].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .39f);
 
-        //squares[1]
-        squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
-        squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .7f);
-        squares[1].GetComponent<LineRenderer>().startWidth = 3;
-        squares[1].GetComponent<LineRenderer>().endWidth = 3;
-        squares[1].transform.localScale = new Vector3(.85f, .85f, .85f);
+        ////squares[1]
+        //squares[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
+        //squares[1].GetComponent<LineRenderer>().material.SetFloat("_OffsetX", .7f);
+        //squares[1].GetComponent<LineRenderer>().startWidth = 3;
+        //squares[1].GetComponent<LineRenderer>().endWidth = 3;
+        //squares[1].transform.localScale = new Vector3(.85f, .85f, .85f);
 
-        //portraits
-        squares[2].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[1];//opaque ribbon
-        squares[2].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[4].color);
-        squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
-        squares[2].GetComponent<LineRenderer>().startWidth = 3;
-        squares[2].GetComponent<LineRenderer>().endWidth = 3;
-        squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.22f);
+        ////portraits
+        //squares[2].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[1];//opaque ribbon
+        //squares[2].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[4].color);
+        //squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .28f);
+        //squares[2].GetComponent<LineRenderer>().startWidth = 3;
+        //squares[2].GetComponent<LineRenderer>().endWidth = 3;
+        //squares[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.22f);
 
-        //squares 3 and 4:
-        squares[3].GetComponent<LineRenderer>().startWidth = 7;
-        squares[3].GetComponent<LineRenderer>().endWidth = 7;
-        squares[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
+        ////squares 3 and 4:
+        //squares[3].GetComponent<LineRenderer>().startWidth = 7;
+        //squares[3].GetComponent<LineRenderer>().endWidth = 7;
+        //squares[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
         
 
-        squares[4].GetComponent<LineRenderer>().startWidth = 7;
-        squares[4].GetComponent<LineRenderer>().endWidth = 7;
-        squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
-        squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 10f);
-        squares[4].transform.localScale = new Vector3(.85f, .85f, .85f);
+        //squares[4].GetComponent<LineRenderer>().startWidth = 7;
+        //squares[4].GetComponent<LineRenderer>().endWidth = 7;
+        //squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", 0.13f);
+        //squares[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", 10f);
+        //squares[4].transform.localScale = new Vector3(.85f, .85f, .85f);
 
         //render this circle before the first square
         circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
@@ -276,15 +292,15 @@ public class LineSource : MonoBehaviour
         //first circle should render quickly and then shimmer.
         boundaryMats[0] = circles[0].GetComponent<LineRenderer>().material;
 
-        boundaryMats[1] = squares[0].GetComponent<LineRenderer>().material;
+        boundaryMats[1] = squares[0].GetComponent<Renderer>().material;
 
         //These squares box in the 4 triangles.
-        boundaryMats[2] = squares[1].GetComponent<LineRenderer>().material;
+        boundaryMats[2] = squares[1].GetComponent<Renderer>().material;
         //Use an opaque texture for this square.
-        boundaryMats[3] = squares[2].GetComponent<LineRenderer>().material;
-        boundaryMats[4] = squares[3].GetComponent<LineRenderer>().material;
+        boundaryMats[3] = squares[2].GetComponent<Renderer>().material;
+        boundaryMats[4] = squares[3].GetComponent<Renderer>().material;
         //5th square, the square below this line, should actually be a gate.
-        boundaryMats[5] = squares[4].GetComponent<LineRenderer>().material;
+        boundaryMats[5] = squares[4].GetComponent<Renderer>().material;
         //Only 3 rings in sample mandala. 
         //Lotus
         boundaryMats[6] = circles[1].GetComponent<LineRenderer>().material;
@@ -337,12 +353,12 @@ public class LineSource : MonoBehaviour
 
     void AssignBoundaryMats(GameObject[] circles, GameObject[] squares)
     {
-        Material mat;
+        Material newMat;
         //circles
         for (int ii = 0; ii < circles.Length; ii++)
         {
-            mat = MGMT.CircleMat;
-            circles[ii].GetComponent<LineRenderer>().material = mat;
+            newMat = MGMT.CircleMat;
+            circles[ii].GetComponent<LineRenderer>().material = newMat;
             circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
             circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
 
@@ -350,10 +366,10 @@ public class LineSource : MonoBehaviour
         //squares
         for (int ii = 0; ii < squares.Length; ii++)
         {
-            mat = MGMT.SquareMat;
-            squares[ii].GetComponent<LineRenderer>().material = mat;
-            squares[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
-            squares[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
+            newMat = MGMT.SquareMat;
+            newMat.SetColor("_Color", colorSwatch.colors[ii].color);
+            newMat.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
+            squares[ii].GetComponent<Renderer>().material = newMat;
         }
     }
 

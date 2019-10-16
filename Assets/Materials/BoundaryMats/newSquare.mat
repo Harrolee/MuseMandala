@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SquareRamp
-  m_Shader: {fileID: -6465566751694194690, guid: e1c12e2130da6fb47b79ca11590d913d,
+  m_Name: newSquare
+  m_Shader: {fileID: -6465566751694194690, guid: b0b3183c723aaed4e8468bbb9f16050d,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -71,7 +71,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_C536C4AE: 1
-    - _Alpha: 1
+    - _Alpha: 0
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -93,8 +93,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _TilingX: 5
-    - _TilingY: 5
+    - _TilingX: 10
+    - _TilingY: 10
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
