@@ -12,7 +12,6 @@ public class MGMT : MonoBehaviour
     public List<ColorSwatch> ColorSwatches;
     public List<ColorSwatch> BackgroundPalletes;
     public GameObject _LineSourceGO;
-    public GameObject _IntroCylinder;
     public GameObject _Frame;
     public Material CircleMat;
     public Material SquareMat;
@@ -72,15 +71,35 @@ public class MGMT : MonoBehaviour
 
     public IEnumerator BeginSequence()
     {
-        yield return new WaitForSeconds(IntroSeconds);
+        Camera gameCam = _mainCamera.GetComponent<Camera>();
+        LayerMask normal = gameCam.cullingMask;
+        gameCam.farClipPlane = 20;
+
+        TextMesh text = GetComponent<TextMesh>();
         print("introsecs: " + IntroSeconds);
+        _mainCamera.GetComponent<Camera>().cullingMask = LayerMask.NameToLayer("UI");
+        //cull everything but MGMT
+        yield return new WaitForSeconds(IntroSeconds * .03f);
+        text.text = "Your journey will begin after \n the second singing bowl chimes.";
+        
+        yield return new WaitForSeconds(IntroSeconds * .1f);
+        text.text = "Before the singing bowl chimes, \n the gong will sound a second time.";//how to break a line?
 
-        float fadeTime = 3;
-        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .7f, 0, fadeTime));
-        _Fog.SetActive(true);
-        yield return new WaitForSeconds(fadeTime);
+        yield return new WaitForSeconds(IntroSeconds * .1f);
+        text.text = "Open your eyes after the second chime.";
 
+        yield return new WaitForSeconds(IntroSeconds * .1f);
+        text.text = "";
 
+        yield return new WaitForSeconds(IntroSeconds * .659f);
+        //restore camera cutting point
+        
+        gameCam.farClipPlane = 20;
+        _mainCamera.GetComponent<Camera>().cullingMask = normal;
+        StartCoroutine(Effects.LerpFarPlaneOverTime(gameCam, 20, 1000, 10));
+
+        yield return new WaitForSeconds(IntroSeconds * .11f);
+        print("finished intro");
 
         //CentralLoop is cued through this call
         sectionRoots[currSectionRoot].GenerateSection();
@@ -251,7 +270,6 @@ public class MGMT : MonoBehaviour
 
     void OnDisable()
     {
-        _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
         _CenterPieceMat.SetFloat("_Alpha", 0);
     }
 
