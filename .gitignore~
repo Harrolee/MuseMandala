@@ -91,9 +91,6 @@ ExportedObj/
 *.mdb.meta
 
 
-# Project specific ignores
-
-Assets\Materials\Materials\GranitePulse.mat
 
 # Unity3D generated file on crash reports
 
