@@ -20,6 +20,8 @@ public class MGMT : MonoBehaviour
     public GameObject _CenterSectionSource;
     public Material _CenterPieceMat;
     public GameObject _Fog;
+    public GameObject _IntroCylinder;
+    public AudioSource _Sound;
     public float transLength = 4;
     [SerializeField]
     GameObject effectsMGMT;
@@ -43,11 +45,12 @@ public class MGMT : MonoBehaviour
     public LayerMask noMandala;
 
     int currSectionRoot = 0;
+    Camera gameCam;
     //make section sources
     void Start()
     {
+        gameCam = _mainCamera.GetComponent<Camera>();
         sectionSeconds = TimeBreakdown();
-        StartCoroutine(BeginSequence());
         //start background pulse
         StartCoroutine(Effects.PingPongLerp(_BackgroundMat, "_Float", 10));
 
@@ -55,9 +58,6 @@ public class MGMT : MonoBehaviour
         BackgroundTriangles = Utilities.MakeLR(Prefabs._Background, 4, sectionRoots[0].transform);
 
         mandalaMother = new GameObject();
-
-
-        //the texture placed below is overidden somewhere
 
         //select one of 5 center textures
         int textureIndex = Random.Range(0, 6);
@@ -67,41 +67,73 @@ public class MGMT : MonoBehaviour
         centerSection.transform.eulerAngles = new Vector3(0, -90, 90);
         _CenterPieceMat = centerSection.GetComponent<MeshRenderer>().sharedMaterial;
         _CenterPieceMat.SetTexture("Texture2D", MandalaParams.AlphaTextures[textureIndex]);
+
+
+        StartCoroutine(Intro());
+    }
+
+    public IEnumerator Intro()
+    {
+        gameCam.farClipPlane = 100;
+
+        TextMesh text = GetComponent<TextMesh>();
+        float readTime = 6;
+
+        //ToDo: 
+            //instead of time, make a sight-based acknowledgement system, like in Dream of Dali
+            //place text on object in front of the user, inside of the cylinder
+
+        text.text = "Open your eyes at the start of the experience.";
+        yield return new WaitForSeconds(readTime);
+
+        text.text = "Close your eyes when you hear the crashing gong.";
+        yield return new WaitForSeconds(readTime);
+
+        text.text = "Open your eyes again at the next gong.";
+        yield return new WaitForSeconds(readTime);
+
+        text.text = "Then focus on clearing the fog from the emerging mandala";
+        yield return new WaitForSeconds(readTime);
+
+        text.text = "";
+        yield return new WaitForSeconds(readTime * .2f);
+
+        //when all four are finished, lerp the cylinder out.
+        float fadeTime = 3;
+        StartCoroutine(Effects.LerpMatOverTime(_IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial, "_Alpha", .55f, 0, fadeTime));
+        yield return new WaitForSeconds(fadeTime);
+        //should be black here.
+
+        //start the music.
+        StartCoroutine(BeginSequence());
     }
 
     public IEnumerator BeginSequence()
     {
-        Camera gameCam = _mainCamera.GetComponent<Camera>();
-        LayerMask normal = gameCam.cullingMask;
+        _Sound.Play();
+
+        effectsMGMT.GetComponent<extOSC.Examples.CompressReadouts>().BindAddress();
+
+        int min = 100;
+        //LayerMask normal = gameCam.cullingMask;
+        //_mainCamera.GetComponent<Camera>().cullingMask = normal;
         gameCam.farClipPlane = 20;
 
         TextMesh text = GetComponent<TextMesh>();
         print("introsecs: " + IntroSeconds);
-        _mainCamera.GetComponent<Camera>().cullingMask = LayerMask.NameToLayer("UI");
         //cull everything but MGMT
-        yield return new WaitForSeconds(IntroSeconds * .03f);
-        text.text = "Your journey will begin after \n the second singing bowl chimes.";
-        
-        yield return new WaitForSeconds(IntroSeconds * .1f);
-        text.text = "Before the singing bowl chimes, \n the gong will sound a second time.";//how to break a line?
+        //gameCam.cullingMask = LayerMask.NameToLayer("UI");
 
-        yield return new WaitForSeconds(IntroSeconds * .1f);
-        text.text = "Open your eyes after the second chime.";
+        yield return new WaitForSeconds(IntroSeconds * .85f);
 
-        yield return new WaitForSeconds(IntroSeconds * .1f);
-        text.text = "";
-
-        yield return new WaitForSeconds(IntroSeconds * .659f);
         //restore camera cutting point
-        
-        gameCam.farClipPlane = 20;
-        _mainCamera.GetComponent<Camera>().cullingMask = normal;
-        StartCoroutine(Effects.LerpFarPlaneOverTime(gameCam, 20, 1000, 10));
+        StartCoroutine(Effects.LerpFarPlaneOverTime(gameCam, min, 1000, 10));
+        _Fog.SetActive(true);
 
-        yield return new WaitForSeconds(IntroSeconds * .11f);
+        yield return new WaitForSeconds(IntroSeconds * .15f);
         print("finished intro");
 
-        //CentralLoop is cued through this call
+        //CentralLoop is cued through the call call GenerateSection
         sectionRoots[currSectionRoot].GenerateSection();
 
 
@@ -270,6 +302,7 @@ public class MGMT : MonoBehaviour
 
     void OnDisable()
     {
+        _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
         _CenterPieceMat.SetFloat("_Alpha", 0);
     }
 

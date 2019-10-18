@@ -81,8 +81,6 @@ namespace extOSC.Examples
             // Set local port.
             _receiver.LocalPort = ReceivePort;
 
-            // Bind "MessageReceived" method to special address.
-            _receiver.Bind(_oscAddress, MessageReceived);
             //connect to EffectMaster, which CompressReadouts
             //assumes to find on this gameobject.
             effectsMaster = GetComponent<EffectsMaster>();
@@ -125,6 +123,12 @@ namespace extOSC.Examples
 
         #region Protected Methods
 
+        public void BindAddress()
+        {
+            // set "MessageReceived" method to recieve from _oscAddress.
+            _receiver.Bind(_oscAddress, MessageReceived);
+            Debug.Log("bound the address");
+        }
 
         protected void MessageReceived(OSCMessage message)
         {

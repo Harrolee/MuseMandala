@@ -172,6 +172,8 @@ MonoBehaviour:
     type: 3}
   _CenterPieceMat: {fileID: 2100000, guid: ede47c8d8177d31409c2dfaeee33abe0, type: 2}
   _Fog: {fileID: 193757476}
+  _IntroCylinder: {fileID: 2112857761}
+  _Sound: {fileID: 708748359}
   transLength: 4
   effectsMGMT: {fileID: 1517841044}
   TotalSeconds: 420
@@ -217,7 +219,7 @@ TextMesh:
   m_Font: {fileID: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4283684849
+    rgba: 4278190080
 --- !u!23 &171828283
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -466,6 +468,12 @@ MonoBehaviour:
 --- !u!1 &574900947 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 33197673327627332, guid: 6bd75138c470cbf418ad364adf43b663,
+    type: 3}
+  m_PrefabInstance: {fileID: 1144402382}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &708748359 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
     type: 3}
   m_PrefabInstance: {fileID: 1144402382}
   m_PrefabAsset: {fileID: 0}
@@ -5420,6 +5428,11 @@ PrefabInstance:
       propertyPath: Priority
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 33197674576339179, guid: 6bd75138c470cbf418ad364adf43b663,
         type: 3}
       propertyPath: m_Layer
@@ -10258,6 +10271,12 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &2112857761 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2229112914457813397, guid: 776eaf7ca7821c645928556d89051305,
+    type: 3}
+  m_PrefabInstance: {fileID: 2229112914563724760}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2229112914563724760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10273,7 +10292,7 @@ PrefabInstance:
     - target: {fileID: 2229112914457813397, guid: 776eaf7ca7821c645928556d89051305,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2229112914457813384, guid: 776eaf7ca7821c645928556d89051305,
         type: 3}
