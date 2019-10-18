@@ -79,8 +79,8 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OffsetX: 0
-    - _OffsetY: 0
+    - _OffsetX: -0.6
+    - _OffsetY: 0.02
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -88,8 +88,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _TilingX: 1
-    - _TilingY: 1
+    - _TilingX: 10
+    - _TilingY: 10
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:

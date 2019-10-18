@@ -136,7 +136,11 @@ public class LineSource : MonoBehaviour
     void MakeBoundaries(Vector3[] endPoints, Vector3[,] sectionReflections)
     {
         //innermost circle
-        Boundaries.PlaceCircle(sectionReflections[0, 7], sectionReflections[2, 7], lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+        //Boundaries.PlaceCircle(sectionReflections[0, 7], sectionReflections[2, 7], lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+
+        GameObject circle = Instantiate(MGMT._CircleFrame, Vector3.zero, Quaternion.Euler(-90, 0, 0));
+        circle.tag = "circle";
+
 
         GameObject square = Instantiate(MGMT._Frame, Vector3.zero, Quaternion.Euler(-90,0,0));
         square.tag = "square";
@@ -187,12 +191,15 @@ public class LineSource : MonoBehaviour
         //4 is the offset at which the squares left off.
         int circleZ = -4;
         float coeff = 1.5f;
-        float final;
+        //float final;
         for (int XYoffset = 0; XYoffset < 4; XYoffset++)
         {
-            final = XYoffset * coeff;
-            Boundaries.PlaceCircle(endPoints[0] - new Vector3(final, final, 0), endPoints[2] + new Vector3(final, final, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+            //final = XYoffset * coeff;
+            //Boundaries.PlaceCircle(endPoints[0] - new Vector3(final, final, 0), endPoints[2] + new Vector3(final, final, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
             //Boundaries.PlaceCircle(endPoints[0] - new Vector3(XYoffset, XYoffset, 0), endPoints[2] + new Vector3(XYoffset, XYoffset, 0), lineParams.BoundaryWidth, lineParams.BoundaryWidth);
+            circle = Instantiate(MGMT._CircleFrame, new Vector3(0,0, circleZ * coeff), Quaternion.Euler(-90, 0, 0));
+            circle.tag = "circle";
+
             circleZ--;
         }
 
@@ -358,9 +365,9 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < circles.Length; ii++)
         {
             newMat = MGMT.CircleMat;
-            circles[ii].GetComponent<LineRenderer>().material = newMat;
-            circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
-            circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
+            circles[ii].GetComponent<Renderer>().material = newMat;
+            circles[ii].GetComponent<Renderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
+            circles[ii].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
 
         }
         //squares
