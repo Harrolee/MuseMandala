@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -166,7 +166,7 @@ MonoBehaviour:
   _CircleFrame: {fileID: 3442598049451170459, guid: cb48f91e7f6269340b9ba271321ca87b,
     type: 3}
   CircleMat: {fileID: 2100000, guid: 672395084d745ae4aa4a152a3b8afda3, type: 2}
-  SquareMat: {fileID: 2100000, guid: 013a0d5104cbeea44950ba0346430557, type: 2}
+  SquareMat: {fileID: 2100000, guid: 73bc3d5f08add3843a76baed6f87fb6d, type: 2}
   MatBank:
   - {fileID: 2100000, guid: b239250ebdaa5b044ae06c52b5fe6184, type: 2}
   - {fileID: 2100000, guid: 3bb4c8a240b228f4599f56f6ff4e8ff3, type: 2}
@@ -5305,6 +5305,31 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
+        type: 3}
+      propertyPath: MinDistance
+      value: 7.0380297
+      objectReference: {fileID: 0}
+    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
+        type: 3}
+      propertyPath: BypassEffects
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
+        type: 3}
+      propertyPath: BypassListenerEffects
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
+        type: 3}
+      propertyPath: Priority
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 33197673327627335, guid: 6bd75138c470cbf418ad364adf43b663,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5409,31 +5434,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
-        type: 3}
-      propertyPath: MinDistance
-      value: 7.0380297
-      objectReference: {fileID: 0}
-    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
-        type: 3}
-      propertyPath: BypassEffects
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
-        type: 3}
-      propertyPath: BypassListenerEffects
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
-        type: 3}
-      propertyPath: Priority
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 33197673244290565, guid: 6bd75138c470cbf418ad364adf43b663,
-        type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 33197674576339179, guid: 6bd75138c470cbf418ad364adf43b663,
         type: 3}

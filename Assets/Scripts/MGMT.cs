@@ -84,16 +84,16 @@ public class MGMT : MonoBehaviour
             //instead of time, make a sight-based acknowledgement system, like in Dream of Dali
             //place text on object in front of the user, inside of the cylinder
 
-        text.text = "Open your eyes at the start of the experience.";
+        text.text = "Open your eyes at the\nstart of the experience.";
         yield return new WaitForSeconds(readTime);
 
-        text.text = "Close your eyes when you hear the crashing gong.";
+        text.text = "Close your eyes when\nyou hear the crashing gong.";
         yield return new WaitForSeconds(readTime);
 
-        text.text = "Open your eyes again at the next gong.";
+        text.text = "Open your eyes again\nat the next gong.";
         yield return new WaitForSeconds(readTime);
 
-        text.text = "Then focus on clearing the fog from the emerging mandala";
+        text.text = "Then focus on clearing\nthe fog from the emerging mandala";
         yield return new WaitForSeconds(readTime);
 
         text.text = "";
@@ -151,7 +151,7 @@ public class MGMT : MonoBehaviour
             go.transform.parent = mandalaMother.transform;
         }
 
-        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 3f, sectionSeconds, transLength));
+        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 7f, sectionSeconds, transLength));
     }
 
     float[] TimeBreakdown()
@@ -205,6 +205,7 @@ public class MGMT : MonoBehaviour
         Debug.LogFormat("first section at {0}", sectionSeconds[0]);
         yield return new WaitForSeconds(sectionSeconds[0]);
 
+        //set params for circles
         start = 1;
         end = 0;
 
@@ -216,6 +217,10 @@ public class MGMT : MonoBehaviour
         //first ring is quick.
         //After it's appearance, it should perform. 
         //I imagine making a radial wave by changing the width.
+
+        //set params for squares
+        start = 3.5f;
+        end = 7;
 
         //third section: create squares
         float lerpTime = sectionSeconds[2] / 5;
@@ -231,6 +236,11 @@ public class MGMT : MonoBehaviour
         StartCoroutine(Effects.RotateOverTime(squares[4].transform, 0, 45, 5, 3));
         yield return new WaitForSeconds(sectionSeconds[3]);
 
+
+        //reset params for circles
+        start = 1;
+        end = 0;
+
         //fifth section: first circle
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[6], "_Alpha", start, end, sectionSeconds[4]));
         yield return new WaitForSeconds(sectionSeconds[4]);
@@ -238,17 +248,17 @@ public class MGMT : MonoBehaviour
         //sixth section: 
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, sectionSeconds[5]));
         yield return new WaitForSeconds(sectionSeconds[5]);
-        StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<LineRenderer>().material, "_OffsetX", 14, 1, 8));
+        StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<Renderer>().material, "_OffsetX", 14, 1, 8));
 
         //seventh section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, sectionSeconds[6]));
         yield return new WaitForSeconds(sectionSeconds[6]);
-        StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
+        StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<Renderer>().material, "_TilingX", 4, .08f, 1.5f));
 
         //eighth section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[9], "_Alpha", start, end, sectionSeconds[7]));
         yield return new WaitForSeconds(sectionSeconds[7]);
-        StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
+        StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<Renderer>().material, "_TilingY", 3, 10, .2f));
 
         StartCoroutine(EndMandala());
     }

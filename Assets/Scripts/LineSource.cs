@@ -224,6 +224,8 @@ public class LineSource : MonoBehaviour
     #region BoundaryConfig Methods
     void ConfigureBoundaryCostumes(GameObject[] circles, GameObject[] squares)
     {
+        float scaleCoeff = .5f;
+
         //squares[0]
         //squares[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[2];
         //squares[0].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[2].color);
@@ -260,36 +262,41 @@ public class LineSource : MonoBehaviour
         //squares[4].transform.localScale = new Vector3(.85f, .85f, .85f);
 
         //render this circle before the first square
-        circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
-        circles[0].GetComponent<LineRenderer>().startWidth = .2f;
-        circles[0].GetComponent<LineRenderer>().endWidth = .2f;
+        circles[0].GetComponent<Renderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
+        //circles[0].GetComponent<Renderer>().startWidth = .2f;
+        //circles[0].GetComponent<Renderer>().endWidth = .2f;
         circles[0].transform.localScale = new Vector3(.56f, .56f, .56f);
 
         //assign filigree
-        circles[1].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[8]);
+        circles[1].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[8]);
         circles[1].transform.position += new Vector3(0, 0, -6);
-        circles[1].GetComponent<LineRenderer>().startWidth = 2;
-        circles[1].GetComponent<LineRenderer>().endWidth = 2;
-        circles[1].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .1f);
+        //circles[1].GetComponent<Renderer>().startWidth = 2;
+        //circles[1].GetComponent<Renderer>().endWidth = 2;
+        //circles[1].GetComponent<Renderer>().material.SetFloat("_TilingX", .1f);
 
         circles[2].transform.position += new Vector3(0, 0, -10 - (zOffset));
-        circles[2].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);//
-        circles[2].GetComponent<LineRenderer>().startWidth = 12;
-        circles[2].GetComponent<LineRenderer>().endWidth = 12;
-        circles[2].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .09f);
+        circles[2].transform.localScale = new Vector3(.6f, .6f, .6f);//
+        //circles[2].GetComponent<Renderer>().startWidth = 12;
+        //circles[2].GetComponent<Renderer>().endWidth = 12;
+        //circles[2].GetComponent<Renderer>().material.SetFloat("_TilingX", .09f);
 
         circles[3].transform.position += new Vector3(0, 0, -10 - (3 * zOffset));
-        circles[3].transform.localScale = new Vector3(1.49f, 1.49f, 1.49f);//
-        circles[3].GetComponent<LineRenderer>().startWidth = 12f;
-        circles[3].GetComponent<LineRenderer>().endWidth = 12f;
-        circles[3].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .09f);
+        circles[3].transform.localScale = new Vector3(.7f, .7f, .7f);//
+        //circles[3].GetComponent<Renderer>().startWidth = 12f;
+        //circles[3].GetComponent<Renderer>().endWidth = 12f;
+        //circles[3].GetComponent<Renderer>().material.SetFloat("_TilingX", .09f);
 
         circles[4].transform.position += new Vector3(0, 0, -10 - (5 * zOffset));
-        circles[4].transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);//
-        circles[4].GetComponent<LineRenderer>().startWidth = 13;
-        circles[4].GetComponent<LineRenderer>().endWidth = 13;
-        circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingX", .37f);
-        circles[4].GetComponent<LineRenderer>().material.SetFloat("_TilingY", .95f);
+        circles[4].transform.localScale = new Vector3(.9f, .9f, .9f);//
+        //circles[4].GetComponent<Renderer>().startWidth = 13;
+        //circles[4].GetComponent<Renderer>().endWidth = 13;
+        //circles[4].GetComponent<Renderer>().material.SetFloat("_TilingX", .37f);
+        //circles[4].GetComponent<Renderer>().material.SetFloat("_TilingY", .95f);
+
+        foreach (var circle in circles)
+        {
+            circle.transform.localScale *= scaleCoeff;
+        }
     }
 
     Material[] OrderBoundaries(GameObject[] circles, GameObject[] squares)
@@ -297,7 +304,7 @@ public class LineSource : MonoBehaviour
         Material[] boundaryMats = new Material[circles.Length + squares.Length];
 
         //first circle should render quickly and then shimmer.
-        boundaryMats[0] = circles[0].GetComponent<LineRenderer>().material;
+        boundaryMats[0] = circles[0].GetComponent<Renderer>().material;
 
         boundaryMats[1] = squares[0].GetComponent<Renderer>().material;
 
@@ -310,12 +317,12 @@ public class LineSource : MonoBehaviour
         boundaryMats[5] = squares[4].GetComponent<Renderer>().material;
         //Only 3 rings in sample mandala. 
         //Lotus
-        boundaryMats[6] = circles[1].GetComponent<LineRenderer>().material;
+        boundaryMats[6] = circles[1].GetComponent<Renderer>().material;
         //Diamond/Thunder
-        boundaryMats[7] = circles[2].GetComponent<LineRenderer>().material;
+        boundaryMats[7] = circles[2].GetComponent<Renderer>().material;
         //Fire
-        boundaryMats[8] = circles[3].GetComponent<LineRenderer>().material;
-        boundaryMats[9] = circles[4].GetComponent<LineRenderer>().material;
+        boundaryMats[8] = circles[3].GetComponent<Renderer>().material;
+        boundaryMats[9] = circles[4].GetComponent<Renderer>().material;
 
         return boundaryMats;
     }
