@@ -26,12 +26,12 @@ MonoBehaviour:
   WidthOfLine: 0.5
   BoundaryWidth: 2
   AlphaTextures:
-  - {fileID: 2800000, guid: d36f502929fb460478784cd3463e074c, type: 3}
+  - {fileID: 2800000, guid: 454ee6c0f1e6bcd458462a908538f0bc, type: 3}
   - {fileID: 2800000, guid: d2f47f83893411942953bee274a901a0, type: 3}
   - {fileID: 2800000, guid: 97b76b299d86c7545910b9d7def726ef, type: 3}
   - {fileID: 2800000, guid: 16976b280c00d254dba368e3dadfbe4a, type: 3}
   - {fileID: 2800000, guid: 1c3f4ce8fe1547247ae54bd84e21aacd, type: 3}
-  - {fileID: 2800000, guid: 454ee6c0f1e6bcd458462a908538f0bc, type: 3}
+  - {fileID: 2800000, guid: d36f502929fb460478784cd3463e074c, type: 3}
   - {fileID: 2800000, guid: 2d3c6dc1982642a4a9a61d778017bbb2, type: 3}
   - {fileID: 2800000, guid: e7bdeb571203125488dd38e9217167f9, type: 3}
   - {fileID: 2800000, guid: 0af79218775b6a84fb94dbb1164426ad, type: 3}

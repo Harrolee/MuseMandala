@@ -265,7 +265,7 @@ public class LineSource : MonoBehaviour
         circles[0].GetComponent<Renderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
         //circles[0].GetComponent<Renderer>().startWidth = .2f;
         //circles[0].GetComponent<Renderer>().endWidth = .2f;
-        circles[0].transform.localScale = new Vector3(.56f, .56f, .56f);
+        circles[0].transform.localScale = new Vector3(.15f, .15f, .15f);
 
         //assign filigree
         circles[1].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[8]);
@@ -275,19 +275,19 @@ public class LineSource : MonoBehaviour
         //circles[1].GetComponent<Renderer>().material.SetFloat("_TilingX", .1f);
 
         circles[2].transform.position += new Vector3(0, 0, -10 - (zOffset));
-        circles[2].transform.localScale = new Vector3(.6f, .6f, .6f);//
+        circles[2].transform.localScale = new Vector3(.4f, .4f, .4f);//
         //circles[2].GetComponent<Renderer>().startWidth = 12;
         //circles[2].GetComponent<Renderer>().endWidth = 12;
         //circles[2].GetComponent<Renderer>().material.SetFloat("_TilingX", .09f);
 
         circles[3].transform.position += new Vector3(0, 0, -10 - (3 * zOffset));
-        circles[3].transform.localScale = new Vector3(.7f, .7f, .7f);//
+        circles[3].transform.localScale = new Vector3(.5f, .5f, .5f);//
         //circles[3].GetComponent<Renderer>().startWidth = 12f;
         //circles[3].GetComponent<Renderer>().endWidth = 12f;
         //circles[3].GetComponent<Renderer>().material.SetFloat("_TilingX", .09f);
 
         circles[4].transform.position += new Vector3(0, 0, -10 - (5 * zOffset));
-        circles[4].transform.localScale = new Vector3(.9f, .9f, .9f);//
+        circles[4].transform.localScale = new Vector3(.6f, .6f, .6f);//
         //circles[4].GetComponent<Renderer>().startWidth = 13;
         //circles[4].GetComponent<Renderer>().endWidth = 13;
         //circles[4].GetComponent<Renderer>().material.SetFloat("_TilingX", .37f);
@@ -372,6 +372,7 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < circles.Length; ii++)
         {
             newMat = MGMT.CircleMat;
+            newMat.SetFloat("_Alpha", 1);
             circles[ii].GetComponent<Renderer>().material = newMat;
             circles[ii].GetComponent<Renderer>().material.SetColor("_Color", colorSwatch.colors[ii].color);
             circles[ii].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
@@ -381,9 +382,11 @@ public class LineSource : MonoBehaviour
         for (int ii = 0; ii < squares.Length; ii++)
         {
             newMat = MGMT.SquareMat;
-            newMat.SetColor("_Color", colorSwatch.colors[ii].color);
-            newMat.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
+            //reset the Alpha value in case somebody moved it.
+            newMat.SetFloat("_Alpha", 3.5f);
             squares[ii].GetComponent<Renderer>().material = newMat;
+            squares[ii].GetComponent<Renderer>().material.SetColor("_Color", colorSwatch.colors[ii % colorSwatch.colors.Count].color);
+            squares[ii].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
         }
     }
 

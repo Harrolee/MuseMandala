@@ -205,9 +205,9 @@ public class MGMT : MonoBehaviour
         Debug.LogFormat("first section at {0}", sectionSeconds[0]);
         yield return new WaitForSeconds(sectionSeconds[0]);
 
-        //set params for circles
-        start = 1;
-        end = 0;
+        //set params for first circle and all of the squares
+        start = 3.5f;
+        end = 7f;
 
         //second section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[0], "_Alpha", start, end, sectionSeconds[1]));
@@ -218,9 +218,6 @@ public class MGMT : MonoBehaviour
         //After it's appearance, it should perform. 
         //I imagine making a radial wave by changing the width.
 
-        //set params for squares
-        start = 3.5f;
-        end = 7;
 
         //third section: create squares
         float lerpTime = sectionSeconds[2] / 5;
@@ -237,7 +234,7 @@ public class MGMT : MonoBehaviour
         yield return new WaitForSeconds(sectionSeconds[3]);
 
 
-        //reset params for circles
+        //reset params for the remaining circles
         start = 1;
         end = 0;
 
