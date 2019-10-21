@@ -196,8 +196,8 @@ public class MGMT : MonoBehaviour
     public IEnumerator CentralLoop(Material[] boundaryMats, Material centerpieceMat, GameObject[] squares, GameObject[] circles)
     {
         //first section is the centerpiece generation
-        float start = 0;
-        float end = 1.5f;
+        float start = -.3f;
+        float end = 5.5f;
 
         //first section:
 
@@ -245,19 +245,36 @@ public class MGMT : MonoBehaviour
         //sixth section: 
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, sectionSeconds[5]));
         yield return new WaitForSeconds(sectionSeconds[5]);
-        StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<Renderer>().material, "_OffsetX", 14, 1, 8));
+        //StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<Renderer>().material, "_OffsetX", 14, 1, 8));
+        StartCoroutine(VegasSpin(circles[2].transform, sectionSeconds[5] + sectionSeconds[6] + sectionSeconds[7], 20));
 
         //seventh section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, sectionSeconds[6]));
         yield return new WaitForSeconds(sectionSeconds[6]);
-        StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<Renderer>().material, "_TilingX", 4, .08f, 1.5f));
+        StartCoroutine(Effects.PingPongLerp(circles[3].GetComponent<LineRenderer>().material, "_TilingX", 4, .08f, 1.5f));
 
         //eighth section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[9], "_Alpha", start, end, sectionSeconds[7]));
         yield return new WaitForSeconds(sectionSeconds[7]);
-        StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<Renderer>().material, "_TilingY", 3, 10, .2f));
+        StartCoroutine(Effects.PingPongLerp(circles[4].GetComponent<LineRenderer>().material, "_TilingY", 3, 10, .2f));
 
         StartCoroutine(EndMandala());
+    }
+
+    IEnumerator VegasSpin(Transform go, float totalSecs, int periodCount)
+    {
+        float periodLength = totalSecs / periodCount;
+        float halfPeriod;
+        float peakVal;
+        for (int i = 0; i < periodCount; i++)
+        {
+            //peakVal = Random.Range(360, 480);
+            halfPeriod = periodLength * .5f;
+            StartCoroutine(Effects.RotateOverTime(go, 0, 720, halfPeriod, true));
+            yield return new WaitForSeconds(halfPeriod);
+            StartCoroutine(Effects.RotateOverTime(go, 720, 0, halfPeriod, true));
+            yield return new WaitForSeconds(halfPeriod);
+        }
     }
 
     IEnumerator EndMandala()
@@ -300,5 +317,4 @@ public class MGMT : MonoBehaviour
         _IntroCylinder.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Alpha", .5f);
         _CenterPieceMat.SetFloat("_Alpha", 0);
     }
-
 }

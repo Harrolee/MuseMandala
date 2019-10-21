@@ -62,11 +62,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: 1c3f4ce8fe1547247ae54bd84e21aacd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 14048c8c6a79ddd4ea3d817a87b86e2c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Alpha: 3.5
+    - _Alpha: 6
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1

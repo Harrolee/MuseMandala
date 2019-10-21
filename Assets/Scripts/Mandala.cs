@@ -132,9 +132,8 @@ namespace Mandala
             }
         }
 
-        public static IEnumerator RotateOverTime(Transform go, float startVal, float endVal, float totalSecs)
+        public static IEnumerator RotateOverTime(Transform go, float startVal, float endVal, float totalSecs, float startY = 90, float startZ = -90)
         {
-            Debug.Log("got to rotate");
             float rotateVal;
             float startTime = Time.time;
             float currTime = Time.time - startTime;
@@ -144,10 +143,27 @@ namespace Mandala
                 currTime = Time.time - startTime;
                 x = currTime / totalSecs;
                 rotateVal = Mathf.Lerp(startVal, endVal, x);
-                go.localEulerAngles = new Vector3(rotateVal, 90, -90);
+                go.localEulerAngles = new Vector3(rotateVal, startY, startZ);
                 yield return null;
             }
         }
+
+        public static IEnumerator RotateOverTime(Transform go, float startVal, float endVal, float totalSecs, bool rotateZ)
+        {
+            float rotateVal;
+            float startTime = Time.time;
+            float currTime = Time.time - startTime;
+            float x;
+            while (currTime < totalSecs)
+            {
+                currTime = Time.time - startTime;
+                x = currTime / totalSecs;
+                rotateVal = Mathf.Lerp(startVal, endVal, x);
+                go.localEulerAngles = new Vector3(0, 0, rotateVal);
+                yield return null;
+            }
+        }
+
 
         public static IEnumerator RotateOverTime(Transform go, float startVal, float endVal, float totalSecs, float waitToStart)
         {
