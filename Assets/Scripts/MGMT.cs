@@ -206,7 +206,7 @@ public class MGMT : MonoBehaviour
         yield return new WaitForSeconds(sectionSeconds[0]);
 
         //set params for first circle and all of the squares
-        start = 3.5f;
+        start = 3f;
         end = 7f;
 
         //second section:
@@ -232,7 +232,6 @@ public class MGMT : MonoBehaviour
         yield return new WaitForSeconds(2);
         StartCoroutine(Effects.RotateOverTime(squares[4].transform, 0, 45, 5, 3));
         yield return new WaitForSeconds(sectionSeconds[3]);
-
 
         //reset params for the remaining circles
         start = 1;

@@ -200,12 +200,12 @@ public class LineSource : MonoBehaviour
 
         //render this circle before the first square
         circles[0].GetComponent<LineRenderer>().material = MGMT.MandalaParams.Materials[3];//inner circle
-        circles[0].GetComponent<LineRenderer>().startWidth = .2f;
-        circles[0].GetComponent<LineRenderer>().endWidth = .2f;
+        circles[0].GetComponent<LineRenderer>().startWidth = .5f;
+        circles[0].GetComponent<LineRenderer>().endWidth = .5f;
         circles[0].transform.localScale = new Vector3(.56f, .56f, .56f);
 
         //assign filigree
-        circles[1].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[8]);
+        circles[1].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[10]);
         circles[1].transform.position += new Vector3(0, 0, -6);
         circles[1].GetComponent<LineRenderer>().startWidth = 2;
         circles[1].GetComponent<LineRenderer>().endWidth = 2;
@@ -307,16 +307,16 @@ public class LineSource : MonoBehaviour
         Material newMat;
         //circles
         //set first one manually
-        circles[0].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[Random.Range(0,3)].color);
-        circles[0].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[Random.Range(0, 3)]);
+        //circles[0].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[Random.Range(0,3)].color);
+        //circles[0].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[Random.Range(0, 3)]);
 
-        for (int ii = 1; ii < circles.Length; ii++)
+        for (int ii = 0; ii < circles.Length; ii++)
         {
             newMat = MGMT.CircleMat;
             newMat.SetFloat("_Alpha", 1);
             circles[ii].GetComponent<LineRenderer>().material = newMat;
             circles[ii].GetComponent<LineRenderer>().material.SetColor("_Color", colorSwatch.colors[ii % colorSwatch.colors.Count].color);
-            circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[Random.Range(ii, MGMT.MandalaParams.AlphaTextures.Count)]);
+            circles[ii].GetComponent<LineRenderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[ii]);
 
         }
         //squares
@@ -327,7 +327,7 @@ public class LineSource : MonoBehaviour
             newMat.SetFloat("_Alpha", 3.5f);
             squares[ii].GetComponent<Renderer>().material = newMat;
             squares[ii].GetComponent<Renderer>().material.SetColor("_Color", colorSwatch.colors[ii % colorSwatch.colors.Count].color);
-            squares[ii].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[Random.Range(ii, MGMT.MandalaParams.AlphaTextures.Count)]);
+            squares[ii].GetComponent<Renderer>().material.SetTexture("_Texture2D", MGMT.MandalaParams.AlphaTextures[Random.Range(ii, MGMT.MandalaParams.AlphaTextures.Count-1)]);
         }
     }
 
