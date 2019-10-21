@@ -246,7 +246,7 @@ public class MGMT : MonoBehaviour
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, sectionSeconds[5]));
         yield return new WaitForSeconds(sectionSeconds[5]);
         //StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<Renderer>().material, "_OffsetX", 14, 1, 8));
-        //StartCoroutine(VegasSpin(circles[2].transform, sectionSeconds[5] + sectionSeconds[6] + sectionSeconds[7], 20));
+        StartCoroutine(VegasSpin(circles[2].transform));
 
         //seventh section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, sectionSeconds[6]));
@@ -261,21 +261,16 @@ public class MGMT : MonoBehaviour
         StartCoroutine(EndMandala());
     }
 
-    //IEnumerator VegasSpin(Transform go, float totalSecs, int periodCount)
-    //{
-    //    float periodLength = totalSecs / periodCount;
-    //    float halfPeriod;
-    //    float peakVal;
-    //    for (int i = 0; i < periodCount; i++)
-    //    {
-    //        //peakVal = Random.Range(360, 480);
-    //        halfPeriod = periodLength * .5f;
-    //        StartCoroutine(Effects.RotateOverTime(go, 0, 720, halfPeriod, true));
-    //        yield return new WaitForSeconds(halfPeriod);
-    //        StartCoroutine(Effects.RotateOverTime(go, 720, 0, halfPeriod, true));
-    //        yield return new WaitForSeconds(halfPeriod);
-    //    }
-    //}
+    IEnumerator VegasSpin(Transform go)
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            StartCoroutine(Effects.RotateOverTime(go, 0, 360, 16, true));
+            yield return new WaitForSeconds(16);
+            StartCoroutine(Effects.RotateOverTime(go, 360, 0, 15, true));
+            yield return new WaitForSeconds(15);
+        }
+    }
 
     IEnumerator EndMandala()
     {
@@ -302,10 +297,10 @@ public class MGMT : MonoBehaviour
         //show words,
         TextMesh text = GetComponent<TextMesh>();
         text.text = "Welcome back.";
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(10);
 
         StartCoroutine(Effects.LerpFarPlaneOverTime(_mainCamera.GetComponent<Camera>(), 1000, 200, 10));
-        StartCoroutine(Effects.LerpNearPlaneOverTime(_mainCamera.GetComponent<Camera>(), .05f, 10, 10));
+        StartCoroutine(Effects.LerpNearPlaneOverTime(_mainCamera.GetComponent<Camera>(), .03f, 10, 10));
         yield return new WaitForSeconds(10);
 
         //end game
