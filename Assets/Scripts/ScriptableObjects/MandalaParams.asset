@@ -38,7 +38,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 84d56f418e23f244b83d2cfcf492064c, type: 3}
   Textures:
   - {fileID: 2800000, guid: 7532c273e14b3b5469ec82287d135cf3, type: 3}
-  - {fileID: 2800000, guid: 1a41cf05d62c71b41845d7e349c483c2, type: 3}
+  - {fileID: 2800000, guid: 640b9ad5d0e791b448305ad7ea242d7c, type: 3}
   - {fileID: 2800000, guid: 33e5c96c37d3036498f40c3459f4cb01, type: 3}
-  - {fileID: 2800000, guid: 1c3f4ce8fe1547247ae54bd84e21aacd, type: 3}
-  - {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2800000, guid: be3f2365d8566e5498eebf4be150aa90, type: 3}
+  - {fileID: 2800000, guid: f5fb14684870ba847b57ec3ee85ca478, type: 3}

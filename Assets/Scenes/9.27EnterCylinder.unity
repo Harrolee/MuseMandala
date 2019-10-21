@@ -178,7 +178,7 @@ MonoBehaviour:
   _Sound: {fileID: 708748359}
   transLength: 4
   effectsMGMT: {fileID: 1517841044}
-  TotalSeconds: 80
+  TotalSeconds: 420
   IntroSeconds: 60
   sectionSeconds: []
   _BackgroundMat: {fileID: 2100000, guid: 939b966958f396549bd7d168fa4f900a, type: 2}
@@ -194,7 +194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171828279}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 15.23}
+  m_LocalPosition: {x: 0, y: 3, z: 23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5388,12 +5388,12 @@ PrefabInstance:
     - target: {fileID: 33197673327627334, guid: 6bd75138c470cbf418ad364adf43b663,
         type: 3}
       propertyPath: field of view
-      value: 61.704597
+      value: 48.3537
       objectReference: {fileID: 0}
     - target: {fileID: 33197673327627334, guid: 6bd75138c470cbf418ad364adf43b663,
         type: 3}
       propertyPath: near clip plane
-      value: 0.05
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 33197673327627334, guid: 6bd75138c470cbf418ad364adf43b663,
         type: 3}

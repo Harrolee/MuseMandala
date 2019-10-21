@@ -118,7 +118,7 @@ public class MGMT : MonoBehaviour
         int min = 100;
         //LayerMask normal = gameCam.cullingMask;
         //_mainCamera.GetComponent<Camera>().cullingMask = normal;
-        gameCam.farClipPlane = 20;
+        gameCam.farClipPlane = 25;
 
         TextMesh text = GetComponent<TextMesh>();
         print("introsecs: " + IntroSeconds);
@@ -151,7 +151,7 @@ public class MGMT : MonoBehaviour
             go.transform.parent = mandalaMother.transform;
         }
 
-        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 7f, sectionSeconds, transLength));
+        StartCoroutine(Utilities.MoveMandala(mandalaMother, mandalaMother.transform.position.z, mandalaMother.transform.position.z + 9f, sectionSeconds, transLength));
     }
 
     float[] TimeBreakdown()
@@ -246,7 +246,7 @@ public class MGMT : MonoBehaviour
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[7], "_Alpha", start, end, sectionSeconds[5]));
         yield return new WaitForSeconds(sectionSeconds[5]);
         //StartCoroutine(Effects.PingPongLerp(circles[2].GetComponent<Renderer>().material, "_OffsetX", 14, 1, 8));
-        StartCoroutine(VegasSpin(circles[2].transform, sectionSeconds[5] + sectionSeconds[6] + sectionSeconds[7], 20));
+        //StartCoroutine(VegasSpin(circles[2].transform, sectionSeconds[5] + sectionSeconds[6] + sectionSeconds[7], 20));
 
         //seventh section:
         StartCoroutine(Effects.LerpMatOverTime(boundaryMats[8], "_Alpha", start, end, sectionSeconds[6]));
@@ -261,21 +261,21 @@ public class MGMT : MonoBehaviour
         StartCoroutine(EndMandala());
     }
 
-    IEnumerator VegasSpin(Transform go, float totalSecs, int periodCount)
-    {
-        float periodLength = totalSecs / periodCount;
-        float halfPeriod;
-        float peakVal;
-        for (int i = 0; i < periodCount; i++)
-        {
-            //peakVal = Random.Range(360, 480);
-            halfPeriod = periodLength * .5f;
-            StartCoroutine(Effects.RotateOverTime(go, 0, 720, halfPeriod, true));
-            yield return new WaitForSeconds(halfPeriod);
-            StartCoroutine(Effects.RotateOverTime(go, 720, 0, halfPeriod, true));
-            yield return new WaitForSeconds(halfPeriod);
-        }
-    }
+    //IEnumerator VegasSpin(Transform go, float totalSecs, int periodCount)
+    //{
+    //    float periodLength = totalSecs / periodCount;
+    //    float halfPeriod;
+    //    float peakVal;
+    //    for (int i = 0; i < periodCount; i++)
+    //    {
+    //        //peakVal = Random.Range(360, 480);
+    //        halfPeriod = periodLength * .5f;
+    //        StartCoroutine(Effects.RotateOverTime(go, 0, 720, halfPeriod, true));
+    //        yield return new WaitForSeconds(halfPeriod);
+    //        StartCoroutine(Effects.RotateOverTime(go, 720, 0, halfPeriod, true));
+    //        yield return new WaitForSeconds(halfPeriod);
+    //    }
+    //}
 
     IEnumerator EndMandala()
     {

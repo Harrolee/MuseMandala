@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: InsideOutSquare 1
-  m_Shader: {fileID: -6465566751694194690, guid: 11aa6fa7167dd924ca914add25908de0,
+  m_Shader: {fileID: -6465566751694194690, guid: e1c12e2130da6fb47b79ca11590d913d,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -66,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Alpha: 3.5
+    - _Alpha: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -88,8 +88,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _TilingX: 10
-    - _TilingY: 10
+    - _TilingX: 1
+    - _TilingY: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
